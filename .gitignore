@@ -1,0 +1,33 @@
+# Local source documents and original KAMP downloads
+/참고자료/
+/준비패키지/reference/
+
+# Temporary tools, dependency installations and duplicate exports
+/tmp/
+/outputs/
+/output/*.zip
+/준비패키지/data/workbook_data.json
+*.inspect.ndjson
+
+# Local environments and generated runtime state
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.sqlite3
+*.sqlite3-*
+*.db
+*.log
+
+# Local secrets and editor/OS temporary files
+.env
+.env.*
+!.env.example
+~$*
+.DS_Store
+Thumbs.db
+desktop.ini
+

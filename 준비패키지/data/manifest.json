@@ -1,0 +1,18 @@
+{
+  "version": "demo-v1",
+  "seed": 20261026,
+  "lots": 1000,
+  "heat_runs": 500,
+  "inspection_rows": 5000,
+  "nonconforming_lots": 141,
+  "data_status": "SYNTHETIC_DEMO_NOT_FACTORY_MEASUREMENTS",
+  "recipe_values_are_demo_assumptions": true,
+  "sha256": {
+    "demo_errors.csv": "422735aaab6b7929401997e093667b884c058be2dcea402094d6724dc496498e",
+    "demo_upload.csv": "7406b2b911e87a0465efa660ee8cdcf694234067ad84c3a45dce2e255dd6a908",
+    "demo_upload_korean.csv": "ef162b1e5a2b13d47539fedabe26a89e677cfc915cefa63f1b71bda5dee424ce",
+    "inspection.csv": "17b1aaaeef4f7f6ac7236e6e08f617733c1a1513c1ea65b190ebd30aed563264",
+    "labels.csv": "30585dc38ce2c1d41b98e6eb322f09a4efebe70baa2d23a014bbce740a2c558a",
+    "process.csv": "fb1cf2280825d77eeca80a8f5932d481701ebba7c8c80e2e0503a5530f45ba5e"
+  }
+}

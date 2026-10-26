@@ -1,0 +1,15 @@
+{
+  "로트번호": "lot_id",
+  "열처리작업": "heat_run_id",
+  "공정완료시각": "process_end_at",
+  "재질": "material_grade",
+  "직경_mm": "diameter_mm",
+  "가열평균_C": "austenitize_mean_c",
+  "가열최대편차_C": "austenitize_dev_c",
+  "가열유지_분": "hold_min",
+  "냉각유온_C": "quench_oil_c",
+  "이송지연_초": "transfer_sec",
+  "뜨임평균_C": "temper_mean_c",
+  "뜨임유지_분": "temper_hold_min",
+  "장입량_kg": "load_kg"
+}

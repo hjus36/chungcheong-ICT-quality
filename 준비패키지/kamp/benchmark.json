@@ -1,0 +1,171 @@
+{
+  "scope": "Automotive-parts salt-bath heat treatment; batch-level relative high-defect risk",
+  "label_definition": "defect_rate_percent >= training-set Q3; a relative pilot label, not product acceptance",
+  "defect_rate_threshold_percent": 0.049443144463256726,
+  "defect_rate_threshold_ppm": 494.43144463256726,
+  "split": {
+    "test": {
+      "batches": 36,
+      "risk_labels": 7,
+      "start": "2022-06-03 13:08:54",
+      "end": "2022-07-19 19:08:59"
+    },
+    "train": {
+      "batches": 78,
+      "risk_labels": 20,
+      "start": "2022-01-03 11:22:07",
+      "end": "2022-04-30 10:03:23"
+    },
+    "validation": {
+      "batches": 22,
+      "risk_labels": 4,
+      "start": "2022-05-02 10:57:46",
+      "end": "2022-05-31 21:50:47"
+    }
+  },
+  "validation_comparison": [
+    {
+      "model": "LogisticRegression",
+      "alert_threshold": 0.55,
+      "count": 22,
+      "positive_count": 4,
+      "tp": 3,
+      "fn": 1,
+      "fp": 5,
+      "tn": 13,
+      "precision": 0.375,
+      "recall": 0.75,
+      "f1": 0.5,
+      "f2": 0.625,
+      "roc_auc": 0.6944444444444445,
+      "average_precision": 0.36090686274509803
+    },
+    {
+      "model": "RandomForest",
+      "alert_threshold": 0.3,
+      "count": 22,
+      "positive_count": 4,
+      "tp": 4,
+      "fn": 0,
+      "fp": 15,
+      "tn": 3,
+      "precision": 0.21052631578947367,
+      "recall": 1.0,
+      "f1": 0.34782608695652173,
+      "f2": 0.5714285714285714,
+      "roc_auc": 0.611111111111111,
+      "average_precision": 0.32158119658119655
+    },
+    {
+      "model": "XGBoost",
+      "alert_threshold": 0.25,
+      "count": 22,
+      "positive_count": 4,
+      "tp": 4,
+      "fn": 0,
+      "fp": 13,
+      "tn": 5,
+      "precision": 0.23529411764705882,
+      "recall": 1.0,
+      "f1": 0.38095238095238093,
+      "f2": 0.6060606060606061,
+      "roc_auc": 0.6944444444444444,
+      "average_precision": 0.5041208791208791
+    }
+  ],
+  "selected_model": "LogisticRegression",
+  "alert_threshold": 0.55,
+  "test": {
+    "count": 36,
+    "positive_count": 7,
+    "tp": 2,
+    "fn": 5,
+    "fp": 9,
+    "tn": 20,
+    "precision": 0.18181818181818182,
+    "recall": 0.2857142857142857,
+    "f1": 0.2222222222222222,
+    "f2": 0.2564102564102564,
+    "roc_auc": 0.4482758620689655,
+    "average_precision": 0.2054165680042258
+  },
+  "test_all_normal": {
+    "count": 36,
+    "positive_count": 7,
+    "tp": 0,
+    "fn": 7,
+    "fp": 0,
+    "tn": 29,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "f2": 0.0,
+    "roc_auc": 0.5,
+    "average_precision": 0.19444444444444445
+  },
+  "test_all_risk": {
+    "count": 36,
+    "positive_count": 7,
+    "tp": 7,
+    "fn": 0,
+    "fp": 29,
+    "tn": 0,
+    "precision": 0.19444444444444445,
+    "recall": 1.0,
+    "f1": 0.32558139534883723,
+    "f2": 0.546875,
+    "roc_auc": 0.5,
+    "average_precision": 0.19444444444444445
+  },
+  "validation_all_risk": {
+    "count": 22,
+    "positive_count": 4,
+    "tp": 4,
+    "fn": 0,
+    "fp": 18,
+    "tn": 0,
+    "precision": 0.18181818181818182,
+    "recall": 1.0,
+    "f1": 0.3076923076923077,
+    "f2": 0.5263157894736842,
+    "roc_auc": 0.5,
+    "average_precision": 0.18181818181818182
+  },
+  "feature_importance_validation": [
+    {
+      "feature": "솔트조 온도 1 Zone_Std",
+      "average_precision_drop": 0.04060499356164992
+    },
+    {
+      "feature": "솔트조 온도 2 Zone_Std",
+      "average_precision_drop": 0.005578467799830044
+    },
+    {
+      "feature": "소입로 온도 1 Zone_Std",
+      "average_precision_drop": 1.1675416087192359e-05
+    },
+    {
+      "feature": "솔트조 온도 2 Zone_Avg",
+      "average_precision_drop": 0.0
+    },
+    {
+      "feature": "건조 1존 OP_Avg",
+      "average_precision_drop": 0.0
+    },
+    {
+      "feature": "소입로 CP 값_Std",
+      "average_precision_drop": 0.0
+    }
+  ],
+  "limitations": [
+    "Only 136 labeled batches; millions of sensor records are not independent labels.",
+    "Features summarize the complete batch: prediction is after completion, before using inspection results.",
+    "No measured hardness; no validation of the synthetic steel-ball model.",
+    "Risk threshold is relative to training Q3, not an industry reject specification.",
+    "No causal inference or calibrated defect probability. CPU-only offline pilot.",
+    "Inspection timestamp, product mix and material are unavailable; verify operational timing with mentor."
+  ],
+  "source_url": "https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=60",
+  "raw_audit": "audit.json",
+  "feature_count": 36
+}
