@@ -1,0 +1,441 @@
+{
+  "candidates": [
+    {
+      "id": "secom590_LogisticRegression_0.01",
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.47500000000000014,
+      "tp": 4,
+      "fn": 8,
+      "fp": 104,
+      "tn": 251,
+      "precision": 0.037037037037037035,
+      "recall": 0.3333333333333333,
+      "f1": 0.06666666666666667,
+      "f2": 0.1282051282051282,
+      "roc_auc": 0.4424882629107981,
+      "average_precision": 0.03881328855308773,
+      "brier": 0.18909357895655066,
+      "alert_rate": 0.29427792915531337,
+      "accuracy": 0.6948228882833788,
+      "precision_at_20pct": 0.04054054054054054,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.036036036036036036,
+      "k_30pct": 111,
+      "calibration": [
+        {
+          "low": 0,
+          "high": 0.2,
+          "n": 33,
+          "mean_score": 0.14828898346103664,
+          "observed_rate": 0.09090909090909091
+        },
+        {
+          "low": 0.2,
+          "high": 0.4,
+          "n": 162,
+          "mean_score": 0.3049668834001552,
+          "observed_rate": 0.024691358024691357
+        },
+        {
+          "low": 0.4,
+          "high": 0.6,
+          "n": 138,
+          "mean_score": 0.48659626353057,
+          "observed_rate": 0.028985507246376812
+        },
+        {
+          "low": 0.6,
+          "high": 0.8,
+          "n": 30,
+          "mean_score": 0.6667537882021909,
+          "observed_rate": 0.03333333333333333
+        },
+        {
+          "low": 0.8,
+          "high": 1,
+          "n": 4,
+          "mean_score": 0.8976289368896663,
+          "observed_rate": 0.0
+        }
+      ]
+    },
+    {
+      "id": "secom590_LogisticRegression_0.1",
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.4000000000000001,
+      "tp": 4,
+      "fn": 8,
+      "fp": 158,
+      "tn": 197,
+      "precision": 0.024691358024691357,
+      "recall": 0.3333333333333333,
+      "f1": 0.04597701149425287,
+      "f2": 0.09523809523809523,
+      "roc_auc": 0.41032863849765255,
+      "average_precision": 0.034555961295177476,
+      "brier": 0.20348862421596142,
+      "alert_rate": 0.44141689373297005,
+      "accuracy": 0.547683923705722,
+      "precision_at_20pct": 0.04054054054054054,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.036036036036036036,
+      "k_30pct": 111,
+      "calibration": [
+        {
+          "low": 0,
+          "high": 0.2,
+          "n": 82,
+          "mean_score": 0.13064338737643547,
+          "observed_rate": 0.07317073170731707
+        },
+        {
+          "low": 0.2,
+          "high": 0.4,
+          "n": 123,
+          "mean_score": 0.30481476362813825,
+          "observed_rate": 0.016260162601626018
+        },
+        {
+          "low": 0.4,
+          "high": 0.6,
+          "n": 104,
+          "mean_score": 0.49527687949171484,
+          "observed_rate": 0.009615384615384616
+        },
+        {
+          "low": 0.6,
+          "high": 0.8,
+          "n": 45,
+          "mean_score": 0.6832855365316735,
+          "observed_rate": 0.06666666666666667
+        },
+        {
+          "low": 0.8,
+          "high": 1,
+          "n": 13,
+          "mean_score": 0.8869728284035063,
+          "observed_rate": 0.0
+        }
+      ]
+    },
+    {
+      "id": "secom590_RandomForest_2",
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.5000000000000002,
+      "tp": 1,
+      "fn": 11,
+      "fp": 0,
+      "tn": 355,
+      "precision": 1.0,
+      "recall": 0.08333333333333333,
+      "f1": 0.15384615384615385,
+      "f2": 0.10204081632653061,
+      "roc_auc": 0.6631455399061033,
+      "average_precision": 0.20012996718216022,
+      "brier": 0.14965398472336736,
+      "alert_rate": 0.0027247956403269754,
+      "accuracy": 0.9700272479564033,
+      "precision_at_20pct": 0.08108108108108109,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.05405405405405406,
+      "k_30pct": 111,
+      "calibration": [
+        {
+          "low": 0,
+          "high": 0.2,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        },
+        {
+          "low": 0.2,
+          "high": 0.4,
+          "n": 262,
+          "mean_score": 0.3544576623009661,
+          "observed_rate": 0.022900763358778626
+        },
+        {
+          "low": 0.4,
+          "high": 0.6,
+          "n": 105,
+          "mean_score": 0.43259662293863743,
+          "observed_rate": 0.05714285714285714
+        },
+        {
+          "low": 0.6,
+          "high": 0.8,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        },
+        {
+          "low": 0.8,
+          "high": 1,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        }
+      ]
+    },
+    {
+      "id": "secom590_RandomForest_3",
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.4500000000000001,
+      "tp": 1,
+      "fn": 11,
+      "fp": 10,
+      "tn": 345,
+      "precision": 0.09090909090909091,
+      "recall": 0.08333333333333333,
+      "f1": 0.08695652173913043,
+      "f2": 0.0847457627118644,
+      "roc_auc": 0.6415492957746479,
+      "average_precision": 0.16080208646819563,
+      "brier": 0.12110285367975082,
+      "alert_rate": 0.02997275204359673,
+      "accuracy": 0.9427792915531336,
+      "precision_at_20pct": 0.08108108108108109,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.05405405405405406,
+      "k_30pct": 111,
+      "calibration": [
+        {
+          "low": 0,
+          "high": 0.2,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        },
+        {
+          "low": 0.2,
+          "high": 0.4,
+          "n": 317,
+          "mean_score": 0.3142015393713753,
+          "observed_rate": 0.01892744479495268
+        },
+        {
+          "low": 0.4,
+          "high": 0.6,
+          "n": 50,
+          "mean_score": 0.43257741956836177,
+          "observed_rate": 0.12
+        },
+        {
+          "low": 0.6,
+          "high": 0.8,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        },
+        {
+          "low": 0.8,
+          "high": 1,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        }
+      ]
+    },
+    {
+      "id": "secom590_XGBoost_1",
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.5250000000000001,
+      "tp": 4,
+      "fn": 8,
+      "fp": 9,
+      "tn": 346,
+      "precision": 0.3076923076923077,
+      "recall": 0.3333333333333333,
+      "f1": 0.32,
+      "f2": 0.32786885245901637,
+      "roc_auc": 0.7789906103286385,
+      "average_precision": 0.32595144298851075,
+      "brier": 0.11104553640937584,
+      "alert_rate": 0.035422343324250684,
+      "accuracy": 0.9536784741144414,
+      "precision_at_20pct": 0.08108108108108109,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.08108108108108109,
+      "k_30pct": 111,
+      "calibration": [
+        {
+          "low": 0,
+          "high": 0.2,
+          "n": 33,
+          "mean_score": 0.17815925180912018,
+          "observed_rate": 0.0
+        },
+        {
+          "low": 0.2,
+          "high": 0.4,
+          "n": 278,
+          "mean_score": 0.29759299755096436,
+          "observed_rate": 0.02877697841726619
+        },
+        {
+          "low": 0.4,
+          "high": 0.6,
+          "n": 55,
+          "mean_score": 0.46715718507766724,
+          "observed_rate": 0.05454545454545454
+        },
+        {
+          "low": 0.6,
+          "high": 0.8,
+          "n": 1,
+          "mean_score": 0.6257650256156921,
+          "observed_rate": 1.0
+        },
+        {
+          "low": 0.8,
+          "high": 1,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        }
+      ]
+    },
+    {
+      "id": "secom590_XGBoost_2",
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.3750000000000001,
+      "tp": 4,
+      "fn": 8,
+      "fp": 42,
+      "tn": 313,
+      "precision": 0.08695652173913043,
+      "recall": 0.3333333333333333,
+      "f1": 0.13793103448275862,
+      "f2": 0.2127659574468085,
+      "roc_auc": 0.7384976525821596,
+      "average_precision": 0.24625671943441024,
+      "brier": 0.0780882497358173,
+      "alert_rate": 0.12534059945504086,
+      "accuracy": 0.8637602179836512,
+      "precision_at_20pct": 0.06756756756756757,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.06306306306306306,
+      "k_30pct": 111,
+      "calibration": [
+        {
+          "low": 0,
+          "high": 0.2,
+          "n": 186,
+          "mean_score": 0.1379600167274475,
+          "observed_rate": 0.010752688172043012
+        },
+        {
+          "low": 0.2,
+          "high": 0.4,
+          "n": 141,
+          "mean_score": 0.2852663993835449,
+          "observed_rate": 0.0425531914893617
+        },
+        {
+          "low": 0.4,
+          "high": 0.6,
+          "n": 36,
+          "mean_score": 0.4671589434146881,
+          "observed_rate": 0.05555555555555555
+        },
+        {
+          "low": 0.6,
+          "high": 0.8,
+          "n": 4,
+          "mean_score": 0.6547929048538208,
+          "observed_rate": 0.5
+        },
+        {
+          "low": 0.8,
+          "high": 1,
+          "n": 0,
+          "mean_score": null,
+          "observed_rate": null
+        }
+      ]
+    }
+  ],
+  "baselines": {
+    "all_normal": {
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.5,
+      "tp": 0,
+      "fn": 12,
+      "fp": 0,
+      "tn": 355,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "roc_auc": 0.5,
+      "average_precision": 0.0326975476839237,
+      "brier": 0.0326975476839237,
+      "alert_rate": 0.0,
+      "accuracy": 0.9673024523160763,
+      "precision_at_20pct": 0.04054054054054054,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.06306306306306306,
+      "k_30pct": 111
+    },
+    "all_risk": {
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.5,
+      "tp": 12,
+      "fn": 0,
+      "fp": 355,
+      "tn": 0,
+      "precision": 0.0326975476839237,
+      "recall": 1.0,
+      "f1": 0.0633245382585752,
+      "f2": 0.14457831325301204,
+      "roc_auc": 0.5,
+      "average_precision": 0.0326975476839237,
+      "brier": 0.9673024523160763,
+      "alert_rate": 1.0,
+      "accuracy": 0.0326975476839237,
+      "precision_at_20pct": 0.04054054054054054,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.06306306306306306,
+      "k_30pct": 111
+    },
+    "train_prevalence": {
+      "n": 367,
+      "positives": 12,
+      "prevalence": 0.0326975476839237,
+      "threshold": 0.5,
+      "tp": 0,
+      "fn": 12,
+      "fp": 0,
+      "tn": 355,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "roc_auc": 0.5,
+      "average_precision": 0.0326975476839237,
+      "brier": 0.03427539644074582,
+      "alert_rate": 0.0,
+      "accuracy": 0.9673024523160763,
+      "precision_at_20pct": 0.04054054054054054,
+      "k_20pct": 74,
+      "precision_at_30pct": 0.06306306306306306,
+      "k_30pct": 111
+    }
+  }
+}

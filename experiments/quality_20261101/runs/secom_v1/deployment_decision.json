@@ -1,0 +1,5 @@
+{
+  "action": "separate_research_model_only",
+  "winner": "secom590_XGBoost_1",
+  "reason": "Different process and anonymized inputs; cannot replace KAMP web model."
+}

@@ -1,0 +1,3797 @@
+{
+  "version": "kamp60-release-20261101",
+  "selected_model": "RandomForest",
+  "alert_threshold": 0.35,
+  "model_sha256": "ba996437efde81e0f6ae35f6027afa6f82e45d944aa25b5f92f2230171abbc26",
+  "data_sha256": "5e32d61b0412b091a3d2f7fdf2dced28f7501f6a3d48338469c4712476c57bb3",
+  "seed": 20261101,
+  "environment": {
+    "python": "3.12.14",
+    "sklearn": "1.9.1"
+  },
+  "selection_rule": "Train time-CV AP selects parameters per family; May validation F2 then precision selects threshold/model.",
+  "defect_rate_threshold_percent": 0.049443144463256726,
+  "defect_rate_threshold_ppm": 494.43144463256726,
+  "split": {
+    "test": {
+      "batches": 36,
+      "risk_labels": 7,
+      "start": "2022-06-03 13:08:54",
+      "end": "2022-07-19 19:08:59"
+    },
+    "train": {
+      "batches": 78,
+      "risk_labels": 20,
+      "start": "2022-01-03 11:22:07",
+      "end": "2022-04-30 10:03:23"
+    },
+    "validation": {
+      "batches": 22,
+      "risk_labels": 4,
+      "start": "2022-05-02 10:57:46",
+      "end": "2022-05-31 21:50:47"
+    }
+  },
+  "cv_comparison": [
+    {
+      "model": "LogisticRegression",
+      "parameter": "C",
+      "value": 0.01,
+      "mean_cv_average_precision": 0.4491947383685,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.3390151515151515
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.3856993894048848
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.6228696741854636
+        }
+      ]
+    },
+    {
+      "model": "LogisticRegression",
+      "parameter": "C",
+      "value": 0.1,
+      "mean_cv_average_precision": 0.42927792063130416,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.3645833333333333
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.4110641186299081
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.5121863099306708
+        }
+      ]
+    },
+    {
+      "model": "LogisticRegression",
+      "parameter": "C",
+      "value": 1.0,
+      "mean_cv_average_precision": 0.3230082313259005,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.2708333333333333
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.3396355472013367
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.35855581344303145
+        }
+      ]
+    },
+    {
+      "model": "RandomForest",
+      "parameter": "max_depth",
+      "value": 2,
+      "mean_cv_average_precision": 0.5694089870131998,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.6575757575757576
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.4127827227382181
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.6378684807256235
+        }
+      ]
+    },
+    {
+      "model": "RandomForest",
+      "parameter": "max_depth",
+      "value": 3,
+      "mean_cv_average_precision": 0.5573152606337591,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.6575757575757576
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.4127827227382181
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.6015873015873017
+        }
+      ]
+    },
+    {
+      "model": "RandomForest",
+      "parameter": "max_depth",
+      "value": 5,
+      "mean_cv_average_precision": 0.5573152606337591,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.6575757575757576
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.4127827227382181
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.6015873015873017
+        }
+      ]
+    },
+    {
+      "model": "XGBoost",
+      "parameter": "max_depth",
+      "value": 1,
+      "mean_cv_average_precision": 0.3967112787228333,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.3737373737373737
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.3367635836385836
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.47963287879254257
+        }
+      ]
+    },
+    {
+      "model": "XGBoost",
+      "parameter": "max_depth",
+      "value": 2,
+      "mean_cv_average_precision": 0.46468759318024017,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.3737373737373737
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.43604400093370677
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.5842814048696401
+        }
+      ]
+    },
+    {
+      "model": "XGBoost",
+      "parameter": "max_depth",
+      "value": 3,
+      "mean_cv_average_precision": 0.4725384724596909,
+      "folds": [
+        {
+          "train_count": 21,
+          "validation_count": 19,
+          "label_threshold": 0.0423842241456232,
+          "average_precision": 0.3737373737373737
+        },
+        {
+          "train_count": 40,
+          "validation_count": 19,
+          "label_threshold": 0.04030883253029815,
+          "average_precision": 0.43604400093370677
+        },
+        {
+          "train_count": 59,
+          "validation_count": 19,
+          "label_threshold": 0.0459893605527819,
+          "average_precision": 0.6078340427079922
+        }
+      ]
+    }
+  ],
+  "validation_comparison": [
+    {
+      "model": "LogisticRegression",
+      "parameter": "C",
+      "value": 0.01,
+      "alert_threshold": 0.5,
+      "count": 22,
+      "positive_count": 4,
+      "tp": 3,
+      "fn": 1,
+      "fp": 7,
+      "tn": 11,
+      "precision": 0.3,
+      "recall": 0.75,
+      "f1": 0.42857142857142855,
+      "f2": 0.5769230769230769,
+      "roc_auc": 0.7222222222222222,
+      "average_precision": 0.3708333333333333,
+      "accuracy": 0.6363636363636364,
+      "alert_rate": 0.45454545454545453
+    },
+    {
+      "model": "RandomForest",
+      "parameter": "max_depth",
+      "value": 2,
+      "alert_threshold": 0.35,
+      "count": 22,
+      "positive_count": 4,
+      "tp": 4,
+      "fn": 0,
+      "fp": 13,
+      "tn": 5,
+      "precision": 0.23529411764705882,
+      "recall": 1.0,
+      "f1": 0.38095238095238093,
+      "f2": 0.6060606060606061,
+      "roc_auc": 0.6666666666666667,
+      "average_precision": 0.3770053475935829,
+      "accuracy": 0.4090909090909091,
+      "alert_rate": 0.7727272727272727
+    },
+    {
+      "model": "XGBoost",
+      "parameter": "max_depth",
+      "value": 3,
+      "alert_threshold": 0.1,
+      "count": 22,
+      "positive_count": 4,
+      "tp": 4,
+      "fn": 0,
+      "fp": 17,
+      "tn": 1,
+      "precision": 0.19047619047619047,
+      "recall": 1.0,
+      "f1": 0.32,
+      "f2": 0.5405405405405406,
+      "roc_auc": 0.625,
+      "average_precision": 0.4041666666666667,
+      "accuracy": 0.22727272727272727,
+      "alert_rate": 0.9545454545454546
+    }
+  ],
+  "test": {
+    "count": 36,
+    "positive_count": 7,
+    "tp": 5,
+    "fn": 2,
+    "fp": 23,
+    "tn": 6,
+    "precision": 0.17857142857142858,
+    "recall": 0.7142857142857143,
+    "f1": 0.2857142857142857,
+    "f2": 0.44642857142857145,
+    "roc_auc": 0.4285714285714286,
+    "average_precision": 0.20554868412011268,
+    "accuracy": 0.3055555555555556,
+    "alert_rate": 0.7777777777777778
+  },
+  "test_status": "previously_seen_holdout_development_reference",
+  "test_all_normal": {
+    "count": 36,
+    "positive_count": 7,
+    "tp": 0,
+    "fn": 7,
+    "fp": 0,
+    "tn": 29,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "f2": 0.0,
+    "roc_auc": 0.5,
+    "average_precision": 0.19444444444444445,
+    "accuracy": 0.8055555555555556,
+    "alert_rate": 0.0
+  },
+  "test_all_risk": {
+    "count": 36,
+    "positive_count": 7,
+    "tp": 7,
+    "fn": 0,
+    "fp": 29,
+    "tn": 0,
+    "precision": 0.19444444444444445,
+    "recall": 1.0,
+    "f1": 0.32558139534883723,
+    "f2": 0.546875,
+    "roc_auc": 0.5,
+    "average_precision": 0.19444444444444445,
+    "accuracy": 0.19444444444444445,
+    "alert_rate": 1.0
+  },
+  "validation_all_risk": {
+    "count": 22,
+    "positive_count": 4,
+    "tp": 4,
+    "fn": 0,
+    "fp": 18,
+    "tn": 0,
+    "precision": 0.18181818181818182,
+    "recall": 1.0,
+    "f1": 0.3076923076923077,
+    "f2": 0.5263157894736842,
+    "roc_auc": 0.5,
+    "average_precision": 0.18181818181818182,
+    "accuracy": 0.18181818181818182,
+    "alert_rate": 1.0
+  },
+  "feature_analysis": [
+    {
+      "feature": "건조 1존 OP_Avg",
+      "q05": 66.97039586623298,
+      "median": 70.53397262347605,
+      "q95": 73.5193334841736,
+      "model_weight": 0.009582509193826194,
+      "permutation_ap_drop": 0.0,
+      "permutation_ap_std": 0.0,
+      "spearman": -0.3090959673238154,
+      "histogram": [
+        {
+          "low": 62.91420430940181,
+          "high": 64.3580557567079,
+          "count": 2
+        },
+        {
+          "low": 64.3580557567079,
+          "high": 65.80190720401397,
+          "count": 2
+        },
+        {
+          "low": 65.80190720401397,
+          "high": 67.24575865132006,
+          "count": 1
+        },
+        {
+          "low": 67.24575865132006,
+          "high": 68.68961009862613,
+          "count": 9
+        },
+        {
+          "low": 68.68961009862613,
+          "high": 70.13346154593222,
+          "count": 19
+        },
+        {
+          "low": 70.13346154593222,
+          "high": 71.57731299323831,
+          "count": 22
+        },
+        {
+          "low": 71.57731299323831,
+          "high": 73.02116444054438,
+          "count": 14
+        },
+        {
+          "low": 73.02116444054438,
+          "high": 74.46501588785047,
+          "count": 9
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 66.460175,
+          "defect_rate_percent": 0.065004,
+          "count": 10
+        },
+        {
+          "value": 68.805376,
+          "defect_rate_percent": 0.063949,
+          "count": 10
+        },
+        {
+          "value": 69.595019,
+          "defect_rate_percent": 0.045881,
+          "count": 10
+        },
+        {
+          "value": 70.290581,
+          "defect_rate_percent": 0.018626,
+          "count": 10
+        },
+        {
+          "value": 70.883522,
+          "defect_rate_percent": 0.060557,
+          "count": 10
+        },
+        {
+          "value": 71.585601,
+          "defect_rate_percent": 0.018238,
+          "count": 10
+        },
+        {
+          "value": 72.529073,
+          "defect_rate_percent": 0.031617,
+          "count": 9
+        },
+        {
+          "value": 73.62258,
+          "defect_rate_percent": 0.019325,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조 1존 OP_Std",
+      "q05": 2.3395756224434474,
+      "median": 3.3376090141972616,
+      "q95": 4.7004059229991695,
+      "model_weight": 0.02740946039573157,
+      "permutation_ap_drop": -0.00969696969696969,
+      "permutation_ap_std": 0.04028608096550506,
+      "spearman": 0.3201734973886872,
+      "histogram": [
+        {
+          "low": 1.4302561311722388,
+          "high": 1.894235722257697,
+          "count": 1
+        },
+        {
+          "low": 1.894235722257697,
+          "high": 2.3582153133431554,
+          "count": 3
+        },
+        {
+          "low": 2.3582153133431554,
+          "high": 2.8221949044286134,
+          "count": 16
+        },
+        {
+          "low": 2.8221949044286134,
+          "high": 3.2861744955140715,
+          "count": 15
+        },
+        {
+          "low": 3.2861744955140715,
+          "high": 3.75015408659953,
+          "count": 19
+        },
+        {
+          "low": 3.75015408659953,
+          "high": 4.214133677684988,
+          "count": 12
+        },
+        {
+          "low": 4.214133677684988,
+          "high": 4.6781132687704465,
+          "count": 8
+        },
+        {
+          "low": 4.6781132687704465,
+          "high": 5.142092859855905,
+          "count": 4
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 2.273538,
+          "defect_rate_percent": 0.019051,
+          "count": 10
+        },
+        {
+          "value": 2.721404,
+          "defect_rate_percent": 0.03051,
+          "count": 10
+        },
+        {
+          "value": 3.056435,
+          "defect_rate_percent": 0.025065,
+          "count": 10
+        },
+        {
+          "value": 3.275979,
+          "defect_rate_percent": 0.034338,
+          "count": 10
+        },
+        {
+          "value": 3.443852,
+          "defect_rate_percent": 0.031565,
+          "count": 10
+        },
+        {
+          "value": 3.781743,
+          "defect_rate_percent": 0.083375,
+          "count": 10
+        },
+        {
+          "value": 4.155236,
+          "defect_rate_percent": 0.066517,
+          "count": 9
+        },
+        {
+          "value": 4.729409,
+          "defect_rate_percent": 0.03815,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조 2존 OP_Avg",
+      "q05": 18.55691480579565,
+      "median": 21.233372812366675,
+      "q95": 24.492964761205254,
+      "model_weight": 0.011206540329098966,
+      "permutation_ap_drop": -0.004772727272727245,
+      "permutation_ap_std": 0.003124483428378964,
+      "spearman": -0.12717662084750692,
+      "histogram": [
+        {
+          "low": 16.088287263479145,
+          "high": 17.995327494562943,
+          "count": 2
+        },
+        {
+          "low": 17.995327494562943,
+          "high": 19.90236772564674,
+          "count": 25
+        },
+        {
+          "low": 19.90236772564674,
+          "high": 21.80940795673054,
+          "count": 16
+        },
+        {
+          "low": 21.80940795673054,
+          "high": 23.716448187814336,
+          "count": 27
+        },
+        {
+          "low": 23.716448187814336,
+          "high": 25.623488418898134,
+          "count": 7
+        },
+        {
+          "low": 25.623488418898134,
+          "high": 27.530528649981935,
+          "count": 0
+        },
+        {
+          "low": 27.530528649981935,
+          "high": 29.437568881065733,
+          "count": 0
+        },
+        {
+          "low": 29.437568881065733,
+          "high": 31.34460911214953,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 18.269208,
+          "defect_rate_percent": 0.048842,
+          "count": 10
+        },
+        {
+          "value": 19.341936,
+          "defect_rate_percent": 0.043713,
+          "count": 10
+        },
+        {
+          "value": 19.860191,
+          "defect_rate_percent": 0.078655,
+          "count": 10
+        },
+        {
+          "value": 20.790111,
+          "defect_rate_percent": 0.033851,
+          "count": 10
+        },
+        {
+          "value": 21.7526,
+          "defect_rate_percent": 0.024237,
+          "count": 10
+        },
+        {
+          "value": 22.22298,
+          "defect_rate_percent": 0.035893,
+          "count": 10
+        },
+        {
+          "value": 23.139979,
+          "defect_rate_percent": 0.033981,
+          "count": 9
+        },
+        {
+          "value": 25.176471,
+          "defect_rate_percent": 0.024809,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조 2존 OP_Std",
+      "q05": 2.1641147464029773,
+      "median": 3.115687522771381,
+      "q95": 4.68828804064866,
+      "model_weight": 0.0160890640801118,
+      "permutation_ap_drop": -0.04584893048128343,
+      "permutation_ap_std": 0.055723596899841736,
+      "spearman": 0.3103858167149306,
+      "histogram": [
+        {
+          "low": 1.3247520054122617,
+          "high": 1.8770175334107764,
+          "count": 2
+        },
+        {
+          "low": 1.8770175334107764,
+          "high": 2.429283061409291,
+          "count": 12
+        },
+        {
+          "low": 2.429283061409291,
+          "high": 2.9815485894078053,
+          "count": 15
+        },
+        {
+          "low": 2.9815485894078053,
+          "high": 3.53381411740632,
+          "count": 22
+        },
+        {
+          "low": 3.53381411740632,
+          "high": 4.086079645404834,
+          "count": 13
+        },
+        {
+          "low": 4.086079645404834,
+          "high": 4.63834517340335,
+          "count": 9
+        },
+        {
+          "low": 4.63834517340335,
+          "high": 5.190610701401864,
+          "count": 4
+        },
+        {
+          "low": 5.190610701401864,
+          "high": 5.742876229400379,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 2.054535,
+          "defect_rate_percent": 0.017312,
+          "count": 10
+        },
+        {
+          "value": 2.486415,
+          "defect_rate_percent": 0.037595,
+          "count": 10
+        },
+        {
+          "value": 2.818195,
+          "defect_rate_percent": 0.021353,
+          "count": 10
+        },
+        {
+          "value": 3.069489,
+          "defect_rate_percent": 0.06458,
+          "count": 10
+        },
+        {
+          "value": 3.351697,
+          "defect_rate_percent": 0.055049,
+          "count": 10
+        },
+        {
+          "value": 3.718956,
+          "defect_rate_percent": 0.053083,
+          "count": 10
+        },
+        {
+          "value": 4.095048,
+          "defect_rate_percent": 0.036573,
+          "count": 9
+        },
+        {
+          "value": 4.76848,
+          "defect_rate_percent": 0.040239,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조로 온도 1 Zone_Avg",
+      "q05": 99.9618978983204,
+      "median": 100.00167149429035,
+      "q95": 100.05055518295735,
+      "model_weight": 0.00883174885812547,
+      "permutation_ap_drop": -0.006931818181818175,
+      "permutation_ap_std": 0.027163369765638296,
+      "spearman": -0.11733835784468695,
+      "histogram": [
+        {
+          "low": 99.37020467289722,
+          "high": 99.46876107791273,
+          "count": 1
+        },
+        {
+          "low": 99.46876107791273,
+          "high": 99.56731748292825,
+          "count": 0
+        },
+        {
+          "low": 99.56731748292825,
+          "high": 99.66587388794377,
+          "count": 0
+        },
+        {
+          "low": 99.66587388794377,
+          "high": 99.76443029295929,
+          "count": 0
+        },
+        {
+          "low": 99.76443029295929,
+          "high": 99.8629866979748,
+          "count": 0
+        },
+        {
+          "low": 99.8629866979748,
+          "high": 99.96154310299033,
+          "count": 3
+        },
+        {
+          "low": 99.96154310299033,
+          "high": 100.06009950800585,
+          "count": 71
+        },
+        {
+          "low": 100.06009950800585,
+          "high": 100.15865591302136,
+          "count": 3
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 99.904719,
+          "defect_rate_percent": 0.089239,
+          "count": 10
+        },
+        {
+          "value": 99.991022,
+          "defect_rate_percent": 0.037057,
+          "count": 10
+        },
+        {
+          "value": 99.996203,
+          "defect_rate_percent": 0.029926,
+          "count": 10
+        },
+        {
+          "value": 100.00026,
+          "defect_rate_percent": 0.022646,
+          "count": 10
+        },
+        {
+          "value": 100.004467,
+          "defect_rate_percent": 0.037019,
+          "count": 10
+        },
+        {
+          "value": 100.009456,
+          "defect_rate_percent": 0.036227,
+          "count": 10
+        },
+        {
+          "value": 100.024599,
+          "defect_rate_percent": 0.025476,
+          "count": 9
+        },
+        {
+          "value": 100.064349,
+          "defect_rate_percent": 0.047846,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조로 온도 1 Zone_Std",
+      "q05": 0.30752263363081855,
+      "median": 0.45019847730202767,
+      "q95": 0.6792149625578964,
+      "model_weight": 0.11179694123687874,
+      "permutation_ap_drop": -0.05286293964893035,
+      "permutation_ap_std": 0.08898960594608556,
+      "spearman": 0.3978932459945118,
+      "histogram": [
+        {
+          "low": 0.0786005629699195,
+          "high": 0.16358498429161616,
+          "count": 1
+        },
+        {
+          "low": 0.16358498429161616,
+          "high": 0.2485694056133128,
+          "count": 1
+        },
+        {
+          "low": 0.2485694056133128,
+          "high": 0.33355382693500946,
+          "count": 8
+        },
+        {
+          "low": 0.33355382693500946,
+          "high": 0.4185382482567061,
+          "count": 22
+        },
+        {
+          "low": 0.4185382482567061,
+          "high": 0.5035226695784027,
+          "count": 23
+        },
+        {
+          "low": 0.5035226695784027,
+          "high": 0.5885070909000993,
+          "count": 13
+        },
+        {
+          "low": 0.5885070909000993,
+          "high": 0.673491512221796,
+          "count": 5
+        },
+        {
+          "low": 0.673491512221796,
+          "high": 0.7584759335434926,
+          "count": 5
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.282948,
+          "defect_rate_percent": 0.023522,
+          "count": 10
+        },
+        {
+          "value": 0.36153,
+          "defect_rate_percent": 0.023635,
+          "count": 10
+        },
+        {
+          "value": 0.392615,
+          "defect_rate_percent": 0.017333,
+          "count": 10
+        },
+        {
+          "value": 0.432816,
+          "defect_rate_percent": 0.031326,
+          "count": 10
+        },
+        {
+          "value": 0.469284,
+          "defect_rate_percent": 0.04196,
+          "count": 10
+        },
+        {
+          "value": 0.503487,
+          "defect_rate_percent": 0.0428,
+          "count": 10
+        },
+        {
+          "value": 0.55563,
+          "defect_rate_percent": 0.074615,
+          "count": 9
+        },
+        {
+          "value": 0.690584,
+          "defect_rate_percent": 0.078193,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조로 온도 2 Zone_Avg",
+      "q05": 99.96533725405502,
+      "median": 100.01071906406918,
+      "q95": 100.06236594909625,
+      "model_weight": 0.05892974028652361,
+      "permutation_ap_drop": -0.035559343155124865,
+      "permutation_ap_std": 0.07893097932312404,
+      "spearman": -0.1339546529419947,
+      "histogram": [
+        {
+          "low": 98.86379462616824,
+          "high": 99.01800186518022,
+          "count": 1
+        },
+        {
+          "low": 99.01800186518022,
+          "high": 99.1722091041922,
+          "count": 0
+        },
+        {
+          "low": 99.1722091041922,
+          "high": 99.32641634320419,
+          "count": 0
+        },
+        {
+          "low": 99.32641634320419,
+          "high": 99.48062358221617,
+          "count": 0
+        },
+        {
+          "low": 99.48062358221617,
+          "high": 99.63483082122815,
+          "count": 0
+        },
+        {
+          "low": 99.63483082122815,
+          "high": 99.78903806024013,
+          "count": 0
+        },
+        {
+          "low": 99.78903806024013,
+          "high": 99.94324529925211,
+          "count": 2
+        },
+        {
+          "low": 99.94324529925211,
+          "high": 100.0974525382641,
+          "count": 75
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 99.846319,
+          "defect_rate_percent": 0.037714,
+          "count": 10
+        },
+        {
+          "value": 99.988511,
+          "defect_rate_percent": 0.029743,
+          "count": 10
+        },
+        {
+          "value": 100.00164,
+          "defect_rate_percent": 0.05332,
+          "count": 10
+        },
+        {
+          "value": 100.009018,
+          "defect_rate_percent": 0.078703,
+          "count": 10
+        },
+        {
+          "value": 100.01401,
+          "defect_rate_percent": 0.029698,
+          "count": 10
+        },
+        {
+          "value": 100.02743,
+          "defect_rate_percent": 0.028121,
+          "count": 10
+        },
+        {
+          "value": 100.040525,
+          "defect_rate_percent": 0.0188,
+          "count": 9
+        },
+        {
+          "value": 100.068265,
+          "defect_rate_percent": 0.04876,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "건조로 온도 2 Zone_Std",
+      "q05": 0.22799790786874063,
+      "median": 0.3699790318514288,
+      "q95": 0.5670285441237601,
+      "model_weight": 0.13126073325264462,
+      "permutation_ap_drop": -0.09284596616833457,
+      "permutation_ap_std": 0.10081007818843643,
+      "spearman": 0.4932409362789109,
+      "histogram": [
+        {
+          "low": 0.0463535437220009,
+          "high": 0.134507406325695,
+          "count": 1
+        },
+        {
+          "low": 0.134507406325695,
+          "high": 0.2226612689293891,
+          "count": 3
+        },
+        {
+          "low": 0.2226612689293891,
+          "high": 0.3108151315330832,
+          "count": 23
+        },
+        {
+          "low": 0.3108151315330832,
+          "high": 0.3989689941367773,
+          "count": 21
+        },
+        {
+          "low": 0.3989689941367773,
+          "high": 0.48712285674047134,
+          "count": 16
+        },
+        {
+          "low": 0.48712285674047134,
+          "high": 0.5752767193441655,
+          "count": 10
+        },
+        {
+          "low": 0.5752767193441655,
+          "high": 0.6634305819478596,
+          "count": 3
+        },
+        {
+          "low": 0.6634305819478596,
+          "high": 0.7515844445515536,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.212782,
+          "defect_rate_percent": 0.020849,
+          "count": 10
+        },
+        {
+          "value": 0.263817,
+          "defect_rate_percent": 0.01601,
+          "count": 10
+        },
+        {
+          "value": 0.30114,
+          "defect_rate_percent": 0.025128,
+          "count": 10
+        },
+        {
+          "value": 0.352578,
+          "defect_rate_percent": 0.032144,
+          "count": 10
+        },
+        {
+          "value": 0.385889,
+          "defect_rate_percent": 0.033922,
+          "count": 10
+        },
+        {
+          "value": 0.429178,
+          "defect_rate_percent": 0.08078,
+          "count": 10
+        },
+        {
+          "value": 0.493526,
+          "defect_rate_percent": 0.079485,
+          "count": 9
+        },
+        {
+          "value": 0.585217,
+          "defect_rate_percent": 0.041925,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "세정기_Avg",
+      "q05": 64.9725086201007,
+      "median": 66.70801214022968,
+      "q95": 69.5451057784465,
+      "model_weight": 0.0010874862983410126,
+      "permutation_ap_drop": 0.0,
+      "permutation_ap_std": 0.0,
+      "spearman": 0.007018298157538664,
+      "histogram": [
+        {
+          "low": 64.62148386731278,
+          "high": 65.28106787938,
+          "count": 8
+        },
+        {
+          "low": 65.28106787938,
+          "high": 65.94065189144723,
+          "count": 9
+        },
+        {
+          "low": 65.94065189144723,
+          "high": 66.60023590351447,
+          "count": 18
+        },
+        {
+          "low": 66.60023590351447,
+          "high": 67.2598199155817,
+          "count": 17
+        },
+        {
+          "low": 67.2598199155817,
+          "high": 67.91940392764893,
+          "count": 9
+        },
+        {
+          "low": 67.91940392764893,
+          "high": 68.57898793971617,
+          "count": 4
+        },
+        {
+          "low": 68.57898793971617,
+          "high": 69.2385719517834,
+          "count": 3
+        },
+        {
+          "low": 69.2385719517834,
+          "high": 69.89815596385063,
+          "count": 10
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 65.022169,
+          "defect_rate_percent": 0.02992,
+          "count": 10
+        },
+        {
+          "value": 65.791857,
+          "defect_rate_percent": 0.02204,
+          "count": 10
+        },
+        {
+          "value": 66.290589,
+          "defect_rate_percent": 0.100376,
+          "count": 10
+        },
+        {
+          "value": 66.6235,
+          "defect_rate_percent": 0.035443,
+          "count": 10
+        },
+        {
+          "value": 66.895912,
+          "defect_rate_percent": 0.038918,
+          "count": 10
+        },
+        {
+          "value": 67.502956,
+          "defect_rate_percent": 0.035979,
+          "count": 10
+        },
+        {
+          "value": 68.462725,
+          "defect_rate_percent": 0.022934,
+          "count": 9
+        },
+        {
+          "value": 69.57233,
+          "defect_rate_percent": 0.038651,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "세정기_Std",
+      "q05": 0.27642768404410023,
+      "median": 0.47692887774781423,
+      "q95": 1.269736959527304,
+      "model_weight": 0.01573527965181355,
+      "permutation_ap_drop": -0.002765151515151512,
+      "permutation_ap_std": 0.009154684756144766,
+      "spearman": -0.07444454279897317,
+      "histogram": [
+        {
+          "low": 0.0566124015674361,
+          "high": 0.3029381978018492,
+          "count": 10
+        },
+        {
+          "low": 0.3029381978018492,
+          "high": 0.5492639940362624,
+          "count": 42
+        },
+        {
+          "low": 0.5492639940362624,
+          "high": 0.7955897902706754,
+          "count": 10
+        },
+        {
+          "low": 0.7955897902706754,
+          "high": 1.0419155865050886,
+          "count": 5
+        },
+        {
+          "low": 1.0419155865050886,
+          "high": 1.2882413827395018,
+          "count": 7
+        },
+        {
+          "low": 1.2882413827395018,
+          "high": 1.5345671789739148,
+          "count": 1
+        },
+        {
+          "low": 1.5345671789739148,
+          "high": 1.780892975208328,
+          "count": 1
+        },
+        {
+          "low": 1.780892975208328,
+          "high": 2.027218771442741,
+          "count": 2
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.255693,
+          "defect_rate_percent": 0.044831,
+          "count": 10
+        },
+        {
+          "value": 0.342686,
+          "defect_rate_percent": 0.02973,
+          "count": 10
+        },
+        {
+          "value": 0.383981,
+          "defect_rate_percent": 0.069409,
+          "count": 10
+        },
+        {
+          "value": 0.44066,
+          "defect_rate_percent": 0.041268,
+          "count": 10
+        },
+        {
+          "value": 0.501461,
+          "defect_rate_percent": 0.058308,
+          "count": 10
+        },
+        {
+          "value": 0.616479,
+          "defect_rate_percent": 0.028823,
+          "count": 10
+        },
+        {
+          "value": 0.895717,
+          "defect_rate_percent": 0.031261,
+          "count": 9
+        },
+        {
+          "value": 1.398362,
+          "defect_rate_percent": 0.019553,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입1존 OP_Avg",
+      "q05": 64.1371671324989,
+      "median": 75.96155324689991,
+      "q95": 81.85991604747399,
+      "model_weight": 0.019935992157114293,
+      "permutation_ap_drop": -0.01868983957219248,
+      "permutation_ap_std": 0.04854750255755162,
+      "spearman": 0.08124786605799263,
+      "histogram": [
+        {
+          "low": 51.432222634791465,
+          "high": 56.765264636050006,
+          "count": 2
+        },
+        {
+          "low": 56.765264636050006,
+          "high": 62.098306637308546,
+          "count": 1
+        },
+        {
+          "low": 62.098306637308546,
+          "high": 67.43134863856709,
+          "count": 4
+        },
+        {
+          "low": 67.43134863856709,
+          "high": 72.76439063982563,
+          "count": 8
+        },
+        {
+          "low": 72.76439063982563,
+          "high": 78.09743264108417,
+          "count": 38
+        },
+        {
+          "low": 78.09743264108417,
+          "high": 83.43047464234272,
+          "count": 23
+        },
+        {
+          "low": 83.43047464234272,
+          "high": 88.76351664360126,
+          "count": 1
+        },
+        {
+          "low": 88.76351664360126,
+          "high": 94.0965586448598,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 63.554392,
+          "defect_rate_percent": 0.022566,
+          "count": 10
+        },
+        {
+          "value": 72.222088,
+          "defect_rate_percent": 0.072887,
+          "count": 10
+        },
+        {
+          "value": 74.440297,
+          "defect_rate_percent": 0.032043,
+          "count": 10
+        },
+        {
+          "value": 75.638076,
+          "defect_rate_percent": 0.0227,
+          "count": 10
+        },
+        {
+          "value": 76.826981,
+          "defect_rate_percent": 0.059863,
+          "count": 10
+        },
+        {
+          "value": 78.342819,
+          "defect_rate_percent": 0.035488,
+          "count": 10
+        },
+        {
+          "value": 79.650164,
+          "defect_rate_percent": 0.043404,
+          "count": 9
+        },
+        {
+          "value": 83.334488,
+          "defect_rate_percent": 0.037212,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입1존 OP_Std",
+      "q05": 16.357106650766156,
+      "median": 23.929581402515566,
+      "q95": 31.150898545883255,
+      "model_weight": 0.04631783836726898,
+      "permutation_ap_drop": -0.0008249093098164157,
+      "permutation_ap_std": 0.04493041985713148,
+      "spearman": 0.35540408958130476,
+      "histogram": [
+        {
+          "low": 2.5605034411137653,
+          "high": 6.71143949763132,
+          "count": 2
+        },
+        {
+          "low": 6.71143949763132,
+          "high": 10.862375554148873,
+          "count": 0
+        },
+        {
+          "low": 10.862375554148873,
+          "high": 15.013311610666426,
+          "count": 0
+        },
+        {
+          "low": 15.013311610666426,
+          "high": 19.164247667183982,
+          "count": 10
+        },
+        {
+          "low": 19.164247667183982,
+          "high": 23.315183723701537,
+          "count": 17
+        },
+        {
+          "low": 23.315183723701537,
+          "high": 27.46611978021909,
+          "count": 32
+        },
+        {
+          "low": 27.46611978021909,
+          "high": 31.617055836736643,
+          "count": 13
+        },
+        {
+          "low": 31.617055836736643,
+          "high": 35.7679918932542,
+          "count": 4
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 14.148729,
+          "defect_rate_percent": 0.020146,
+          "count": 10
+        },
+        {
+          "value": 20.090092,
+          "defect_rate_percent": 0.027747,
+          "count": 10
+        },
+        {
+          "value": 22.418906,
+          "defect_rate_percent": 0.022751,
+          "count": 10
+        },
+        {
+          "value": 23.697379,
+          "defect_rate_percent": 0.024665,
+          "count": 10
+        },
+        {
+          "value": 24.962745,
+          "defect_rate_percent": 0.072568,
+          "count": 10
+        },
+        {
+          "value": 26.586755,
+          "defect_rate_percent": 0.043883,
+          "count": 10
+        },
+        {
+          "value": 28.35828,
+          "defect_rate_percent": 0.062733,
+          "count": 9
+        },
+        {
+          "value": 31.853092,
+          "defect_rate_percent": 0.055426,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입2존 OP_Avg",
+      "q05": 45.13887342110728,
+      "median": 54.77406379623966,
+      "q95": 58.607203048851055,
+      "model_weight": 0.024658101300925165,
+      "permutation_ap_drop": -0.0031751336898395628,
+      "permutation_ap_std": 0.0034583768239613323,
+      "spearman": 0.2372690600538702,
+      "histogram": [
+        {
+          "low": 43.311839997692665,
+          "high": 45.3144298154695,
+          "count": 5
+        },
+        {
+          "low": 45.3144298154695,
+          "high": 47.317019633246346,
+          "count": 6
+        },
+        {
+          "low": 47.317019633246346,
+          "high": 49.31960945102318,
+          "count": 1
+        },
+        {
+          "low": 49.31960945102318,
+          "high": 51.32219926880002,
+          "count": 2
+        },
+        {
+          "low": 51.32219926880002,
+          "high": 53.324789086576864,
+          "count": 3
+        },
+        {
+          "low": 53.324789086576864,
+          "high": 55.3273789043537,
+          "count": 30
+        },
+        {
+          "low": 55.3273789043537,
+          "high": 57.329968722130545,
+          "count": 21
+        },
+        {
+          "low": 57.329968722130545,
+          "high": 59.33255853990738,
+          "count": 10
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 45.292058,
+          "defect_rate_percent": 0.014156,
+          "count": 10
+        },
+        {
+          "value": 51.614473,
+          "defect_rate_percent": 0.022104,
+          "count": 10
+        },
+        {
+          "value": 54.031244,
+          "defect_rate_percent": 0.072248,
+          "count": 10
+        },
+        {
+          "value": 54.452044,
+          "defect_rate_percent": 0.056226,
+          "count": 10
+        },
+        {
+          "value": 55.204198,
+          "defect_rate_percent": 0.033392,
+          "count": 10
+        },
+        {
+          "value": 55.765207,
+          "defect_rate_percent": 0.036985,
+          "count": 10
+        },
+        {
+          "value": 56.859668,
+          "defect_rate_percent": 0.035398,
+          "count": 9
+        },
+        {
+          "value": 58.450231,
+          "defect_rate_percent": 0.056816,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입2존 OP_Std",
+      "q05": 1.5961405615445312,
+      "median": 2.5822112372349064,
+      "q95": 3.8490521491738123,
+      "model_weight": 0.036227404420142106,
+      "permutation_ap_drop": -0.043663101604278054,
+      "permutation_ap_std": 0.057035509968118486,
+      "spearman": 0.1862314900289584,
+      "histogram": [
+        {
+          "low": 0.9947858897843443,
+          "high": 1.9991534732498701,
+          "count": 15
+        },
+        {
+          "low": 1.9991534732498701,
+          "high": 3.003521056715396,
+          "count": 39
+        },
+        {
+          "low": 3.003521056715396,
+          "high": 4.007888640180922,
+          "count": 21
+        },
+        {
+          "low": 4.007888640180922,
+          "high": 5.012256223646448,
+          "count": 2
+        },
+        {
+          "low": 5.012256223646448,
+          "high": 6.016623807111974,
+          "count": 0
+        },
+        {
+          "low": 6.016623807111974,
+          "high": 7.0209913905775,
+          "count": 0
+        },
+        {
+          "low": 7.0209913905775,
+          "high": 8.025358974043026,
+          "count": 0
+        },
+        {
+          "low": 8.025358974043026,
+          "high": 9.029726557508551,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 1.585155,
+          "defect_rate_percent": 0.028701,
+          "count": 10
+        },
+        {
+          "value": 1.970855,
+          "defect_rate_percent": 0.016324,
+          "count": 10
+        },
+        {
+          "value": 2.223804,
+          "defect_rate_percent": 0.058827,
+          "count": 10
+        },
+        {
+          "value": 2.491496,
+          "defect_rate_percent": 0.030346,
+          "count": 10
+        },
+        {
+          "value": 2.766802,
+          "defect_rate_percent": 0.038685,
+          "count": 10
+        },
+        {
+          "value": 3.097508,
+          "defect_rate_percent": 0.037404,
+          "count": 10
+        },
+        {
+          "value": 3.39047,
+          "defect_rate_percent": 0.022196,
+          "count": 9
+        },
+        {
+          "value": 4.382483,
+          "defect_rate_percent": 0.097599,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입3존 OP_Avg",
+      "q05": 49.94635093467226,
+      "median": 53.62788926821265,
+      "q95": 56.939781660171,
+      "model_weight": 0.030395776162481517,
+      "permutation_ap_drop": -0.06841354723707666,
+      "permutation_ap_std": 0.06558368502193489,
+      "spearman": 0.2037582670494063,
+      "histogram": [
+        {
+          "low": 47.31847561111553,
+          "high": 48.64095270220119,
+          "count": 2
+        },
+        {
+          "low": 48.64095270220119,
+          "high": 49.96342979328685,
+          "count": 2
+        },
+        {
+          "low": 49.96342979328685,
+          "high": 51.2859068843725,
+          "count": 9
+        },
+        {
+          "low": 51.2859068843725,
+          "high": 52.60838397545816,
+          "count": 5
+        },
+        {
+          "low": 52.60838397545816,
+          "high": 53.93086106654382,
+          "count": 26
+        },
+        {
+          "low": 53.93086106654382,
+          "high": 55.25333815762947,
+          "count": 22
+        },
+        {
+          "low": 55.25333815762947,
+          "high": 56.57581524871513,
+          "count": 7
+        },
+        {
+          "low": 56.57581524871513,
+          "high": 57.89829233980079,
+          "count": 5
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 49.602769,
+          "defect_rate_percent": 0.014372,
+          "count": 10
+        },
+        {
+          "value": 51.959069,
+          "defect_rate_percent": 0.026753,
+          "count": 10
+        },
+        {
+          "value": 53.050608,
+          "defect_rate_percent": 0.081869,
+          "count": 10
+        },
+        {
+          "value": 53.477703,
+          "defect_rate_percent": 0.070535,
+          "count": 10
+        },
+        {
+          "value": 53.882644,
+          "defect_rate_percent": 0.032228,
+          "count": 10
+        },
+        {
+          "value": 54.262772,
+          "defect_rate_percent": 0.02838,
+          "count": 10
+        },
+        {
+          "value": 55.186755,
+          "defect_rate_percent": 0.03776,
+          "count": 9
+        },
+        {
+          "value": 56.910665,
+          "defect_rate_percent": 0.033313,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입3존 OP_Std",
+      "q05": 1.259855533371858,
+      "median": 1.7407885124149594,
+      "q95": 2.3599424587294227,
+      "model_weight": 0.028700893087691703,
+      "permutation_ap_drop": -0.02756090314913844,
+      "permutation_ap_std": 0.044564024280769776,
+      "spearman": 0.09965983383704902,
+      "histogram": [
+        {
+          "low": 0.9471819707363766,
+          "high": 2.054803788090008,
+          "count": 65
+        },
+        {
+          "low": 2.054803788090008,
+          "high": 3.16242560544364,
+          "count": 12
+        },
+        {
+          "low": 3.16242560544364,
+          "high": 4.270047422797271,
+          "count": 0
+        },
+        {
+          "low": 4.270047422797271,
+          "high": 5.377669240150903,
+          "count": 0
+        },
+        {
+          "low": 5.377669240150903,
+          "high": 6.485291057504535,
+          "count": 0
+        },
+        {
+          "low": 6.485291057504535,
+          "high": 7.592912874858166,
+          "count": 0
+        },
+        {
+          "low": 7.592912874858166,
+          "high": 8.700534692211798,
+          "count": 0
+        },
+        {
+          "low": 8.700534692211798,
+          "high": 9.80815650956543,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 1.269375,
+          "defect_rate_percent": 0.034478,
+          "count": 10
+        },
+        {
+          "value": 1.451427,
+          "defect_rate_percent": 0.047725,
+          "count": 10
+        },
+        {
+          "value": 1.560646,
+          "defect_rate_percent": 0.024429,
+          "count": 10
+        },
+        {
+          "value": 1.692909,
+          "defect_rate_percent": 0.022116,
+          "count": 10
+        },
+        {
+          "value": 1.785811,
+          "defect_rate_percent": 0.039552,
+          "count": 10
+        },
+        {
+          "value": 1.927902,
+          "defect_rate_percent": 0.043863,
+          "count": 10
+        },
+        {
+          "value": 2.061272,
+          "defect_rate_percent": 0.064577,
+          "count": 9
+        },
+        {
+          "value": 3.223767,
+          "defect_rate_percent": 0.053134,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입4존 OP_Avg",
+      "q05": 68.23016050138986,
+      "median": 70.37241321266228,
+      "q95": 71.90763578242527,
+      "model_weight": 0.017474012851169396,
+      "permutation_ap_drop": -0.0009191176470588203,
+      "permutation_ap_std": 0.001591958462839036,
+      "spearman": 0.11283653055804954,
+      "histogram": [
+        {
+          "low": 66.45679792726348,
+          "high": 67.36655462918966,
+          "count": 3
+        },
+        {
+          "low": 67.36655462918966,
+          "high": 68.27631133111585,
+          "count": 2
+        },
+        {
+          "low": 68.27631133111585,
+          "high": 69.18606803304203,
+          "count": 6
+        },
+        {
+          "low": 69.18606803304203,
+          "high": 70.0958247349682,
+          "count": 19
+        },
+        {
+          "low": 70.0958247349682,
+          "high": 71.00558143689439,
+          "count": 28
+        },
+        {
+          "low": 71.00558143689439,
+          "high": 71.91533813882057,
+          "count": 16
+        },
+        {
+          "low": 71.91533813882057,
+          "high": 72.82509484074676,
+          "count": 2
+        },
+        {
+          "low": 72.82509484074676,
+          "high": 73.73485154267294,
+          "count": 2
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 68.101323,
+          "defect_rate_percent": 0.028001,
+          "count": 10
+        },
+        {
+          "value": 69.475525,
+          "defect_rate_percent": 0.061876,
+          "count": 10
+        },
+        {
+          "value": 69.890626,
+          "defect_rate_percent": 0.044342,
+          "count": 10
+        },
+        {
+          "value": 70.220847,
+          "defect_rate_percent": 0.027872,
+          "count": 10
+        },
+        {
+          "value": 70.64581,
+          "defect_rate_percent": 0.044572,
+          "count": 10
+        },
+        {
+          "value": 70.942309,
+          "defect_rate_percent": 0.053943,
+          "count": 10
+        },
+        {
+          "value": 71.178807,
+          "defect_rate_percent": 0.024339,
+          "count": 9
+        },
+        {
+          "value": 72.213475,
+          "defect_rate_percent": 0.039545,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입4존 OP_Std",
+      "q05": 1.25985682913621,
+      "median": 1.7258569516957778,
+      "q95": 2.2521133177448025,
+      "model_weight": 0.009220217090182552,
+      "permutation_ap_drop": -0.0006818181818181779,
+      "permutation_ap_std": 0.002045454545454534,
+      "spearman": 0.03349814742219805,
+      "histogram": [
+        {
+          "low": 0.916023462814663,
+          "high": 2.505941515892229,
+          "count": 76
+        },
+        {
+          "low": 2.505941515892229,
+          "high": 4.095859568969795,
+          "count": 1
+        },
+        {
+          "low": 4.095859568969795,
+          "high": 5.685777622047361,
+          "count": 0
+        },
+        {
+          "low": 5.685777622047361,
+          "high": 7.275695675124927,
+          "count": 0
+        },
+        {
+          "low": 7.275695675124927,
+          "high": 8.865613728202494,
+          "count": 0
+        },
+        {
+          "low": 8.865613728202494,
+          "high": 10.455531781280058,
+          "count": 0
+        },
+        {
+          "low": 10.455531781280058,
+          "high": 12.045449834357624,
+          "count": 0
+        },
+        {
+          "low": 12.045449834357624,
+          "high": 13.63536788743519,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 1.2192,
+          "defect_rate_percent": 0.023843,
+          "count": 10
+        },
+        {
+          "value": 1.505542,
+          "defect_rate_percent": 0.03539,
+          "count": 10
+        },
+        {
+          "value": 1.627019,
+          "defect_rate_percent": 0.048732,
+          "count": 10
+        },
+        {
+          "value": 1.695145,
+          "defect_rate_percent": 0.021089,
+          "count": 10
+        },
+        {
+          "value": 1.770663,
+          "defect_rate_percent": 0.066218,
+          "count": 10
+        },
+        {
+          "value": 1.864516,
+          "defect_rate_percent": 0.030581,
+          "count": 10
+        },
+        {
+          "value": 2.069287,
+          "defect_rate_percent": 0.052777,
+          "count": 9
+        },
+        {
+          "value": 3.575336,
+          "defect_rate_percent": 0.049723,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 CP 값_Avg",
+      "q05": 0.42854484248116553,
+      "median": 0.45016166139875813,
+      "q95": 0.4505547710848607,
+      "model_weight": 0.016928947572534075,
+      "permutation_ap_drop": -0.0013636363636363557,
+      "permutation_ap_std": 0.0027272727272727114,
+      "spearman": 0.20196259436765762,
+      "histogram": [
+        {
+          "low": 0.3410912294211323,
+          "high": 0.3551061346233394,
+          "count": 1
+        },
+        {
+          "low": 0.3551061346233394,
+          "high": 0.3691210398255465,
+          "count": 1
+        },
+        {
+          "low": 0.3691210398255465,
+          "high": 0.3831359450277536,
+          "count": 0
+        },
+        {
+          "low": 0.3831359450277536,
+          "high": 0.39715085022996066,
+          "count": 0
+        },
+        {
+          "low": 0.39715085022996066,
+          "high": 0.4111657554321678,
+          "count": 1
+        },
+        {
+          "low": 0.4111657554321678,
+          "high": 0.4251806606343749,
+          "count": 1
+        },
+        {
+          "low": 0.4251806606343749,
+          "high": 0.439195565836582,
+          "count": 1
+        },
+        {
+          "low": 0.439195565836582,
+          "high": 0.4532104710387891,
+          "count": 73
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.420963,
+          "defect_rate_percent": 0.039364,
+          "count": 10
+        },
+        {
+          "value": 0.449913,
+          "defect_rate_percent": 0.012483,
+          "count": 10
+        },
+        {
+          "value": 0.45008,
+          "defect_rate_percent": 0.05816,
+          "count": 10
+        },
+        {
+          "value": 0.450147,
+          "defect_rate_percent": 0.052416,
+          "count": 10
+        },
+        {
+          "value": 0.450195,
+          "defect_rate_percent": 0.053102,
+          "count": 10
+        },
+        {
+          "value": 0.450267,
+          "defect_rate_percent": 0.043323,
+          "count": 10
+        },
+        {
+          "value": 0.450389,
+          "defect_rate_percent": 0.036608,
+          "count": 9
+        },
+        {
+          "value": 0.45085,
+          "defect_rate_percent": 0.029231,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 CP 값_Std",
+      "q05": 0.002071253060244285,
+      "median": 0.0035012772634804,
+      "q95": 0.05077245079141114,
+      "model_weight": 0.020975632079492424,
+      "permutation_ap_drop": -0.013943850267379668,
+      "permutation_ap_std": 0.03768825059663784,
+      "spearman": 0.15788009458895536,
+      "histogram": [
+        {
+          "low": 0.0013214390413037,
+          "high": 0.019132164515977188,
+          "count": 72
+        },
+        {
+          "low": 0.019132164515977188,
+          "high": 0.03694288999065067,
+          "count": 1
+        },
+        {
+          "low": 0.03694288999065067,
+          "high": 0.05475361546532416,
+          "count": 1
+        },
+        {
+          "low": 0.05475361546532416,
+          "high": 0.07256434093999765,
+          "count": 1
+        },
+        {
+          "low": 0.07256434093999765,
+          "high": 0.09037506641467115,
+          "count": 1
+        },
+        {
+          "low": 0.09037506641467115,
+          "high": 0.10818579188934463,
+          "count": 1
+        },
+        {
+          "low": 0.10818579188934463,
+          "high": 0.1259965173640181,
+          "count": 0
+        },
+        {
+          "low": 0.1259965173640181,
+          "high": 0.1438072428386916,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.001973,
+          "defect_rate_percent": 0.027788,
+          "count": 10
+        },
+        {
+          "value": 0.002613,
+          "defect_rate_percent": 0.02092,
+          "count": 10
+        },
+        {
+          "value": 0.003,
+          "defect_rate_percent": 0.048036,
+          "count": 10
+        },
+        {
+          "value": 0.003334,
+          "defect_rate_percent": 0.037931,
+          "count": 10
+        },
+        {
+          "value": 0.00371,
+          "defect_rate_percent": 0.040943,
+          "count": 10
+        },
+        {
+          "value": 0.004375,
+          "defect_rate_percent": 0.033705,
+          "count": 10
+        },
+        {
+          "value": 0.005531,
+          "defect_rate_percent": 0.086912,
+          "count": 9
+        },
+        {
+          "value": 0.054367,
+          "defect_rate_percent": 0.033955,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 1 Zone_Avg",
+      "q05": 858.2588928288826,
+      "median": 859.2191555925566,
+      "q95": 860.0347233446685,
+      "model_weight": 0.01930286388826529,
+      "permutation_ap_drop": -0.0405135918003565,
+      "permutation_ap_std": 0.05409062881430254,
+      "spearman": -0.1894940502535439,
+      "histogram": [
+        {
+          "low": 856.5435041208791,
+          "high": 857.0083907214638,
+          "count": 1
+        },
+        {
+          "low": 857.0083907214638,
+          "high": 857.4732773220486,
+          "count": 0
+        },
+        {
+          "low": 857.4732773220486,
+          "high": 857.9381639226333,
+          "count": 2
+        },
+        {
+          "low": 857.9381639226333,
+          "high": 858.4030505232181,
+          "count": 4
+        },
+        {
+          "low": 858.4030505232181,
+          "high": 858.8679371238028,
+          "count": 13
+        },
+        {
+          "low": 858.8679371238028,
+          "high": 859.3328237243875,
+          "count": 22
+        },
+        {
+          "low": 859.3328237243875,
+          "high": 859.7977103249723,
+          "count": 29
+        },
+        {
+          "low": 859.7977103249723,
+          "high": 860.262596925557,
+          "count": 7
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 858.084706,
+          "defect_rate_percent": 0.032519,
+          "count": 10
+        },
+        {
+          "value": 858.760579,
+          "defect_rate_percent": 0.050715,
+          "count": 10
+        },
+        {
+          "value": 858.990306,
+          "defect_rate_percent": 0.038084,
+          "count": 10
+        },
+        {
+          "value": 859.144303,
+          "defect_rate_percent": 0.042847,
+          "count": 10
+        },
+        {
+          "value": 859.383689,
+          "defect_rate_percent": 0.035098,
+          "count": 10
+        },
+        {
+          "value": 859.53464,
+          "defect_rate_percent": 0.053694,
+          "count": 10
+        },
+        {
+          "value": 859.671425,
+          "defect_rate_percent": 0.026004,
+          "count": 9
+        },
+        {
+          "value": 860.016236,
+          "defect_rate_percent": 0.04638,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 1 Zone_Std",
+      "q05": 1.8175424154213877,
+      "median": 3.218131774782492,
+      "q95": 5.543639438704329,
+      "model_weight": 0.027468438356597416,
+      "permutation_ap_drop": -0.00900401069518715,
+      "permutation_ap_std": 0.026838531641067358,
+      "spearman": 0.3730826135889427,
+      "histogram": [
+        {
+          "low": 0.0945332883968692,
+          "high": 0.9795664047877597,
+          "count": 2
+        },
+        {
+          "low": 0.9795664047877597,
+          "high": 1.8645995211786501,
+          "count": 3
+        },
+        {
+          "low": 1.8645995211786501,
+          "high": 2.7496326375695403,
+          "count": 20
+        },
+        {
+          "low": 2.7496326375695403,
+          "high": 3.634665753960431,
+          "count": 21
+        },
+        {
+          "low": 3.634665753960431,
+          "high": 4.519698870351322,
+          "count": 16
+        },
+        {
+          "low": 4.519698870351322,
+          "high": 5.4047319867422114,
+          "count": 11
+        },
+        {
+          "low": 5.4047319867422114,
+          "high": 6.289765103133102,
+          "count": 4
+        },
+        {
+          "low": 6.289765103133102,
+          "high": 7.174798219523993,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 1.529473,
+          "defect_rate_percent": 0.018485,
+          "count": 10
+        },
+        {
+          "value": 2.281658,
+          "defect_rate_percent": 0.019332,
+          "count": 10
+        },
+        {
+          "value": 2.756347,
+          "defect_rate_percent": 0.029672,
+          "count": 10
+        },
+        {
+          "value": 3.01069,
+          "defect_rate_percent": 0.03711,
+          "count": 10
+        },
+        {
+          "value": 3.573356,
+          "defect_rate_percent": 0.052203,
+          "count": 10
+        },
+        {
+          "value": 3.981235,
+          "defect_rate_percent": 0.04296,
+          "count": 10
+        },
+        {
+          "value": 4.635147,
+          "defect_rate_percent": 0.044494,
+          "count": 9
+        },
+        {
+          "value": 5.649848,
+          "defect_rate_percent": 0.086996,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 2 Zone_Avg",
+      "q05": 859.9613693634728,
+      "median": 860.0035439020378,
+      "q95": 860.0408328234375,
+      "model_weight": 0.008124128918562174,
+      "permutation_ap_drop": -0.0011029411764705843,
+      "permutation_ap_std": 0.0016847704760867,
+      "spearman": -0.02717535628928034,
+      "histogram": [
+        {
+          "low": 859.8995137413394,
+          "high": 859.9351054916746,
+          "count": 1
+        },
+        {
+          "low": 859.9351054916746,
+          "high": 859.9706972420097,
+          "count": 5
+        },
+        {
+          "low": 859.9706972420097,
+          "high": 860.0062889923447,
+          "count": 43
+        },
+        {
+          "low": 860.0062889923447,
+          "high": 860.0418807426798,
+          "count": 25
+        },
+        {
+          "low": 860.0418807426798,
+          "high": 860.077472493015,
+          "count": 3
+        },
+        {
+          "low": 860.077472493015,
+          "high": 860.11306424335,
+          "count": 0
+        },
+        {
+          "low": 860.11306424335,
+          "high": 860.1486559936851,
+          "count": 0
+        },
+        {
+          "low": 860.1486559936851,
+          "high": 860.1842477440202,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 859.961625,
+          "defect_rate_percent": 0.056274,
+          "count": 10
+        },
+        {
+          "value": 859.991376,
+          "defect_rate_percent": 0.024951,
+          "count": 10
+        },
+        {
+          "value": 859.997986,
+          "defect_rate_percent": 0.058501,
+          "count": 10
+        },
+        {
+          "value": 860.002092,
+          "defect_rate_percent": 0.032101,
+          "count": 10
+        },
+        {
+          "value": 860.005049,
+          "defect_rate_percent": 0.04995,
+          "count": 10
+        },
+        {
+          "value": 860.008933,
+          "defect_rate_percent": 0.030838,
+          "count": 10
+        },
+        {
+          "value": 860.015861,
+          "defect_rate_percent": 0.046826,
+          "count": 9
+        },
+        {
+          "value": 860.057117,
+          "defect_rate_percent": 0.025939,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 2 Zone_Std",
+      "q05": 0.30696351201491534,
+      "median": 0.5171587651969181,
+      "q95": 0.8751823536189253,
+      "model_weight": 0.016514713909867713,
+      "permutation_ap_drop": -0.044485294117647046,
+      "permutation_ap_std": 0.059870056448691845,
+      "spearman": 0.27573692130654154,
+      "histogram": [
+        {
+          "low": 0.1590530786337326,
+          "high": 0.257657543478918,
+          "count": 3
+        },
+        {
+          "low": 0.257657543478918,
+          "high": 0.3562620083241034,
+          "count": 8
+        },
+        {
+          "low": 0.3562620083241034,
+          "high": 0.45486647316928874,
+          "count": 21
+        },
+        {
+          "low": 0.45486647316928874,
+          "high": 0.5534709380144741,
+          "count": 12
+        },
+        {
+          "low": 0.5534709380144741,
+          "high": 0.6520754028596595,
+          "count": 11
+        },
+        {
+          "low": 0.6520754028596595,
+          "high": 0.7506798677048448,
+          "count": 8
+        },
+        {
+          "low": 0.7506798677048448,
+          "high": 0.8492843325500302,
+          "count": 10
+        },
+        {
+          "low": 0.8492843325500302,
+          "high": 0.9478887973952156,
+          "count": 5
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.28122,
+          "defect_rate_percent": 0.026415,
+          "count": 10
+        },
+        {
+          "value": 0.373011,
+          "defect_rate_percent": 0.014722,
+          "count": 10
+        },
+        {
+          "value": 0.418583,
+          "defect_rate_percent": 0.035043,
+          "count": 10
+        },
+        {
+          "value": 0.486933,
+          "defect_rate_percent": 0.050385,
+          "count": 10
+        },
+        {
+          "value": 0.563033,
+          "defect_rate_percent": 0.037099,
+          "count": 10
+        },
+        {
+          "value": 0.650406,
+          "defect_rate_percent": 0.042064,
+          "count": 10
+        },
+        {
+          "value": 0.764606,
+          "defect_rate_percent": 0.026551,
+          "count": 9
+        },
+        {
+          "value": 0.86528,
+          "defect_rate_percent": 0.098311,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 3 Zone_Avg",
+      "q05": 859.9859397658822,
+      "median": 860.0013229129188,
+      "q95": 860.0575245317567,
+      "model_weight": 0.11046194518036641,
+      "permutation_ap_drop": 0.028987241366304855,
+      "permutation_ap_std": 0.10224196492825449,
+      "spearman": 0.1905309879993424,
+      "histogram": [
+        {
+          "low": 859.9213361790494,
+          "high": 859.969806269014,
+          "count": 1
+        },
+        {
+          "low": 859.969806269014,
+          "high": 860.0182763589787,
+          "count": 65
+        },
+        {
+          "low": 860.0182763589787,
+          "high": 860.0667464489434,
+          "count": 8
+        },
+        {
+          "low": 860.0667464489434,
+          "high": 860.115216538908,
+          "count": 2
+        },
+        {
+          "low": 860.115216538908,
+          "high": 860.1636866288726,
+          "count": 0
+        },
+        {
+          "low": 860.1636866288726,
+          "high": 860.2121567188373,
+          "count": 0
+        },
+        {
+          "low": 860.2121567188373,
+          "high": 860.2606268088019,
+          "count": 1
+        },
+        {
+          "low": 860.2606268088019,
+          "high": 860.3090968987666,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 859.979634,
+          "defect_rate_percent": 0.029241,
+          "count": 10
+        },
+        {
+          "value": 859.993406,
+          "defect_rate_percent": 0.021707,
+          "count": 10
+        },
+        {
+          "value": 859.996799,
+          "defect_rate_percent": 0.029667,
+          "count": 10
+        },
+        {
+          "value": 860.000046,
+          "defect_rate_percent": 0.022319,
+          "count": 10
+        },
+        {
+          "value": 860.002688,
+          "defect_rate_percent": 0.027179,
+          "count": 10
+        },
+        {
+          "value": 860.005844,
+          "defect_rate_percent": 0.108574,
+          "count": 10
+        },
+        {
+          "value": 860.015042,
+          "defect_rate_percent": 0.054121,
+          "count": 9
+        },
+        {
+          "value": 860.100192,
+          "defect_rate_percent": 0.034117,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 3 Zone_Std",
+      "q05": 0.19326933497263143,
+      "median": 0.3203825606054007,
+      "q95": 0.4890884634887726,
+      "model_weight": 0.023059434129336004,
+      "permutation_ap_drop": -0.04724264705882351,
+      "permutation_ap_std": 0.05976130930236443,
+      "spearman": 0.22082980310828412,
+      "histogram": [
+        {
+          "low": 0.1191060886250303,
+          "high": 0.2686651992868019,
+          "count": 25
+        },
+        {
+          "low": 0.2686651992868019,
+          "high": 0.41822430994857346,
+          "count": 39
+        },
+        {
+          "low": 0.41822430994857346,
+          "high": 0.567783420610345,
+          "count": 13
+        },
+        {
+          "low": 0.567783420610345,
+          "high": 0.7173425312721167,
+          "count": 0
+        },
+        {
+          "low": 0.7173425312721167,
+          "high": 0.8669016419338882,
+          "count": 0
+        },
+        {
+          "low": 0.8669016419338882,
+          "high": 1.0164607525956597,
+          "count": 0
+        },
+        {
+          "low": 1.0164607525956597,
+          "high": 1.1660198632574315,
+          "count": 0
+        },
+        {
+          "low": 1.1660198632574315,
+          "high": 1.315578973919203,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.196807,
+          "defect_rate_percent": 0.029841,
+          "count": 10
+        },
+        {
+          "value": 0.24639,
+          "defect_rate_percent": 0.024218,
+          "count": 10
+        },
+        {
+          "value": 0.267336,
+          "defect_rate_percent": 0.04809,
+          "count": 10
+        },
+        {
+          "value": 0.312691,
+          "defect_rate_percent": 0.022802,
+          "count": 10
+        },
+        {
+          "value": 0.337767,
+          "defect_rate_percent": 0.034889,
+          "count": 10
+        },
+        {
+          "value": 0.378964,
+          "defect_rate_percent": 0.04792,
+          "count": 10
+        },
+        {
+          "value": 0.430576,
+          "defect_rate_percent": 0.027275,
+          "count": 9
+        },
+        {
+          "value": 0.587162,
+          "defect_rate_percent": 0.095329,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 4 Zone_Avg",
+      "q05": 859.9889454548088,
+      "median": 860.00160923555,
+      "q95": 860.0239769456695,
+      "model_weight": 0.04357817357736041,
+      "permutation_ap_drop": 0.010790626856803338,
+      "permutation_ap_std": 0.024315260149042745,
+      "spearman": 0.06030678182576916,
+      "histogram": [
+        {
+          "low": 859.9703756046438,
+          "high": 860.0634752853633,
+          "count": 76
+        },
+        {
+          "low": 860.0634752853633,
+          "high": 860.1565749660829,
+          "count": 0
+        },
+        {
+          "low": 860.1565749660829,
+          "high": 860.2496746468023,
+          "count": 0
+        },
+        {
+          "low": 860.2496746468023,
+          "high": 860.3427743275219,
+          "count": 1
+        },
+        {
+          "low": 860.3427743275219,
+          "high": 860.4358740082414,
+          "count": 0
+        },
+        {
+          "low": 860.4358740082414,
+          "high": 860.5289736889608,
+          "count": 0
+        },
+        {
+          "low": 860.5289736889608,
+          "high": 860.6220733696804,
+          "count": 0
+        },
+        {
+          "low": 860.6220733696804,
+          "high": 860.7151730503999,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 859.98701,
+          "defect_rate_percent": 0.053025,
+          "count": 10
+        },
+        {
+          "value": 859.994709,
+          "defect_rate_percent": 0.033496,
+          "count": 10
+        },
+        {
+          "value": 859.99755,
+          "defect_rate_percent": 0.05275,
+          "count": 10
+        },
+        {
+          "value": 860.001081,
+          "defect_rate_percent": 0.026707,
+          "count": 10
+        },
+        {
+          "value": 860.003241,
+          "defect_rate_percent": 0.02327,
+          "count": 10
+        },
+        {
+          "value": 860.006286,
+          "defect_rate_percent": 0.056871,
+          "count": 10
+        },
+        {
+          "value": 860.012074,
+          "defect_rate_percent": 0.038947,
+          "count": 9
+        },
+        {
+          "value": 860.126532,
+          "defect_rate_percent": 0.041035,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "소입로 온도 4 Zone_Std",
+      "q05": 0.21127361675652584,
+      "median": 0.3200094713039328,
+      "q95": 0.48494680188761097,
+      "model_weight": 0.004047074366375065,
+      "permutation_ap_drop": 0.0,
+      "permutation_ap_std": 0.0,
+      "spearman": 0.019613298094310755,
+      "histogram": [
+        {
+          "low": 0.0682217166151646,
+          "high": 0.48324594522385655,
+          "count": 74
+        },
+        {
+          "low": 0.48324594522385655,
+          "high": 0.8982701738325486,
+          "count": 3
+        },
+        {
+          "low": 0.8982701738325486,
+          "high": 1.3132944024412405,
+          "count": 0
+        },
+        {
+          "low": 1.3132944024412405,
+          "high": 1.7283186310499326,
+          "count": 0
+        },
+        {
+          "low": 1.7283186310499326,
+          "high": 2.1433428596586244,
+          "count": 0
+        },
+        {
+          "low": 2.1433428596586244,
+          "high": 2.558367088267316,
+          "count": 0
+        },
+        {
+          "low": 2.558367088267316,
+          "high": 2.9733913168760084,
+          "count": 0
+        },
+        {
+          "low": 2.9733913168760084,
+          "high": 3.3884155454847003,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.190825,
+          "defect_rate_percent": 0.022787,
+          "count": 10
+        },
+        {
+          "value": 0.268689,
+          "defect_rate_percent": 0.051281,
+          "count": 10
+        },
+        {
+          "value": 0.292947,
+          "defect_rate_percent": 0.029917,
+          "count": 10
+        },
+        {
+          "value": 0.312579,
+          "defect_rate_percent": 0.022267,
+          "count": 10
+        },
+        {
+          "value": 0.330992,
+          "defect_rate_percent": 0.037415,
+          "count": 10
+        },
+        {
+          "value": 0.360084,
+          "defect_rate_percent": 0.063878,
+          "count": 10
+        },
+        {
+          "value": 0.409332,
+          "defect_rate_percent": 0.044817,
+          "count": 9
+        },
+        {
+          "value": 0.817588,
+          "defect_rate_percent": 0.055802,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트 컨베이어 온도 1 Zone_Avg",
+      "q05": 282.5676291424399,
+      "median": 283.7094901305752,
+      "q95": 284.73579370320095,
+      "model_weight": 0.010270721807402232,
+      "permutation_ap_drop": -0.000524732620320853,
+      "permutation_ap_std": 0.0016507142822936968,
+      "spearman": 0.14910406049646555,
+      "histogram": [
+        {
+          "low": 280.9212241578219,
+          "high": 281.50627178678405,
+          "count": 1
+        },
+        {
+          "low": 281.50627178678405,
+          "high": 282.0913194157462,
+          "count": 0
+        },
+        {
+          "low": 282.0913194157462,
+          "high": 282.6763670447084,
+          "count": 6
+        },
+        {
+          "low": 282.6763670447084,
+          "high": 283.2614146736705,
+          "count": 13
+        },
+        {
+          "low": 283.2614146736705,
+          "high": 283.8464623026327,
+          "count": 30
+        },
+        {
+          "low": 283.8464623026327,
+          "high": 284.43150993159486,
+          "count": 18
+        },
+        {
+          "low": 284.43150993159486,
+          "high": 285.01655756055703,
+          "count": 9
+        },
+        {
+          "low": 285.01655756055703,
+          "high": 285.6016051895192,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 282.456147,
+          "defect_rate_percent": 0.047006,
+          "count": 10
+        },
+        {
+          "value": 283.013378,
+          "defect_rate_percent": 0.029274,
+          "count": 10
+        },
+        {
+          "value": 283.473558,
+          "defect_rate_percent": 0.0254,
+          "count": 10
+        },
+        {
+          "value": 283.662795,
+          "defect_rate_percent": 0.033681,
+          "count": 10
+        },
+        {
+          "value": 283.790669,
+          "defect_rate_percent": 0.0601,
+          "count": 10
+        },
+        {
+          "value": 283.987242,
+          "defect_rate_percent": 0.043685,
+          "count": 10
+        },
+        {
+          "value": 284.274092,
+          "defect_rate_percent": 0.037951,
+          "count": 9
+        },
+        {
+          "value": 284.7771,
+          "defect_rate_percent": 0.049779,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트 컨베이어 온도 1 Zone_Std",
+      "q05": 9.325077856924306,
+      "median": 9.56009471436153,
+      "q95": 9.709910032809944,
+      "model_weight": 0.012131934585655247,
+      "permutation_ap_drop": -0.04613636363636362,
+      "permutation_ap_std": 0.06010106845765776,
+      "spearman": 0.2005209979893524,
+      "histogram": [
+        {
+          "low": 1.4716428664224324,
+          "high": 2.557644615080928,
+          "count": 1
+        },
+        {
+          "low": 2.557644615080928,
+          "high": 3.643646363739424,
+          "count": 0
+        },
+        {
+          "low": 3.643646363739424,
+          "high": 4.7296481123979195,
+          "count": 0
+        },
+        {
+          "low": 4.7296481123979195,
+          "high": 5.815649861056415,
+          "count": 0
+        },
+        {
+          "low": 5.815649861056415,
+          "high": 6.901651609714911,
+          "count": 0
+        },
+        {
+          "low": 6.901651609714911,
+          "high": 7.987653358373406,
+          "count": 0
+        },
+        {
+          "low": 7.987653358373406,
+          "high": 9.073655107031902,
+          "count": 1
+        },
+        {
+          "low": 9.073655107031902,
+          "high": 10.159656855690397,
+          "count": 76
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 8.496596,
+          "defect_rate_percent": 0.02804,
+          "count": 10
+        },
+        {
+          "value": 9.43422,
+          "defect_rate_percent": 0.025888,
+          "count": 10
+        },
+        {
+          "value": 9.496099,
+          "defect_rate_percent": 0.031363,
+          "count": 10
+        },
+        {
+          "value": 9.545843,
+          "defect_rate_percent": 0.034065,
+          "count": 10
+        },
+        {
+          "value": 9.581015,
+          "defect_rate_percent": 0.040014,
+          "count": 10
+        },
+        {
+          "value": 9.622477,
+          "defect_rate_percent": 0.052888,
+          "count": 10
+        },
+        {
+          "value": 9.681039,
+          "defect_rate_percent": 0.027455,
+          "count": 9
+        },
+        {
+          "value": 9.785325,
+          "defect_rate_percent": 0.090151,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트 컨베이어 온도 2 Zone_Avg",
+      "q05": 278.94082325124384,
+      "median": 279.7998889123065,
+      "q95": 280.6161711778812,
+      "model_weight": 0.028738474998983188,
+      "permutation_ap_drop": -0.019772727272727265,
+      "permutation_ap_std": 0.03793321846826183,
+      "spearman": 0.22141149989251255,
+      "histogram": [
+        {
+          "low": 277.54476865551624,
+          "high": 278.81331060675205,
+          "count": 4
+        },
+        {
+          "low": 278.81331060675205,
+          "high": 280.0818525579879,
+          "count": 52
+        },
+        {
+          "low": 280.0818525579879,
+          "high": 281.3503945092237,
+          "count": 19
+        },
+        {
+          "low": 281.3503945092237,
+          "high": 282.6189364604595,
+          "count": 2
+        },
+        {
+          "low": 282.6189364604595,
+          "high": 283.8874784116954,
+          "count": 0
+        },
+        {
+          "low": 283.8874784116954,
+          "high": 285.1560203629312,
+          "count": 0
+        },
+        {
+          "low": 285.1560203629312,
+          "high": 286.424562314167,
+          "count": 0
+        },
+        {
+          "low": 286.424562314167,
+          "high": 287.69310426540284,
+          "count": 1
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 278.769844,
+          "defect_rate_percent": 0.01876,
+          "count": 10
+        },
+        {
+          "value": 279.348785,
+          "defect_rate_percent": 0.038637,
+          "count": 10
+        },
+        {
+          "value": 279.606721,
+          "defect_rate_percent": 0.030984,
+          "count": 10
+        },
+        {
+          "value": 279.76179,
+          "defect_rate_percent": 0.028622,
+          "count": 10
+        },
+        {
+          "value": 279.873404,
+          "defect_rate_percent": 0.014959,
+          "count": 10
+        },
+        {
+          "value": 280.058989,
+          "defect_rate_percent": 0.081259,
+          "count": 10
+        },
+        {
+          "value": 280.25068,
+          "defect_rate_percent": 0.067998,
+          "count": 9
+        },
+        {
+          "value": 281.582365,
+          "defect_rate_percent": 0.048538,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트 컨베이어 온도 2 Zone_Std",
+      "q05": 5.968541587200482,
+      "median": 6.484710415718948,
+      "q95": 7.0558843937453934,
+      "model_weight": 0.006853834567590142,
+      "permutation_ap_drop": 0.0,
+      "permutation_ap_std": 0.0,
+      "spearman": 0.07879462309842056,
+      "histogram": [
+        {
+          "low": 0.4907957930805126,
+          "high": 1.333763825197816,
+          "count": 1
+        },
+        {
+          "low": 1.333763825197816,
+          "high": 2.17673185731512,
+          "count": 0
+        },
+        {
+          "low": 2.17673185731512,
+          "high": 3.019699889432424,
+          "count": 0
+        },
+        {
+          "low": 3.019699889432424,
+          "high": 3.8626679215497273,
+          "count": 0
+        },
+        {
+          "low": 3.8626679215497273,
+          "high": 4.705635953667031,
+          "count": 0
+        },
+        {
+          "low": 4.705635953667031,
+          "high": 5.548603985784335,
+          "count": 1
+        },
+        {
+          "low": 5.548603985784335,
+          "high": 6.391572017901638,
+          "count": 30
+        },
+        {
+          "low": 6.391572017901638,
+          "high": 7.234540050018942,
+          "count": 46
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 5.362479,
+          "defect_rate_percent": 0.050249,
+          "count": 10
+        },
+        {
+          "value": 6.179403,
+          "defect_rate_percent": 0.038017,
+          "count": 10
+        },
+        {
+          "value": 6.305371,
+          "defect_rate_percent": 0.035983,
+          "count": 10
+        },
+        {
+          "value": 6.434785,
+          "defect_rate_percent": 0.02754,
+          "count": 10
+        },
+        {
+          "value": 6.568104,
+          "defect_rate_percent": 0.021659,
+          "count": 10
+        },
+        {
+          "value": 6.672149,
+          "defect_rate_percent": 0.024446,
+          "count": 10
+        },
+        {
+          "value": 6.811069,
+          "defect_rate_percent": 0.059962,
+          "count": 9
+        },
+        {
+          "value": 7.061456,
+          "defect_rate_percent": 0.073601,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트조 온도 1 Zone_Avg",
+      "q05": 329.0151118399529,
+      "median": 331.9499723430187,
+      "q95": 332.1472309695764,
+      "model_weight": 0.006452954972194319,
+      "permutation_ap_drop": 0.0,
+      "permutation_ap_std": 0.0,
+      "spearman": 0.07583555684821507,
+      "histogram": [
+        {
+          "low": 328.8314109659951,
+          "high": 329.2518474649889,
+          "count": 10
+        },
+        {
+          "low": 329.2518474649889,
+          "high": 329.67228396398264,
+          "count": 0
+        },
+        {
+          "low": 329.67228396398264,
+          "high": 330.09272046297644,
+          "count": 0
+        },
+        {
+          "low": 330.09272046297644,
+          "high": 330.51315696197025,
+          "count": 0
+        },
+        {
+          "low": 330.51315696197025,
+          "high": 330.93359346096406,
+          "count": 0
+        },
+        {
+          "low": 330.93359346096406,
+          "high": 331.35402995995787,
+          "count": 0
+        },
+        {
+          "low": 331.35402995995787,
+          "high": 331.7744664589516,
+          "count": 6
+        },
+        {
+          "low": 331.7744664589516,
+          "high": 332.19490295794543,
+          "count": 62
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 329.039489,
+          "defect_rate_percent": 0.02015,
+          "count": 10
+        },
+        {
+          "value": 331.739387,
+          "defect_rate_percent": 0.048308,
+          "count": 10
+        },
+        {
+          "value": 331.872329,
+          "defect_rate_percent": 0.066501,
+          "count": 10
+        },
+        {
+          "value": 331.936205,
+          "defect_rate_percent": 0.052385,
+          "count": 10
+        },
+        {
+          "value": 331.970843,
+          "defect_rate_percent": 0.027817,
+          "count": 10
+        },
+        {
+          "value": 332.014366,
+          "defect_rate_percent": 0.036418,
+          "count": 10
+        },
+        {
+          "value": 332.077276,
+          "defect_rate_percent": 0.041558,
+          "count": 9
+        },
+        {
+          "value": 332.151348,
+          "defect_rate_percent": 0.032356,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트조 온도 1 Zone_Std",
+      "q05": 0.08569725845126072,
+      "median": 0.1093368414531184,
+      "q95": 0.2110701771239975,
+      "model_weight": 0.015534764795497327,
+      "permutation_ap_drop": -0.06323529411764703,
+      "permutation_ap_std": 0.06288376986242733,
+      "spearman": 0.07095436209360259,
+      "histogram": [
+        {
+          "low": 0.049147403031401,
+          "high": 0.07940646668775077,
+          "count": 2
+        },
+        {
+          "low": 0.07940646668775077,
+          "high": 0.10966553034410054,
+          "count": 37
+        },
+        {
+          "low": 0.10966553034410054,
+          "high": 0.1399245940004503,
+          "count": 25
+        },
+        {
+          "low": 0.1399245940004503,
+          "high": 0.17018365765680005,
+          "count": 6
+        },
+        {
+          "low": 0.17018365765680005,
+          "high": 0.20044272131314983,
+          "count": 3
+        },
+        {
+          "low": 0.20044272131314983,
+          "high": 0.23070178496949958,
+          "count": 2
+        },
+        {
+          "low": 0.23070178496949958,
+          "high": 0.26096084862584934,
+          "count": 1
+        },
+        {
+          "low": 0.26096084862584934,
+          "high": 0.2912199122821991,
+          "count": 2
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.081339,
+          "defect_rate_percent": 0.024031,
+          "count": 10
+        },
+        {
+          "value": 0.09384,
+          "defect_rate_percent": 0.075225,
+          "count": 10
+        },
+        {
+          "value": 0.100565,
+          "defect_rate_percent": 0.034613,
+          "count": 10
+        },
+        {
+          "value": 0.106046,
+          "defect_rate_percent": 0.053178,
+          "count": 10
+        },
+        {
+          "value": 0.115421,
+          "defect_rate_percent": 0.030587,
+          "count": 10
+        },
+        {
+          "value": 0.124882,
+          "defect_rate_percent": 0.045241,
+          "count": 10
+        },
+        {
+          "value": 0.140437,
+          "defect_rate_percent": 0.042209,
+          "count": 9
+        },
+        {
+          "value": 0.214519,
+          "defect_rate_percent": 0.019154,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트조 온도 2 Zone_Avg",
+      "q05": 329.1079087069859,
+      "median": 332.38762149703837,
+      "q95": 332.74693211239975,
+      "model_weight": 0.007294451448326871,
+      "permutation_ap_drop": 0.0,
+      "permutation_ap_std": 0.0,
+      "spearman": 0.054540396312548214,
+      "histogram": [
+        {
+          "low": 328.924151026393,
+          "high": 329.4079818789847,
+          "count": 7
+        },
+        {
+          "low": 329.4079818789847,
+          "high": 329.89181273157635,
+          "count": 3
+        },
+        {
+          "low": 329.89181273157635,
+          "high": 330.37564358416796,
+          "count": 0
+        },
+        {
+          "low": 330.37564358416796,
+          "high": 330.8594744367596,
+          "count": 0
+        },
+        {
+          "low": 330.8594744367596,
+          "high": 331.3433052893513,
+          "count": 0
+        },
+        {
+          "low": 331.3433052893513,
+          "high": 331.8271361419429,
+          "count": 0
+        },
+        {
+          "low": 331.8271361419429,
+          "high": 332.31096699453457,
+          "count": 18
+        },
+        {
+          "low": 332.31096699453457,
+          "high": 332.79479784712623,
+          "count": 50
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 329.199726,
+          "defect_rate_percent": 0.02015,
+          "count": 10
+        },
+        {
+          "value": 332.082386,
+          "defect_rate_percent": 0.041775,
+          "count": 10
+        },
+        {
+          "value": 332.268081,
+          "defect_rate_percent": 0.027034,
+          "count": 10
+        },
+        {
+          "value": 332.374807,
+          "defect_rate_percent": 0.058624,
+          "count": 10
+        },
+        {
+          "value": 332.44744,
+          "defect_rate_percent": 0.027029,
+          "count": 10
+        },
+        {
+          "value": 332.521578,
+          "defect_rate_percent": 0.055616,
+          "count": 10
+        },
+        {
+          "value": 332.586254,
+          "defect_rate_percent": 0.0667,
+          "count": 9
+        },
+        {
+          "value": 332.728438,
+          "defect_rate_percent": 0.030938,
+          "count": 9
+        }
+      ]
+    },
+    {
+      "feature": "솔트조 온도 2 Zone_Std",
+      "q05": 0.06831111036959747,
+      "median": 0.1160474644410539,
+      "q95": 0.3618514797658279,
+      "model_weight": 0.017401771825522532,
+      "permutation_ap_drop": -0.08988079322638143,
+      "permutation_ap_std": 0.058306964855196125,
+      "spearman": 0.11491040604964656,
+      "histogram": [
+        {
+          "low": 0.0369556146513408,
+          "high": 0.09026277124812807,
+          "count": 18
+        },
+        {
+          "low": 0.09026277124812807,
+          "high": 0.14356992784491535,
+          "count": 36
+        },
+        {
+          "low": 0.14356992784491535,
+          "high": 0.1968770844417026,
+          "count": 12
+        },
+        {
+          "low": 0.1968770844417026,
+          "high": 0.2501842410384899,
+          "count": 3
+        },
+        {
+          "low": 0.2501842410384899,
+          "high": 0.30349139763527716,
+          "count": 2
+        },
+        {
+          "low": 0.30349139763527716,
+          "high": 0.3567985542320644,
+          "count": 2
+        },
+        {
+          "low": 0.3567985542320644,
+          "high": 0.4101057108288517,
+          "count": 3
+        },
+        {
+          "low": 0.4101057108288517,
+          "high": 0.463412867425639,
+          "count": 2
+        }
+      ],
+      "quality_relation": [
+        {
+          "value": 0.067227,
+          "defect_rate_percent": 0.024734,
+          "count": 10
+        },
+        {
+          "value": 0.086025,
+          "defect_rate_percent": 0.020989,
+          "count": 10
+        },
+        {
+          "value": 0.101238,
+          "defect_rate_percent": 0.067297,
+          "count": 10
+        },
+        {
+          "value": 0.110187,
+          "defect_rate_percent": 0.046718,
+          "count": 10
+        },
+        {
+          "value": 0.123053,
+          "defect_rate_percent": 0.056723,
+          "count": 10
+        },
+        {
+          "value": 0.145083,
+          "defect_rate_percent": 0.047659,
+          "count": 10
+        },
+        {
+          "value": 0.188661,
+          "defect_rate_percent": 0.040792,
+          "count": 9
+        },
+        {
+          "value": 0.358099,
+          "defect_rate_percent": 0.019189,
+          "count": 9
+        }
+      ]
+    }
+  ],
+  "feature_count": 36,
+  "source_url": "https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=60",
+  "limitations": [
+    "독립 품질 라벨은 136작업입니다.",
+    "공정 완료 후 집계값이며 실시간 조기예측이 아닙니다.",
+    "위험 점수는 보정된 불량 확률·예상 불량률이 아닙니다.",
+    "5~95% 구간은 학습 통계이며 기업 규격이 아닙니다.",
+    "보류자료는 이전에 확인한 개발 참고 평가입니다. 신규 외부 검증은 없습니다.",
+    "제품·재질·검사 시각과 기업 규격이 없어 현장 일반화를 확인하지 못했습니다."
+  ],
+  "quality_relation_mode": "group_means_min5",
+  "distribution_notice": "Repository edition: aggregate training statistics; no batch-level KAMP observations or identifiers.",
+  "source_benchmark_sha256": "a46f020910e9af9428aaa5790aa5470f0d88eb7624ae16c0a15f60a5032a1bc9"
+}

@@ -1,0 +1,9 @@
+{
+  "winner": "secom590_XGBoost_1",
+  "model_sha256": "7deddbd019d624f005e205e66489335a973e6ad7226fcad8289c3833c8c257f4",
+  "threshold": 0.5250000000000001,
+  "rule": "Highest mean train-fold AP; no validation/test model selection. Same OOF threshold40% budget. Lock model+threshold hashes before opening test evaluation.",
+  "created_utc": "2026-10-31T18:28:32.532537+00:00",
+  "validation_metrics_not_yet_computed": true,
+  "test_metrics_not_yet_computed": true
+}

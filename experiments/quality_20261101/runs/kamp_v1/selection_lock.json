@@ -1,0 +1,9 @@
+{
+  "winner": "compact16_RandomForest_3",
+  "model_sha256": "14593a87ea2b5d1d169913edf35e2a10e1cc4e318209ca5810d812ebd3f62ad7",
+  "threshold": 0.47500000000000014,
+  "rule": "Highest mean fold AP selects one candidate before reading candidate validation results; tie-break fewer inputs then id.",
+  "created_utc": "2026-10-31T18:28:34.144526+00:00",
+  "validation_metrics_not_yet_computed": true,
+  "test_metrics_not_yet_computed": true
+}

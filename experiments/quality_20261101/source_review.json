@@ -1,0 +1,51 @@
+{
+  "review_date": "2026-11-01",
+  "scope": "Focused search for compatible heat-treatment quality data, then an independent manufacturing case. Not an exhaustive catalog.",
+  "candidates": [
+    {
+      "name": "KAMP 열처리 품질보증 60",
+      "url": "https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=60",
+      "decision": "Existing source, not additional data",
+      "evidence": "Locally verified 2,939,722 sensor rows and 136 batch quality labels; original hashes unchanged.",
+      "conditions": "Existing source/citation agreement; original and personalized guide remain local."
+    },
+    {
+      "name": "KAMP 열처리 공정최적화 61",
+      "url": "https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=61",
+      "decision": "Do not count as new independent quality data",
+      "evidence": "Official page shows same 2,939,722 sensor rows, 136 label rows, first batch102410 and first timestamp2022-01-03. Strong overlap indication; byte identity not checked.",
+      "size": "Official page: raw481MB, labels24KB",
+      "conditions": "Page says content modification allowed; not a complete redistribution license. Not downloaded."
+    },
+    {
+      "name": "KAMP 열처리 예지보전 43",
+      "url": "https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=43",
+      "decision": "Not selected for supervised product-quality validation",
+      "evidence": "Official page describes Autoencoder equipment anomaly detection, 2,889,195 raw rows and345,390 processed rows. Preview shares batch102410 and2022-01-03 timestamp. Independent product inspection labels not established.",
+      "size": "Official page: raw583MB, processed70MB",
+      "conditions": "Page says content modification allowed. No download attempted because suitability was not established."
+    },
+    {
+      "name": "명장 플랫폼 열처리 후보",
+      "url": "https://master-ai.kr/ai_dataset",
+      "evidence_url": "https://aisquare.kamp-ai.kr/upload_data/mainImg/84a525b4-a651-4b2f-8238-fcc78b12421f.pdf",
+      "decision": "Unavailable for current acquisition, not counted as secured",
+      "evidence": "Official assessment report mentions152,300 heat-treatment records. Direct browser access failed ERR_NAME_NOT_RESOLVED; labels, batch independence, file size and current license not verified.",
+      "conditions": "No authentication or payment submitted; no download."
+    },
+    {
+      "name": "UCI SECOM179",
+      "url": "https://archive.ics.uci.edu/dataset/179/secom",
+      "decision": "Downloaded and trained as a separate semiconductor case",
+      "evidence": "Actual production entities with original in-house line test pass/fail.1567rows,104failures; downloaded numeric matrix590signals. Website591-feature count discrepancy recorded. Units/physical meanings and lot identifiers absent.",
+      "size": "ZIP1964989bytes, numeric data5389983bytes, labels40638bytes",
+      "conditions": "CC BY4.0. McCann,M. & Johnston,A.(2008), DOI10.24432/C54305. No login/payment required.",
+      "use": "Separate time-split methods benchmark; cannot validate the heat-treatment model or be pooled with KAMP."
+    }
+  ],
+  "other_portals": [
+    {"url": "https://www.aihub.or.kr/", "finding": "Search did not establish a directly downloadable compatible heat-treatment batch-quality dataset with verified labels and terms."},
+    {"url": "https://www.data.go.kr/", "finding": "Search results checked did not establish linked batch-level heat-treatment quality labels; energy/directory data are not a substitute."},
+    {"url": "https://www.myfactorydata.co.kr/", "finding": "Heat-treatment sensor/anomaly listings were found, but independent product-quality ground truth and license were not established."}
+  ]
+}

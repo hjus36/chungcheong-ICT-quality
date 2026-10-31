@@ -1,0 +1,58 @@
+{
+  "version": "quality-improvement-20261101-v1",
+  "frozen_before_candidate_training": true,
+  "seed": 20261101,
+  "kamp": {
+    "split": "Reuse train78 / validation22 / previously-seen development test36. Never choose on test36.",
+    "cv": "Three expanding time folds inside train78; purge batch overlap; fold-training Q3 defines each fold's target. Fit preprocessing/selection on fold train only.",
+    "features": [
+      "baseline36",
+      "compact16",
+      "compact16_plus_temporal35"
+    ],
+    "families": {
+      "LogisticRegression_C": [
+        0.01,
+        0.1
+      ],
+      "RandomForest_depth": [
+        2,
+        3
+      ],
+      "XGBoost_depth": [
+        1,
+        2
+      ]
+    },
+    "selection": "Highest mean fold AP selects one candidate before reading candidate validation results; tie-break fewer inputs then id.",
+    "threshold": "Train out-of-fold predictions: maximize F2, precision, higher threshold, subject to alert_rate<=0.40. Grid0.05..0.95 step0.025 plus abstain1.000001.",
+    "review_budget_status": "Internal demonstration assumption; not a user or factory operating requirement.",
+    "deployment_gate": "Winner must on validation22 achieve AP>=baseline+0.05, F2>=baseline, recall>=0.75, precision>=baseline+0.10, alerts<=0.50; paired AP bootstrap95% lower bound>0; must preserve original input contract. Otherwise keep current deployed RF.",
+    "uncertainty": "Validation has4 positives and was used previously; passing the gate still does not establish external generalization.",
+    "test": "Reproduce frozen baseline; score only the preselected candidate once after deployment decision. Report as development reference, never reconsider selection."
+  },
+  "secom": {
+    "source": "https://archive.ics.uci.edu/dataset/179/secom",
+    "download": "https://archive.ics.uci.edu/static/public/179/secom.zip",
+    "license": "CC BY 4.0; McCann and Johnston (2008), DOI10.24432/C54305",
+    "scope": "Separate semiconductor benchmark. Never pool with KAMP or claim heat-treatment external validation.",
+    "split": "Chronological unique calendar days 60%train/20%validation/20%test, rounded down; same day never crosses splits. Freeze manifest before training.",
+    "cv": "Three expanding unique-day folds within training; train-only missingness<=40%, variance/correlation pruning, median imputation, ANOVA selection.",
+    "families": {
+      "LogisticRegression_C": [
+        0.01,
+        0.1
+      ],
+      "RandomForest_depth": [
+        2,
+        3
+      ],
+      "XGBoost_depth": [
+        1,
+        2
+      ]
+    },
+    "selection": "Highest mean train-fold AP; no validation/test model selection. Same OOF threshold40% budget. Lock model+threshold hashes before opening test evaluation.",
+    "test": "One untouched chronological holdout evaluation after selection. Same dataset, not new factory external validation."
+  }
+}

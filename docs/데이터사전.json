@@ -1,0 +1,702 @@
+{
+  "required_columns": [
+    "batch_id",
+    "process_start_at",
+    "process_end_at",
+    "data_source",
+    "건조 1존 OP_Avg",
+    "건조 1존 OP_Std",
+    "건조 2존 OP_Avg",
+    "건조 2존 OP_Std",
+    "건조로 온도 1 Zone_Avg",
+    "건조로 온도 1 Zone_Std",
+    "건조로 온도 2 Zone_Avg",
+    "건조로 온도 2 Zone_Std",
+    "세정기_Avg",
+    "세정기_Std",
+    "소입1존 OP_Avg",
+    "소입1존 OP_Std",
+    "소입2존 OP_Avg",
+    "소입2존 OP_Std",
+    "소입3존 OP_Avg",
+    "소입3존 OP_Std",
+    "소입4존 OP_Avg",
+    "소입4존 OP_Std",
+    "소입로 CP 값_Avg",
+    "소입로 CP 값_Std",
+    "소입로 온도 1 Zone_Avg",
+    "소입로 온도 1 Zone_Std",
+    "소입로 온도 2 Zone_Avg",
+    "소입로 온도 2 Zone_Std",
+    "소입로 온도 3 Zone_Avg",
+    "소입로 온도 3 Zone_Std",
+    "소입로 온도 4 Zone_Avg",
+    "소입로 온도 4 Zone_Std",
+    "솔트 컨베이어 온도 1 Zone_Avg",
+    "솔트 컨베이어 온도 1 Zone_Std",
+    "솔트 컨베이어 온도 2 Zone_Avg",
+    "솔트 컨베이어 온도 2 Zone_Std",
+    "솔트조 온도 1 Zone_Avg",
+    "솔트조 온도 1 Zone_Std",
+    "솔트조 온도 2 Zone_Avg",
+    "솔트조 온도 2 Zone_Std"
+  ],
+  "optional_columns": [
+    "item_code",
+    "total_count",
+    "good_count",
+    "defect_count"
+  ],
+  "fields": [
+    {
+      "name": "batch_id",
+      "kind": "meta",
+      "required": true
+    },
+    {
+      "name": "process_start_at",
+      "kind": "meta",
+      "required": true
+    },
+    {
+      "name": "process_end_at",
+      "kind": "meta",
+      "required": true
+    },
+    {
+      "name": "data_source",
+      "kind": "meta",
+      "required": true
+    },
+    {
+      "name": "건조 1존 OP_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 66.97039586623298,
+        "median": 70.53397262347605,
+        "q95": 73.5193334841736
+      }
+    },
+    {
+      "name": "건조 1존 OP_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 2.3395756224434474,
+        "median": 3.3376090141972616,
+        "q95": 4.7004059229991695
+      }
+    },
+    {
+      "name": "건조 2존 OP_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 18.55691480579565,
+        "median": 21.233372812366675,
+        "q95": 24.492964761205254
+      }
+    },
+    {
+      "name": "건조 2존 OP_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 2.1641147464029773,
+        "median": 3.115687522771381,
+        "q95": 4.68828804064866
+      }
+    },
+    {
+      "name": "건조로 온도 1 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 99.9618978983204,
+        "median": 100.00167149429035,
+        "q95": 100.05055518295735
+      }
+    },
+    {
+      "name": "건조로 온도 1 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.30752263363081855,
+        "median": 0.45019847730202767,
+        "q95": 0.6792149625578964
+      }
+    },
+    {
+      "name": "건조로 온도 2 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 99.96533725405502,
+        "median": 100.01071906406918,
+        "q95": 100.06236594909625
+      }
+    },
+    {
+      "name": "건조로 온도 2 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.22799790786874063,
+        "median": 0.3699790318514288,
+        "q95": 0.5670285441237601
+      }
+    },
+    {
+      "name": "세정기_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 64.9725086201007,
+        "median": 66.70801214022968,
+        "q95": 69.5451057784465
+      }
+    },
+    {
+      "name": "세정기_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.27642768404410023,
+        "median": 0.47692887774781423,
+        "q95": 1.269736959527304
+      }
+    },
+    {
+      "name": "소입1존 OP_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 64.1371671324989,
+        "median": 75.96155324689991,
+        "q95": 81.85991604747399
+      }
+    },
+    {
+      "name": "소입1존 OP_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 16.357106650766156,
+        "median": 23.929581402515566,
+        "q95": 31.150898545883255
+      }
+    },
+    {
+      "name": "소입2존 OP_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 45.13887342110728,
+        "median": 54.77406379623966,
+        "q95": 58.607203048851055
+      }
+    },
+    {
+      "name": "소입2존 OP_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 1.5961405615445312,
+        "median": 2.5822112372349064,
+        "q95": 3.8490521491738123
+      }
+    },
+    {
+      "name": "소입3존 OP_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 49.94635093467226,
+        "median": 53.62788926821265,
+        "q95": 56.939781660171
+      }
+    },
+    {
+      "name": "소입3존 OP_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 1.259855533371858,
+        "median": 1.7407885124149594,
+        "q95": 2.3599424587294227
+      }
+    },
+    {
+      "name": "소입4존 OP_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 68.23016050138986,
+        "median": 70.37241321266228,
+        "q95": 71.90763578242527
+      }
+    },
+    {
+      "name": "소입4존 OP_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 1.25985682913621,
+        "median": 1.7258569516957778,
+        "q95": 2.2521133177448025
+      }
+    },
+    {
+      "name": "소입로 CP 값_Avg",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 0.42854484248116553,
+        "median": 0.45016166139875813,
+        "q95": 0.4505547710848607
+      }
+    },
+    {
+      "name": "소입로 CP 값_Std",
+      "kind": "feature",
+      "unit": "%",
+      "units": [
+        "%",
+        "fraction"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.002071253060244285,
+        "median": 0.0035012772634804,
+        "q95": 0.05077245079141114
+      }
+    },
+    {
+      "name": "소입로 온도 1 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 858.2588928288826,
+        "median": 859.2191555925566,
+        "q95": 860.0347233446685
+      }
+    },
+    {
+      "name": "소입로 온도 1 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 1.8175424154213877,
+        "median": 3.218131774782492,
+        "q95": 5.543639438704329
+      }
+    },
+    {
+      "name": "소입로 온도 2 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 859.9613693634728,
+        "median": 860.0035439020378,
+        "q95": 860.0408328234375
+      }
+    },
+    {
+      "name": "소입로 온도 2 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.30696351201491534,
+        "median": 0.5171587651969181,
+        "q95": 0.8751823536189253
+      }
+    },
+    {
+      "name": "소입로 온도 3 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 859.9859397658822,
+        "median": 860.0013229129188,
+        "q95": 860.0575245317567
+      }
+    },
+    {
+      "name": "소입로 온도 3 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.19326933497263143,
+        "median": 0.3203825606054007,
+        "q95": 0.4890884634887726
+      }
+    },
+    {
+      "name": "소입로 온도 4 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 859.9889454548088,
+        "median": 860.00160923555,
+        "q95": 860.0239769456695
+      }
+    },
+    {
+      "name": "소입로 온도 4 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.21127361675652584,
+        "median": 0.3200094713039328,
+        "q95": 0.48494680188761097
+      }
+    },
+    {
+      "name": "솔트 컨베이어 온도 1 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 282.5676291424399,
+        "median": 283.7094901305752,
+        "q95": 284.73579370320095
+      }
+    },
+    {
+      "name": "솔트 컨베이어 온도 1 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 9.325077856924306,
+        "median": 9.56009471436153,
+        "q95": 9.709910032809944
+      }
+    },
+    {
+      "name": "솔트 컨베이어 온도 2 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 278.94082325124384,
+        "median": 279.7998889123065,
+        "q95": 280.6161711778812
+      }
+    },
+    {
+      "name": "솔트 컨베이어 온도 2 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 5.968541587200482,
+        "median": 6.484710415718948,
+        "q95": 7.0558843937453934
+      }
+    },
+    {
+      "name": "솔트조 온도 1 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 329.0151118399529,
+        "median": 331.9499723430187,
+        "q95": 332.1472309695764
+      }
+    },
+    {
+      "name": "솔트조 온도 1 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.08569725845126072,
+        "median": 0.1093368414531184,
+        "q95": 0.2110701771239975
+      }
+    },
+    {
+      "name": "솔트조 온도 2 Zone_Avg",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "observed mean",
+      "reference": {
+        "q05": 329.1079087069859,
+        "median": 332.38762149703837,
+        "q95": 332.74693211239975
+      }
+    },
+    {
+      "name": "솔트조 온도 2 Zone_Std",
+      "kind": "feature",
+      "unit": "°C",
+      "units": [
+        "°C",
+        "°F",
+        "K"
+      ],
+      "required": true,
+      "aggregation": "sample standard deviation, ddof=1",
+      "reference": {
+        "q05": 0.06831111036959747,
+        "median": 0.1160474644410539,
+        "q95": 0.3618514797658279
+      }
+    },
+    {
+      "name": "item_code",
+      "kind": "meta",
+      "required": false
+    },
+    {
+      "name": "total_count",
+      "kind": "quality",
+      "required": false
+    },
+    {
+      "name": "good_count",
+      "kind": "quality",
+      "required": false
+    },
+    {
+      "name": "defect_count",
+      "kind": "quality",
+      "required": false
+    }
+  ],
+  "sources": {
+    "KAMP_heat_quality_60": "KAMP 실측",
+    "synthetic_kamp60": "합성 기능검증"
+  },
+  "max_bytes": 10485760,
+  "max_rows": 10000,
+  "max_columns": 100,
+  "max_missing_features_per_row": 3,
+  "timezone": "Asia/Seoul",
+  "reference_notice": "학습 자료 5~95백분위이며 기업 규격이 아닙니다.",
+  "notice": "공정 완료 후 검토용 연구 MVP입니다. 위험 점수는 실제 불량률이 아니며 출하판정·설비제어에 사용하지 않습니다.",
+  "source_url": "https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=60"
+}

@@ -1,0 +1,7 @@
+{
+  "created_utc": "2026-10-31T18:28:25.923666+00:00",
+  "method": "Chronological 60/20/20 percent of unique days, floor boundaries; frozen before feature/label audit.",
+  "sha256": "1beb3b4092478f946e902d170255dd74a8c803d1bbf5d3e2157fc4b8c5f0bc38",
+  "cutoff_validation": "2008-09-13",
+  "cutoff_test": "2008-09-30"
+}

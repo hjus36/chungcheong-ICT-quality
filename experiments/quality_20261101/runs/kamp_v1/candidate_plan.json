@@ -1,0 +1,135 @@
+[
+  {
+    "id": "baseline36_LogisticRegression_0.01",
+    "features": "baseline36",
+    "family": "LogisticRegression",
+    "value": 0.01,
+    "baseline": false
+  },
+  {
+    "id": "baseline36_LogisticRegression_0.1",
+    "features": "baseline36",
+    "family": "LogisticRegression",
+    "value": 0.1,
+    "baseline": false
+  },
+  {
+    "id": "baseline36_RandomForest_2",
+    "features": "baseline36",
+    "family": "RandomForest",
+    "value": 2,
+    "baseline": false
+  },
+  {
+    "id": "baseline36_RandomForest_3",
+    "features": "baseline36",
+    "family": "RandomForest",
+    "value": 3,
+    "baseline": false
+  },
+  {
+    "id": "baseline36_XGBoost_1",
+    "features": "baseline36",
+    "family": "XGBoost",
+    "value": 1,
+    "baseline": false
+  },
+  {
+    "id": "baseline36_XGBoost_2",
+    "features": "baseline36",
+    "family": "XGBoost",
+    "value": 2,
+    "baseline": false
+  },
+  {
+    "id": "compact16_LogisticRegression_0.01",
+    "features": "compact16",
+    "family": "LogisticRegression",
+    "value": 0.01,
+    "baseline": false
+  },
+  {
+    "id": "compact16_LogisticRegression_0.1",
+    "features": "compact16",
+    "family": "LogisticRegression",
+    "value": 0.1,
+    "baseline": false
+  },
+  {
+    "id": "compact16_RandomForest_2",
+    "features": "compact16",
+    "family": "RandomForest",
+    "value": 2,
+    "baseline": false
+  },
+  {
+    "id": "compact16_RandomForest_3",
+    "features": "compact16",
+    "family": "RandomForest",
+    "value": 3,
+    "baseline": false
+  },
+  {
+    "id": "compact16_XGBoost_1",
+    "features": "compact16",
+    "family": "XGBoost",
+    "value": 1,
+    "baseline": false
+  },
+  {
+    "id": "compact16_XGBoost_2",
+    "features": "compact16",
+    "family": "XGBoost",
+    "value": 2,
+    "baseline": false
+  },
+  {
+    "id": "compact16_plus_temporal35_LogisticRegression_0.01",
+    "features": "compact16_plus_temporal35",
+    "family": "LogisticRegression",
+    "value": 0.01,
+    "baseline": false
+  },
+  {
+    "id": "compact16_plus_temporal35_LogisticRegression_0.1",
+    "features": "compact16_plus_temporal35",
+    "family": "LogisticRegression",
+    "value": 0.1,
+    "baseline": false
+  },
+  {
+    "id": "compact16_plus_temporal35_RandomForest_2",
+    "features": "compact16_plus_temporal35",
+    "family": "RandomForest",
+    "value": 2,
+    "baseline": false
+  },
+  {
+    "id": "compact16_plus_temporal35_RandomForest_3",
+    "features": "compact16_plus_temporal35",
+    "family": "RandomForest",
+    "value": 3,
+    "baseline": false
+  },
+  {
+    "id": "compact16_plus_temporal35_XGBoost_1",
+    "features": "compact16_plus_temporal35",
+    "family": "XGBoost",
+    "value": 1,
+    "baseline": false
+  },
+  {
+    "id": "compact16_plus_temporal35_XGBoost_2",
+    "features": "compact16_plus_temporal35",
+    "family": "XGBoost",
+    "value": 2,
+    "baseline": false
+  },
+  {
+    "id": "deployed_RF_protocol_control",
+    "features": "baseline36",
+    "family": "RandomForest",
+    "value": 2,
+    "baseline": true
+  }
+]
