@@ -23,6 +23,8 @@ def model():
 
 @app.get('/sample')
 def sample(kind: str = Query('real', pattern='^(real|synthetic)$')):
+    if service.public_demo() and kind == 'real':
+        raise HTTPException(404, '공개 체험용 서버는 합성 예제만 제공합니다.')
     path = service.sample_path(kind)
     if not path.exists():
         raise HTTPException(404, '실측 예제는 저장소에 배포하지 않습니다. 합성 예제를 사용하거나 이용 권한이 있는 실측자료를 업로드하세요.')
