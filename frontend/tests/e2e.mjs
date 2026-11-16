@@ -19,8 +19,31 @@ page.on('console',msg=>{if(msg.type()==='error'&&!msg.text().includes('favicon.i
 const check=(name)=>{checks.push(name);console.log('PASS '+name)};
 try{
   await page.goto(base);
-  await expect(page.getByRole('heading',{name:'분석 대시보드',exact:true})).toBeVisible();
-  await page.getByRole('button',{name:'새 데이터 분석',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'열처리 공정 품질 분석',exact:true})).toBeVisible();
+  const deploymentSchema=await (await context.request.get(base+'/schema')).json();
+  if(deploymentSchema.public_demo){
+    await expect(page.getByLabel('공개 체험 안내')).toContainText('모든 방문자에게 공개');
+    expect(deploymentSchema.max_rows).toBe(500);
+    expect(deploymentSchema.sample_availability.real).toBe(false);
+    check('Public demo notice and upload limits match the API');
+  }
+  await expect(page.locator('.preview-sheet').getByText('화면 예시 · 6건')).toBeVisible();
+  await page.screenshot({path:path.join(evidence,'home.png'),fullPage:true});
+  // The landing-page shortcut must run the real API with the synthetic sample.
+  const exampleResponse=page.waitForResponse(r=>r.url().endsWith('/predict')&&r.request().method()==='POST');
+  await page.getByRole('button',{name:'합성 예제 결과 보기 ›',exact:true}).click();
+  const example=await (await exampleResponse).json();
+  expect(example.data_scope).toBe('synthetic_kamp60');
+  expect(example.predicted_rows).toBe(120);
+  await expect(page.getByRole('heading',{name:'작업 검토',exact:true})).toBeVisible();
+  await expect(page).toHaveURL(/#dashboard$/);
+  await page.goBack();
+  await expect(page.getByRole('heading',{name:'열처리 공정 품질 분석',exact:true})).toBeVisible();
+  await page.goForward();
+  await expect(page.getByRole('heading',{name:'작업 검토',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'무한루프 홈',exact:true}).click();
+  check('Home synthetic shortcut uses real inference; browser back/forward restores the view');
+  await page.locator('.hero').getByRole('button',{name:'데이터 업로드',exact:true}).click();
   const raw=await fs.readFile(path.join(root,'준비패키지/kamp/share/test_upload.csv'),'utf8');
   const renamed=raw.replace('batch_id','작업번호');
   await page.getByLabel('데이터 파일 선택').setInputFiles({name:'E2E_매핑.csv',mimeType:'text/csv',buffer:Buffer.from(renamed)});
@@ -29,6 +52,7 @@ try{
   await expect(page.getByText('40/40 필수 연결')).toBeVisible();
   await page.getByRole('button',{name:'데이터 검증',exact:true}).click();
   await expect(page.getByRole('button',{name:'20행 분석 및 저장',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:/2.*항목 연결/}).click();
   // Changing the mapping must invalidate a previously successful validation.
   await page.getByLabel('batch_id 연결',{exact:true}).selectOption('');
   await expect(page.getByRole('button',{name:'20행 분석 및 저장',exact:true})).toHaveCount(0);
@@ -46,10 +70,22 @@ try{
   check('CSV upload → alias mapping → validation invalidation → real inference → SQLite save');
   await page.screenshot({path:path.join(evidence,'dashboard.png'),fullPage:true});
   await page.getByRole('button',{name:first.batch_id,exact:true}).click();
+  await expect(page.locator('.review-side').getByRole('heading',{name:first.batch_id,exact:true})).toBeVisible();
+  await expect(page.locator('.review-side .readout strong')).toHaveText(Number(first.risk_score).toLocaleString('ko-KR',{maximumFractionDigits:3}));
+  await page.getByRole('button',{name:'전체 작업 상세 보기 ›'}).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByRole('dialog').getByText(Number(first.risk_score).toLocaleString('ko-KR',{maximumFractionDigits:3}),{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'상세 닫기'}).click();
   check('Dashboard risk score matches API and batch detail opens');
+  await page.getByLabel('작업 ID 검색').fill('NO_MATCH_FOR_THIS_TEST');
+  await expect(page.getByRole('heading',{name:'조건에 맞는 작업이 없습니다'})).toBeVisible();
+  await expect(page.locator('.review-side')).toHaveCount(0);
+  await page.getByLabel('작업 ID 검색').fill('');
+  await page.getByRole('button',{name:'다음 작업 페이지'}).click();
+  const nextId=await page.locator('.review-grid .lot').first().innerText();
+  await expect(page.locator('.review-side h2')).toHaveText(nextId);
+  await page.getByRole('button',{name:'이전 작업 페이지'}).click();
+  check('Selection panel follows the visible page and clears when filters return no rows');
   const downloadPromise=page.waitForEvent('download');
   await page.getByRole('link',{name:'결과 CSV'}).click();
   const download=await downloadPromise;
@@ -61,6 +97,10 @@ try{
   await expect(page.locator('.recharts-scatter-symbol').first()).toBeVisible();
   await page.screenshot({path:path.join(evidence,'variables.png'),fullPage:true});
   check('Feature histogram, quality relation and influence analysis');
+  await page.reload();
+  await expect(page.getByRole('heading',{name:'공정변수 분석',exact:true})).toBeVisible();
+  await expect(page.getByRole('navigation',{name:'주요 메뉴'}).getByRole('button',{name:'공정변수 분석',exact:true})).toHaveAttribute('aria-current','page');
+  check('Direct hash navigation survives reload and identifies the current menu');
   await page.getByRole('button',{name:'모델 검증',exact:true}).click();
   await expect(page.getByRole('heading',{name:'모델 3종 검증 비교'})).toBeVisible();
   await expect(page.getByText('LogisticRegression',{exact:true})).toBeVisible();
@@ -94,13 +134,20 @@ try{
   await page.getByRole('button',{name:'데이터 검증',exact:true}).click();
   await page.getByRole('button',{name:'120행 분석 및 저장'}).click();
   await expect(page.getByText('합성 기능검증',{exact:true}).first()).toBeVisible();
-  await expect(page.locator('thead th').filter({hasText:/가상\s*불량률/})).toBeVisible();
+  await page.getByRole('button',{name:'전체 작업 상세 보기 ›'}).click();
+  await expect(page.getByText('가상 불량률',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'상세 닫기'}).click();
   check('Synthetic input is explicitly separated and quality is labeled virtual');
   await page.setViewportSize({width:390,height:844});
-  await expect(page.getByRole('heading',{name:'분석 대시보드',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'작업 검토',exact:true})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
   await page.screenshot({path:path.join(evidence,'mobile.png'),fullPage:true});
   check('390px responsive layout has no page-level horizontal overflow');
+  await page.getByRole('button',{name:'무한루프 홈',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'열처리 공정 품질 분석',exact:true})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+  await page.screenshot({path:path.join(evidence,'home_mobile.png'),fullPage:true});
+  check('390px landing page and navigation stay within the viewport');
   expect(errors).toEqual([]);
   check('No browser JavaScript errors');
   await fs.writeFile(path.join(evidence,'browser_results.json'),JSON.stringify({base,checks,errors,status:'passed',viewport:{desktop:[1440,1080],mobile:[390,844]},run_id:result.run_id},null,2));

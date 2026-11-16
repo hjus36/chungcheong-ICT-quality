@@ -26,18 +26,27 @@ SOURCES = {'KAMP_heat_quality_60': 'KAMP 실측', 'synthetic_kamp60': '합성 �
 MAX_BYTES = 10 * 1024 * 1024
 NOTICE = '공정 완료 후 검토용 연구 MVP입니다. 위험 점수는 실제 불량률이 아니며 출하판정·설비제어에 사용하지 않습니다.'
 
+def public_demo():
+    return os.environ.get('ICT_PUBLIC_DEMO') == '1'
+
+
+def max_rows():
+    return 500 if public_demo() else 10000
+
+
 @lru_cache
 def bundle():
     return joblib.load(RELEASE / 'model.joblib')
 
 @lru_cache
 def model_info():
-    path = RELEASE / 'benchmark.json'
+    path = RELEASE / ('benchmark_public.json' if public_demo() else 'benchmark.json')
     if not path.exists(): path = RELEASE / 'benchmark_public.json'
     return json.loads(path.read_text(encoding='utf-8'))
 
 def sample_path(kind):
     if kind == 'real': return ROOT / 'demo_upload.csv'
+    if public_demo(): return ROOT / 'share' / 'synthetic_demo.csv'
     local = RELEASE / 'synthetic_demo.csv'
     return local if local.exists() else ROOT / 'share' / 'synthetic_demo.csv'
 
@@ -46,13 +55,14 @@ def unit_for(feature):
 
 def schema():
     return {'required_columns': META + FEATURES, 'optional_columns': OPTIONAL,
-            'sample_availability': {'real': sample_path('real').exists(), 'synthetic': sample_path('synthetic').exists()},
+            'sample_availability': {'real': not public_demo() and sample_path('real').exists(), 'synthetic': sample_path('synthetic').exists()},
             'fields': [{'name': k, 'kind': 'meta', 'required': True} for k in META] +
                       [{'name': k, 'kind': 'feature', 'unit': unit_for(k),
                         'units': ['%', 'fraction'] if unit_for(k) == '%' else ['°C', '°F', 'K'],
                         'required': True} for k in FEATURES] +
                       [{'name': k, 'kind': 'quality' if k != 'item_code' else 'meta', 'required': False} for k in OPTIONAL],
-            'sources': SOURCES, 'max_bytes': MAX_BYTES, 'max_rows': 10000, 'max_columns': 100,
+            'sources': SOURCES, 'max_bytes': MAX_BYTES, 'max_rows': max_rows(), 'max_columns': 100,
+            'public_demo': public_demo(), 'history_limit': 20 if public_demo() else None,
             'max_missing_features_per_row': 3, 'timezone': 'Asia/Seoul',
             'reference_notice': '학습 자료 5~95백분위이며 기업 규격이 아닙니다.', 'notice': NOTICE}
 
@@ -73,7 +83,7 @@ async def read_upload(file):
             header = next(csv.reader(StringIO(content)))
             if len(header) != len(set(h.strip() for h in header)):
                 raise HTTPException(422, '원본 파일에 중복된 열 이름이 있습니다.')
-            df = pd.read_csv(StringIO(content), dtype=str, nrows=10001, keep_default_na=False)
+            df = pd.read_csv(StringIO(content), dtype=str, nrows=max_rows()+1, keep_default_na=False)
         elif suffix == '.xlsx':
             with zipfile.ZipFile(BytesIO(raw)) as archive:
                 if sum(z.file_size for z in archive.infolist()) > 100 * 1024 * 1024 or len(archive.infolist()) > 6000:
@@ -84,7 +94,7 @@ async def read_upload(file):
                 sheet = wb.worksheets[0]
                 if sheet.max_column > 100:
                     raise HTTPException(422, '입력은 100열 이하여야 합니다.')
-                rows = list(sheet.iter_rows(max_row=10002, values_only=True))
+                rows = list(sheet.iter_rows(max_row=max_rows()+2, values_only=True))
                 while rows and not any(v is not None for v in rows[-1]): rows.pop()
                 if not rows: raise HTTPException(422, '비어 있는 파일입니다.')
                 header = [str(v).strip() if v is not None else '' for v in rows[0]]
@@ -99,7 +109,7 @@ async def read_upload(file):
     except HTTPException: raise
     except Exception:
         raise HTTPException(422, '파일을 읽지 못했습니다. 손상 여부와 CSV 인코딩/Excel 형식을 확인하세요.')
-    if not 1 <= len(df) <= 10000: raise HTTPException(422, '입력은 1~10,000행이어야 합니다.')
+    if not 1 <= len(df) <= max_rows(): raise HTTPException(422, f'입력은 1~{max_rows():,}행이어야 합니다.')
     if len(df.columns) > 100: raise HTTPException(422, '입력은 100열 이하여야 합니다.')
     df.columns = [str(c).strip() for c in df.columns]
     if '' in df.columns or df.columns.duplicated().any(): raise HTTPException(422, '열 이름은 비어 있거나 중복될 수 없습니다.')
@@ -250,6 +260,8 @@ def save_run(payload):
             db.execute('INSERT INTO runs (id,payload,created_at,filename,data_scope,model_version,predicted_rows) VALUES (?,?,?,?,?,?,?)',
                        (payload['run_id'], json.dumps(payload, ensure_ascii=False, allow_nan=False), payload['created_at'],
                         payload['filename'], payload['data_scope'], payload['model_version'], payload['predicted_rows']))
+            if public_demo():
+                db.execute('DELETE FROM runs WHERE id NOT IN (SELECT id FROM runs ORDER BY created_at DESC,rowid DESC LIMIT 20)')
     finally: db.close()
 
 def get_run(run_id):

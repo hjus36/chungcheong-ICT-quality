@@ -1,0 +1,25 @@
+# A single free Python service serves both React and the prediction API.
+services:
+  - type: web
+    name: chungcheong-ict-quality
+    runtime: python
+    plan: free
+    region: singapore
+    numInstances: 1
+    autoDeployTrigger: off
+    buildCommand: pip install -r 준비패키지/requirements-lock.txt && python scripts/build_public_demo.py
+    startCommand: uvicorn app_kamp:app --app-dir tmp/public-demo/준비패키지 --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: ICT_PUBLIC_DEMO
+        value: "1"
+      - key: ICT_DB_PATH
+        value: /tmp/ict-public-demo/runs.sqlite3
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"

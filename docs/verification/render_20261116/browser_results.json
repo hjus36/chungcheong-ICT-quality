@@ -1,0 +1,34 @@
+{
+  "base": "https://chungcheong-ict-quality.onrender.com",
+  "checks": [
+    "Public demo notice and upload limits match the API",
+    "Home synthetic shortcut uses real inference; browser back/forward restores the view",
+    "CSV upload → alias mapping → validation invalidation → real inference → SQLite save",
+    "Dashboard risk score matches API and batch detail opens",
+    "Selection panel follows the visible page and clears when filters return no rows",
+    "Saved result CSV download",
+    "Feature histogram, quality relation and influence analysis",
+    "Direct hash navigation survives reload and identifies the current menu",
+    "Three model comparison, confusion matrix and baseline limitations",
+    "Invalid numeric cell is shown before prediction; 19 valid rows persisted",
+    "History search and original result restored without recomputation",
+    "Browser reload restores a persisted analysis",
+    "Synthetic input is explicitly separated and quality is labeled virtual",
+    "390px responsive layout has no page-level horizontal overflow",
+    "390px landing page and navigation stay within the viewport",
+    "No browser JavaScript errors"
+  ],
+  "errors": [],
+  "status": "passed",
+  "viewport": {
+    "desktop": [
+      1440,
+      1080
+    ],
+    "mobile": [
+      390,
+      844
+    ]
+  },
+  "run_id": "68f53748-be8d-4990-92ef-ff74287a792c"
+}
