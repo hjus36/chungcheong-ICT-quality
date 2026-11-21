@@ -125,8 +125,8 @@ def main(argv=None):
     test = pd.concat([test, error_rows(test, dictionary, scfg.get("error_rows") or [])], ignore_index=True)
 
     a.out.mkdir(parents=True, exist_ok=True)
-    demo.to_csv(a.out / "synthetic_demo.csv", index=False, encoding="utf-8-sig")
-    test.to_csv(a.out / "test_upload.csv", index=False, encoding="utf-8-sig")
+    demo.to_csv(a.out / "synthetic_demo.csv", index=False, encoding="utf-8-sig", lineterminator="\n")
+    test.to_csv(a.out / "test_upload.csv", index=False, encoding="utf-8-sig", lineterminator="\n")
     definition = {
         "notice": "합성 자료이며 실측이 아니다. 원본 행을 복사하거나 섞지 않았다. actual_label은 모델 위험도로 뽑은 가상값이다.",
         "release_version": dictionary["version"], "data_source": dictionary["synthetic_source"],
@@ -136,7 +136,7 @@ def main(argv=None):
                                       "sha256": sha(a.out / "test_upload.csv")}},
     }
     (a.out / "synthetic_definition.json").write_text(json.dumps(definition, ensure_ascii=False, indent=2),
-                                                     encoding="utf-8")
+                                                     encoding="utf-8", newline="\n")
     pos = int(demo["actual_label"].sum()) if "actual_label" in demo else 0
     print(f"✓ 합성 예제 → {a.out}: demo {len(demo)}행(가상 불량 {pos}), test_upload {len(test)}행")
 

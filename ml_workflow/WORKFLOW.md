@@ -40,6 +40,7 @@ dataset ─► 00 validate ─► 01 eda ─► 02 split ─┬─► dev ─►
                                               └─► holdout (05 model의 마지막 평가 전까지 사용 금지)
                                                                                                    │
               준비패키지/release/ (서비스) ◄─ promote.py (승격 조건 확인) ◄─────────────────────────┘
+              준비패키지/local/   (실측 예제, git 제외) ◄─ promote.py
               준비패키지/share/   (합성 예제) ◄─ make_synthetic.py
 ```
 
@@ -64,6 +65,7 @@ ml_workflow/
 ├── run.py                 실행기
 ├── promote.py             승격: 07_release → 준비패키지/release/
 ├── make_synthetic.py      합성 예제: → 준비패키지/share/
+├── make_upload.py         원본 데이터셋 파일 → 웹 업로드 형식 CSV
 ├── predict.py             개발용 예측 (06_explain 모델)
 ├── tests/                 작은 합성 데이터셋으로 전 단계 종단 테스트
 └── runs/                  실행 결과 (git 제외, holdout_ledger.json 포함)
@@ -79,6 +81,7 @@ python run.py --resume im_v3                    # 중단된 단계부터 이어�
 python run.py --list                            # 실행 목록과 단계 상태
 python promote.py --run im_v3                   # 승격 조건 통과 시 서비스로 복사
 python make_synthetic.py                        # 승격된 모델 기준으로 합성 예제 다시 생성
+python make_upload.py --input data/dataset_V2.parquet --holdout-of im_v3 --output out.csv   # 원본 → 업로드 형식
 python -m unittest discover -s tests -v         # 종단 테스트 (실데이터 불필요)
 ```
 
@@ -200,10 +203,12 @@ Windows에서는 `scripts\train.ps1 -Run im_v3 [-Resume] [-Promote]`로 같은 �
   - `model.joblib` — 번들(schema 2): 파이프라인, 특징 순서, `alert_threshold`(불량 위험 기준 = 화면의 우선 검토 기준), `caution_threshold`(품질주의, 번들에만 저장), 정상 부품 참고 구간, 결측 정책, 단위·허용 범위, 라벨 정의
   - `data_dictionary.json` — 업로드 입력 계약: 메타(part_id, cycle_start_at/end, data_source), 선택 항목(material, actual_label), 특징별 단위·허용 범위·필수 여부, 특징으로 연결할 수 없는 접두사(라벨·사후측정·오프라인)
   - `benchmark_public.json` — 화면용 집계: 선택 기록표, holdout 지표(개발 참고 평가 표기), 기준선, 실험일 제외 진단, 공정변수 분석(히스토그램, 5부품 이상 묶은 구간 평균). 개별 부품 값·ID는 넣지 않는다.
-  - `release_check.json` — `release.yaml`의 승격 조건 판정
+  - `release_check.json` — `release.yaml`의 승격 조건 판정(`checks`, 실패 시 승격 차단)과 경고(`warnings`, 기록만)
+  - `real_demo.csv` / `real_demo_definition.json` — 실측 예제. 원본 holdout 행을 업로드 형식으로 바꾼 파일(행 단위라 비공개)과 그 정의(행 수·불량 수·해시)
+- **실측 예제:** `contract.to_service_input`이 데이터 사전의 `source_column`(없으면 `columns.yaml`의 `service.meta`)으로 열을 바꾸고 특징 값은 그대로 둔다. 파일을 다시 읽어 ① 서비스 검증 규칙 통과 ② 판정 TP/FN/FP/TN = 05_model holdout 결과를 검사해 `checks`에 넣는다. 원본 열이 없어 만들지 못하면 `warnings`에만 남기고 모델 승격은 막지 않는다. 설정: `release.yaml`의 `real_demo {enabled, rows: holdout|all}`.
 - **결측 정책:** dev에서 한 번도 비지 않은 특징은 필수(비면 오류 행), 결측이 있던 특징은 선택(학습 중앙값 대체 + indicator).
 - **승격 조건(기본):** 선택 모델의 Gate 1·2 통과, holdout Recall ≥ 0.90, holdout PR-AUC가 '전부 우선 검토'보다 높고 F2가 같거나 높음. `promote.py`는 미통과 시 중단한다(`--force`는 기록에 남음).
-- **승격:** 해시를 확인한 뒤 `준비패키지/release/`로 복사하고, 이전 버전은 `release/previous/`에 보관(git 제외), `release_info.json`에 실행 이름·해시·버전을 기록한다.
+- **승격:** 해시를 확인한 뒤 `준비패키지/release/`로 복사하고, 실측 예제는 `준비패키지/local/`(git 제외)로 복사하며, 이전 버전은 `release/previous/`에 보관(git 제외), `release_info.json`에 실행 이름·해시·버전을 기록한다.
 
 <a id="s99"></a>
 ### 2.9 `99_report` — 보고서
@@ -229,6 +234,8 @@ Windows에서는 `scripts\train.ps1 -Run im_v3 [-Resume] [-Promote]`로 같은 �
 | 처음 보는 실험일에서의 성능 과대평가 | 실험일 제외 진단을 **Gate 2**로 적용 (모든 모델) | 05 |
 | 같은 holdout을 여러 번 보며 규칙 조정 | holdout 원장(`runs/holdout_ledger.json`), 결과에 '개발 참고 평가' 표기 | 05 |
 | 업로드 단계에서 라벨·사후측정 열을 특징에 연결 | 금지 접두사를 데이터 사전에 내보내고 서비스가 매핑을 거부 | 07 |
+| 워크플로우와 웹이 다른 판정을 냄 | 실측 예제를 서비스 형식으로 다시 읽어 holdout 판정과 대조, 불일치 시 승격 차단 | 07 |
+| 실측 예제(원본 행)가 공개됨 | `PRIVATE_FILES`로 공개 사본 제외, `준비패키지/local/` git 제외, 감사 규칙 | 07, 승격 |
 | 행 단위 분할 점수 과대평가 | 그룹 라벨 순도 경고 | 01 |
 
 ---

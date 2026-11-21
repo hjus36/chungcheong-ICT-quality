@@ -55,7 +55,7 @@ def _holdout_status(ctx, hold_index, ev):
     if ctx.run_dir.name not in ledger[sig]:
         ledger[sig].append(ctx.run_dir.name)
     ledger_path.parent.mkdir(parents=True, exist_ok=True)
-    ledger_path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2), encoding="utf-8")
+    ledger_path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     note = (ev or {}).get("holdout_status_note") if mode == "development_reference" else \
         (f"같은 holdout을 이전 실행이 이미 평가했다: {previous}" if previous else "이 분할의 첫 holdout 평가")
     return {"status": status, "split_signature": sig, "previous_runs": previous, "mode": mode, "note": note}

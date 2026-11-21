@@ -16,6 +16,7 @@ python run.py --run im_v3            # validate → eda → split → filter →
 python run.py --resume im_v3         # 중단된 단계부터 (설정·코드·데이터가 같을 때만)
 python promote.py --run im_v3        # 승격 조건 통과 시 준비패키지/release/로 복사
 python make_synthetic.py             # 준비패키지/share/ 합성 예제 다시 생성
+python make_upload.py --input data/dataset_V2.parquet --holdout-of im_v3 --output out.csv   # 원본 → 업로드 형식
 python -m unittest discover -s tests -v
 ```
 Windows: `scripts\setup.ps1 -Train` 후 `scripts\train.ps1 -Run im_v3 -Promote`.
@@ -32,10 +33,12 @@ Windows: `scripts\setup.ps1 -Train` 후 `scripts\train.ps1 -Run im_v3 -Promote`.
 | `04_wrapper` | 모델별 특징 수(k) 탐색 — 반복 그룹 CV, 1-SE 규칙 |
 | `05_model` | 4개 모델 비교 → Gate 1(Recall 0.9 지점 Precision ≥ 0.4) → Gate 2(실험일 제외 Recall ≥ 0.5) → PR-AUC → 1-SE 동점 처리. 위험 구간, 기준선, holdout(개발 참고 평가) |
 | `06_explain` | permutation importance, 영향 방향, 정상 부품 참고 구간 |
-| `07_release` | 서비스 번들·데이터 사전·공개 벤치마크·승격 조건 판정 |
+| `07_release` | 서비스 번들·데이터 사전·공개 벤치마크·승격 조건 판정, 실측 예제(원본 holdout → 업로드 형식)와 판정 일치 검사 |
 | `99_report` | `report.md`와 행 단위 자료를 뺀 `public/` 사본 |
 
-## 현재 서비스 모델 (`im_v2_r2`)
+## 현재 서비스 모델 (`im_v2_r3`)
 ProBayes 사출성형 v2, 564 사이클(불량 27.5%). **Logistic Regression, 특징 2개**(`DXP_HoldingPressure1` 필수, `CALC_InjectionStroke` 선택). 네 모델 중 유일하게 Gate 1·2를 통과했다.
 holdout 121부품(개발 참고 평가): PR-AUC 0.841, Recall 1.00, Precision 0.60, F2 0.882 — 전부 우선 검토(F2 0.679)보다 높다.
-자세한 수치는 `runs/im_v2_r2/report.md`(로컬)와 `준비패키지/release/benchmark_public.json`.
+자세한 수치는 `runs/im_v2_r3/report.md`(로컬)와 `준비패키지/release/benchmark_public.json`. (`im_v2_r2`와 결과 동일, r3에서 실측 예제 생성 추가)
+
+승격하면 holdout 121행 실측 예제가 `준비패키지/local/real_demo.csv`(git 제외)로 복사되어 웹의 **실측 예제 불러오기**가 켜진다. 웹에서 분석한 판정(36/0/24/61)은 리포트 holdout 결과와 같으며, 다르면 `07_release`가 승격을 막는다.

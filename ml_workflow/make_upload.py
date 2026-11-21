@@ -68,7 +68,7 @@ def main(argv=None) -> int:
         print(f"✗ {e}")
         return 2
     a.output.parent.mkdir(parents=True, exist_ok=True)
-    out.to_csv(a.output, index=False, encoding="utf-8-sig")
+    out.to_csv(a.output, index=False, encoding="utf-8-sig", lineterminator="\n")
     pos = int(out["actual_label"].sum()) if "actual_label" in out else None
     print(f"✓ {len(out)}행 → {a.output} (기준 데이터 사전 {dictionary['version']}, 불량 {pos})")
     if not a.holdout_of:

@@ -177,7 +177,7 @@ def main(argv=None):
             status = 1
         rec["seconds"] = round(time.time() - t0, 2)
         manifest["stages"][stage] = rec
-        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
         if status:
             break
     print("\n완료" if status == 0 else "\n실패 — 위 메시지와 manifest.json을 확인하세요.")

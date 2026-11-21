@@ -121,7 +121,7 @@ def run(ctx):
         "versions": {"python": platform.python_version(), "scikit-learn": sklearn.__version__},
     }
     (ctx.stage_dir(STAGE) / "model_card.json").write_text(
-        json.dumps(card, ensure_ascii=False, indent=2, default=float), encoding="utf-8")
+        json.dumps(card, ensure_ascii=False, indent=2, default=float), encoding="utf-8", newline="\n")
     fig = _plot(ctx, imp)
     ctx.write_json(STAGE, "explain_summary", {"model": m, "model_name": th["model_name"],
                                               "n_features": len(feats), "percentiles": [lo, hi],

@@ -20,6 +20,7 @@
 | 사후 비교 | `actual_label`(0/1)이 있으면 예측과 비교 (예측 입력에는 쓰지 않음) |
 | 분석 화면 | 공정변수 분포·구간별 불량 비율·영향도, 모델 선택 기록표·기준선·실험일 제외 진단 |
 | 이력·내보내기 | SQLite 저장·검색·당시 결과 복원, 결과·오류 CSV |
+| 실측 예제 | 원본 데이터의 학습 미사용 부품을 업로드 형식으로 자동 변환, 웹 판정이 리포트와 같은지 승격 전에 검사 |
 | 학습 워크플로우 | 사후측정 자동 제외, 그룹 분할, 반복 그룹 CV, 4개 모델 비교, Gate 1·2, 리포트 자동 생성, 승격 |
 
 ## 시스템 구조
@@ -64,13 +65,13 @@ powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run im_v3
 powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run im_v3 -Resume -Stages report -Promote
 ```
 
-실행 결과와 자동 리포트는 `ml_workflow\runs\im_v3\`(git 제외). 절차: [문서 11](docs/11_데이터_재현과_저장소_운영.md).
+실행 결과와 자동 리포트는 `ml_workflow\runs\im_v3\`(git 제외). 승격하면 실측 예제(`준비패키지\local\real_demo.csv`, git 제외)도 함께 생겨 **실측 예제 불러오기** 버튼이 켜집니다. 새 Clone에는 이 파일이 없으므로 버튼이 꺼져 있습니다. 승격 없이 만들려면 `ml_workflow\make_upload.py`를 씁니다. 절차: [문서 11](docs/11_데이터_재현과_저장소_운영.md).
 
 ### 5분 시연
 
 1. 홈 → **합성 예제 결과 보기**: 120부품 분석 → 우선 검토 부품과 참고 구간 이탈 변수
-2. **데이터 업로드 → 오류 포함 예제** → 검증에서 제외된 6행과 이유 확인 → 분석
-3. 대시보드의 **가상 판정과 비교** (합성 라벨은 가상값)
+2. **데이터 업로드 → 실측 예제 불러오기**: 원본에서 학습에 쓰지 않은 실제 부품 121개 → **실제 판정과 비교**가 모델 검증 화면의 holdout 결과(36/0/24/61)와 같음
+3. **데이터 업로드 → 오류 포함 예제** → 검증에서 제외된 6행과 이유 확인 → 분석
 4. **모델 검증**: XGBoost가 CV 점수는 높지만 Gate 2(처음 보는 실험일)에서 탈락한 이유
 5. **분석 이력**에서 결과 복원, CSV 다운로드
 
@@ -113,7 +114,7 @@ holdout은 규칙을 조정하면서 이미 본 자료이므로 **독립 검증�
 ## 저장소 구조
 
 ```text
-ml_workflow/              학습 워크플로우 — 설정(YAML), 단계별 코드, 승격·합성 예제, 테스트
+ml_workflow/              학습 워크플로우 — 설정(YAML), 단계별 코드, 승격·합성 예제·원본 변환(make_upload.py), 테스트
   config/                 columns.yaml(사람 판단) · experiment.yaml(분석 기준) · release.yaml · synthetic.yaml
   data/README.md          원본 받는 법·해시 (데이터 파일은 git 제외)
   runs/                   실행 결과 (git 제외)
@@ -122,6 +123,7 @@ ml_workflow/              학습 워크플로우 — 설정(YAML), 단계별 코
   quality_service.py      입력 계약 검증·추론·SQLite 이력
   release/                승격된 모델·데이터 사전·공개 벤치마크·승격 기록
   share/                  합성 예제 (데모 120행, 오류 포함 업로드 예제, 생성 정의)
+  local/                  실측 예제 — 승격 때 생성, git 제외
 frontend/                 React 소스·빌드 dist·브라우저 테스트
 scripts/                  setup · start · train · test (PowerShell), 공개 배포 패키지, 저장소 감사
 tests/                    릴리스 무결성 · API · 공개 모드 · 서버 재시작
@@ -132,11 +134,11 @@ DATA_USAGE.md             데이터 출처·라이선스·공유 범위
 ## 테스트
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1            # 릴리스 무결성, API 12, 공개 모드 4, 재시작
-powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1 -Workflow  # + 워크플로우 종단 7 (setup.ps1 -Train 필요)
+powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1            # 릴리스 무결성, API 13, 공개 모드 4, 재시작
+powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1 -Workflow  # + 워크플로우 종단 11 (setup.ps1 -Train 필요)
 ```
 
-브라우저 테스트(15개)는 서버를 8766에 띄운 뒤 `test.ps1 -Browser`. 결과: [문서 07](docs/07_검증_결과보고서.md).
+브라우저 테스트(16개, 실측 예제 흐름은 파일이 있을 때만)는 서버를 8766에 띄운 뒤 `test.ps1 -Browser`. 결과: [문서 07](docs/07_검증_결과보고서.md).
 
 ## 기술 스택
 

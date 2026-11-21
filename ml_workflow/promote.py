@@ -103,7 +103,7 @@ def main(argv=None) -> int:
     else:
         info["real_demo"] = None
         print("  [경고] 실측 예제(real_demo.csv)가 없어 복사하지 않았습니다. 웹의 '실측 예제 불러오기'는 꺼진 상태로 남습니다.")
-    info_path.write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
+    info_path.write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     print(f"✓ 승격 완료 → {target}")
     return 0
 

@@ -74,7 +74,7 @@ def _real_demo(ctx, cfg, rel, dictionary, pipeline, feats, threshold, hold_df, h
         warnings.append(f"실측 예제를 만들지 못함: {e}")
         return None
     path = out_dir / "real_demo.csv"
-    out.to_csv(path, index=False, encoding="utf-8-sig")
+    out.to_csv(path, index=False, encoding="utf-8-sig", lineterminator="\n")
     # 서비스처럼 파일을 다시 읽어 검사한다 (CSV 저장·읽기 과정까지 포함)
     back = pd.read_csv(path, dtype={"part_id": str}, encoding="utf-8-sig")
     problems = check_service_input(back, dictionary)

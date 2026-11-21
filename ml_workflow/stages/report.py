@@ -483,7 +483,7 @@ def run(ctx):
     sec_release(d)
     d.add("\n---\n\n# 결과 해석 및 한계\n", design("limitations", "알려진 한계"), "\n_(작성)_\n")
     path = ctx.run_dir / "report.md"
-    path.write_text("\n".join(d.parts), encoding="utf-8")
+    path.write_text("\n".join(d.parts), encoding="utf-8", newline="\n")
     n_public = publish(ctx.run_dir)
     print(f"  공개용 사본: public/ ({n_public}개 파일, 행 단위 산출물 제외)")
     print(f"  {path.relative_to(ctx.run_dir.parent.parent)} ({len(path.read_text(encoding='utf-8').splitlines())}줄)")

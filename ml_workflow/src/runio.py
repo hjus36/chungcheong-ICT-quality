@@ -59,13 +59,13 @@ class RunContext:
 
     def write_csv(self, stage: str, name: str, df: pd.DataFrame) -> Path:
         path = self.stage_dir(stage) / f"{name}.csv"
-        df.to_csv(path, index=False, encoding="utf-8-sig")
+        df.to_csv(path, index=False, encoding="utf-8-sig", lineterminator="\n")
         return path
 
     def write_json(self, stage: str, name: str, obj) -> Path:
         path = self.stage_dir(stage) / f"{name}.json"
         path.write_text(json.dumps(obj, ensure_ascii=False, indent=2,
-                                   default=_json_default), encoding="utf-8")
+                                   default=_json_default), encoding="utf-8", newline="\n")
         return path
 
     def read_json(self, stage: str, name: str):

@@ -6,7 +6,7 @@ React 개발 서버만 `/api` 접두사를 프록시에서 제거한다. 정적 
 
 ## 입력 계약
 
-계약은 `준비패키지/release/data_dictionary.json`과 번들에서 읽는다. 아래는 현재 모델(`probayes-im-v2-im_v2_r2`) 기준.
+계약은 `준비패키지/release/data_dictionary.json`과 번들에서 읽는다. 아래는 현재 모델(`probayes-im-v2-im_v2_r3`) 기준.
 
 | 열 | 필수 | 형식 |
 |---|---|---|
@@ -30,7 +30,7 @@ React 개발 서버만 `/api` 접두사를 프록시에서 제거한다. 정적 
 | GET /health | 없음 | status, model_version, data_scope, readiness, notice |
 | GET /schema | 없음 | required_columns, optional_columns, fields(단위·min·max·설명·참고 구간), sources, missing_policy, excluded_input_prefixes, alert_threshold, 제한 |
 | GET /model | 없음 | benchmark_public.json 그대로 |
-| GET /sample | kind=synthetic(기본)·test·real | CSV. real은 `준비패키지/local/real_demo.csv`가 있을 때만(공개 모드 404) |
+| GET /sample | kind=synthetic(기본)·test·real | CSV. real은 승격 때 생기는 `준비패키지/local/real_demo.csv`(원본 holdout 121행)가 있을 때만(공개 모드 404) |
 | POST /preview | multipart file | filename, file_sha256, bytes, encoding, columns, rows, sample(5행), suggested_mapping |
 | POST /validate | file, mapping(JSON: 원본 열 → 공통항목) | input_rows, valid_rows, error_rows, errors[{row, part_id, reasons}], missing_cells, imputed_rows, ignored_columns, units, data_scope |
 | POST /predict | 위와 동일 | 재검증 → 추론 → SQLite 저장 → 결과. 유효행 0개면 422, 저장 안 함 |
