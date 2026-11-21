@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 import quality_service as service
 
-app = FastAPI(title='무한루프 · 사출성형 품질위험 검토', version='2.0.0')
+app = FastAPI(title='무한루프 · 제조공정 품질 분석', version='2.0.0')
 
 @app.get('/health')
 def health():
