@@ -1,12 +1,19 @@
-# Local source documents and original KAMP downloads
-/참고자료/
-/준비패키지/reference/
+# Injection-molding source data (ProBayes, CC BY 4.0) stays local: download it, verify the hash
+/ml_workflow/data/*
+!/ml_workflow/data/README.md
+*.parquet
+
+# Workflow runs contain row-level splits and predictions; publish only reviewed aggregates
+/ml_workflow/runs/
+/ml_workflow/tests/_tmp/
+
+# Release history kept locally; only the current release is shared
+/준비패키지/release/previous/
 
 # Temporary tools, dependency installations and duplicate exports
 /tmp/
 /outputs/
 /output/
-/준비패키지/data/workbook_data.json
 *.inspect.ndjson
 
 # Local environments and generated runtime state
@@ -24,31 +31,6 @@ __pycache__/
 /frontend/test-results/
 /frontend/playwright-report/
 /docs/verification/browser_failure.png
-/docs/verification/*.png
-/experiments/quality_20261101/verification/*.png
-
-# Local preservation copies, row-level KAMP data and bootstrap samples
-/experiments/quality_20261101/baseline_snapshot/
-/experiments/quality_20261101/results/compact_features.csv
-/experiments/quality_20261101/results/temporal_features.csv
-/experiments/quality_20261101/runs/kamp_v1/*.csv
-/experiments/quality_20261101/runs/*/models/*.joblib
-!/experiments/quality_20261101/runs/kamp_v1/models/compact16_RandomForest_3.joblib
-!/experiments/quality_20261101/runs/secom_v1/models/secom590_XGBoost_1.joblib
-/준비패키지/kamp/*.csv
-!/준비패키지/kamp/validation_comparison.csv
-/준비패키지/kamp/release/benchmark.json
-/준비패키지/kamp/release/holdout_predictions.csv
-/준비패키지/kamp/release/synthetic_demo.csv
-
-# Reproduction runs are local until reviewed for publication
-/experiments/quality_20261101/runs/*reproduction*/
-/experiments/quality_20261101/runs/*rerun*/
-
-# Downloaded source data stays local; provenance and experiment results are shared
-/experiments/quality_20261101/sources/uci_secom/secom.zip
-/experiments/quality_20261101/sources/uci_secom/secom.data
-/experiments/quality_20261101/sources/uci_secom/secom_labels.data
 
 # Local secrets and editor/OS temporary files
 .env
@@ -58,4 +40,3 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
-
