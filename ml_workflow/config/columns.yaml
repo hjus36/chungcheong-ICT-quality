@@ -52,3 +52,118 @@ column_overrides: {}
 # 컬럼 단위 수동 제외 — 사유가 그대로 결과 표에 기록된다.
 manual_drop: []
 #  예) - {column: SOME_COLUMN, reason: "센서 교체로 단위 불일치"}
+
+# ============================================================
+# 서비스(웹 MVP) 입력 계약 — 07_release가 데이터 사전(data_dictionary.json)으로 내보낸다.
+# ============================================================
+service:
+  data_source: ProBayes_IM_v2          # 실측 자료 출처 표기 (업로드 파일의 data_source 값)
+  synthetic_source: synthetic_im       # 합성 기능검증 자료 출처 표기
+  meta:                                # 서비스 공통 항목 ← 원본 컬럼 (업로드 시 자동 매핑 제안)
+    part_id: MET_MachineCycleID
+    cycle_start_at: MET_TimeCycleStart
+    cycle_end_at: MET_TimeCycleEnd
+    material: MET_MaterialName         # 선택 항목
+  label_column: actual_label           # 선택 항목: 실제 판정(0/1). 예측 입력에서 제외하고 사후 비교에만 사용
+
+# 특징 단위·허용 범위. 이름 패턴(정규식)을 위에서부터 검사해 처음 일치한 규칙을 쓴다.
+# min/max는 물리적으로 불가능한 값을 거르는 용도이며 공정 규격이 아니다.
+feature_info:
+  rules:
+    - {pattern: "^(QUA_Area|DXP_Area)", unit: "면적 지표", min: 0}
+    - {pattern: "Humidity|Moisture", unit: "%", min: 0, max: 100}
+    - {pattern: "TemperatureDifference", unit: "°C", min: -100, max: 100}
+    - {pattern: "Temperature|Temp", unit: "°C", min: -50, max: 500}
+    - {pattern: "Pressure", unit: "bar", min: 0, max: 5000}
+    - {pattern: "PumpSpeedRPM", unit: "rpm", min: 0}
+    - {pattern: "FlowRate", unit: "l/min", min: 0}
+    - {pattern: "Power", unit: "kW", min: 0}
+    - {pattern: "Time", unit: "s", min: 0, max: 3600}
+    - {pattern: "Stroke", unit: "mm", min: 0, max: 1000}
+    - {pattern: "Weight", unit: "g", min: 0, max: 10000}
+    - {pattern: "Volume", unit: "ccm", min: 0, max: 10000}
+    - {pattern: "InjectionSpeed", unit: "ccm/s", min: 0, max: 1000}
+    - {pattern: ".*", unit: ""}
+  descriptions:                        # 출처: dataset/data_description.pdf, 팀 Workflow 문서
+    ENV_AirTemperature: 사출성형기 근처 생산 공간의 공기 온도
+    ENV_AirHumidity: 사출성형기 근처 생산 공간의 상대 습도
+    MET_MaterialMoisture: 사용 플라스틱 재료의 수분 함량
+    SET_CylinderTemperature: 설정 실린더 온도 (다른 구역도 같은 비율로 변경)
+    SET_ToolTemperature: 금형 설정 온도
+    SET_HoldingPressure1: 1단계 설정 보압
+    SET_HoldingPressure2: 2단계 설정 보압
+    SET_InjectionSpeed: 설정 사출 속도
+    SET_BackPressure: 설정 배압
+    SET_HoldingTime1: 1단계 설정 보압 시간
+    SET_HoldingTime2: 2단계 설정 보압 시간
+    SET_CoolingTime: 설정 냉각 시간
+    SET_TransferVolume: 설정 전환 용적
+    QUA_CycleTime: 사출성형 사이클 소요 시간
+    QUA_InjectionTime: 사출 단계 소요 시간
+    QUA_PlastificationTime: 가소화 단계 소요 시간
+    QUA_CushionVolume: 사출 종료 시 쿠션량
+    QUA_InjectionPressureMax: 최대 사출 압력
+    QUA_TransferPressure: 전환 압력
+    QUA_TransferStroke: 전환 시 스크류 위치
+    QUA_OilTemperature: 오일 온도
+    QUA_CylinderTemperature11: 실린더 위치 11 온도 (설정 실린더 온도의 실제값)
+    QUA_CylinderTemperature04: 실린더 위치 04 온도
+    QUA_CylinderTemperature03: 실린더 위치 03 온도
+    QUA_CylinderTemperature02: 실린더 위치 02 온도
+    QUA_CylinderTemperature01: 실린더 위치 01 온도
+    QUA_FlangeTemperature: 플랜지 온도
+    QUA_ToolTemperature1: 금형 온도 센서 1
+    QUA_ToolTemperature2: 금형 온도 센서 2
+    QUA_ToolClosingTime: 금형 닫힘 소요 시간
+    QUA_ClampForceDecreaseTime: 형체력 감소 소요 시간
+    QUA_ClampForceIncreaseTime: 형체력 증가 소요 시간
+    QUA_ToolOpeningTime: 금형 열림 소요 시간
+    QUA_CoolingTime: 냉각 시간 (설정 냉각 시간의 실제값)
+    QUA_EjectionTime: 취출 소요 시간
+    QUA_WaitingTime: 대기 시간
+    QUA_HoldingTime: 보압 시간
+    QUA_InjectionUnitForwardsTime: 사출 유닛 전진 소요 시간
+    QUA_InjectionUnitBackwardsTime: 사출 유닛 후진 소요 시간
+    QUA_MeltPressure2Max: 용융 수지 압력 2 최대값
+    QUA_HoldingPressureMax: 최대 보압
+    QUA_TransferSpecificPressure1: 전환 비압력 1
+    QUA_CavityPressure1Max: 캐비티 압력 1 최대값
+    QUA_InjectionSpeed1: 사출 속도 1 (설정 사출 속도의 실제값)
+    QUA_InjectionSpeed2: 사출 속도 2
+    QUA_PlastificationSpeed: 가소화 속도
+    QUA_AreaCavityPressure1Max: 캐비티 압력 1 곡선 최대값의 면적 지표
+    QUA_AreaCavityPressure1Dr1: 캐비티 압력 1 곡선 1차 미분 관련 면적 지표
+    QUA_AreaMeltPressureMax: 용융 압력 곡선 최대값의 면적 지표
+    QUA_AreaMeltPressure: 용융 압력 곡선의 면적 지표
+    QUA_AreaPowerMax: 동력 곡선 최대값의 면적 지표
+    QUA_AreaPower: 동력 곡선의 면적 지표
+    QUA_AreaInjectionStroke: 사출 행정 곡선의 면적 지표
+    QUA_AreaInjectionSpeedMax: 사출 속도 곡선 최대값의 면적 지표
+    QUA_AreaInjectionSpeed: 사출 속도 곡선의 면적 지표
+    QUA_BackPressureMax: 최대 배압
+    DXP_AreaCavityPressure: 사출기 센서 시계열에서 추출한 캐비티 압력 곡선 면적 지표
+    DXP_HoldingPressure1: 사출기 센서 시계열에서 추출한 1단계 보압 (설정 보압 1의 실제값)
+    DXP_HoldingPressure2: 사출기 센서 시계열에서 추출한 2단계 보압 (설정 보압 2의 실제값)
+    DXP_HoldingTime1: 사출기 센서 시계열에서 추출한 1단계 보압 시간
+    DXP_HoldingTime2: 사출기 센서 시계열에서 추출한 2단계 보압 시간
+    TCE_ActualProcessPowerMean: 취출측 온도조절기 실제 공정 동력 평균
+    TCE_ActualPumpSpeedRPMMean: 취출측 온도조절기 펌프 회전 속도 평균
+    TCE_ActualFlowRateMean: 취출측 온도조절기 실제 유량 평균
+    TCE_PressureMainLineMean: 취출측 온도조절기 공급 배관 압력 평균
+    TCE_PressureReturnLineMean: 취출측 온도조절기 회수 배관 압력 평균
+    TCE_ActualPumpSpeedMean: 취출측 온도조절기 펌프 속도 평균
+    TCE_ActualTemperatureDifferenceMean: 취출측 온도조절기 실제 온도 차 평균
+    TCE_TemperatureMainLineMean: 취출측 공급 배관 냉각매체 온도 평균 (금형 온도의 실제값)
+    TCE_TemperatureReturnLineMean: 취출측 회수 배관 냉각매체 온도 평균
+    TCE_SetTemperatureMean: 취출측 온도조절기 설정 온도 평균
+    TCN_ActualProcessPowerMean: 노즐측 온도조절기 실제 공정 동력 평균
+    TCN_ActualFlowRateMean: 노즐측 온도조절기 실제 유량 평균
+    TCN_PressureMainLineMean: 노즐측 온도조절기 공급 배관 압력 평균
+    TCN_PressureReturnLineMean: 노즐측 온도조절기 회수 배관 압력 평균
+    TCN_ActualTemperatureDifferenceMean: 노즐측 온도조절기 실제 온도 차 평균
+    TCN_TemperatureMainLineMean: 노즐측 공급 배관 냉각매체 온도 평균
+    TCN_TemperatureReturnLineMean: 노즐측 회수 배관 냉각매체 온도 평균
+    TCN_SetTemperatureMean: 노즐측 온도조절기 설정 온도 평균
+    CALC_InjectionStroke: 사출 시작부터 보압 종료까지의 스크류 위치 변화량 (PP만 계산)
+    CALC_DosingStroke: 계량 단계 중 스크류 위치 변화량 (PP만 계산)
+    CALC_DosedWeight: 계량 용적에 Tait 모델을 적용한 용융 수지 무게 (PP만 계산)

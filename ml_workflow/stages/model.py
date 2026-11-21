@@ -17,7 +17,6 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-from src.config import WORKFLOW_DIR
 from src.data import file_sha256
 from src.design import rank_fdr_candidates
 from src.evaluate import fit_predict, rank_metrics, threshold_at_recall, threshold_metrics
@@ -47,7 +46,7 @@ def _pooled(y, oof_mat):
 def _holdout_status(ctx, hold_index, ev):
     data_sha = file_sha256(ctx.data_file)
     sig = hashlib.sha256((data_sha + "," + ",".join(map(str, sorted(hold_index)))).encode()).hexdigest()
-    ledger_path = WORKFLOW_DIR / "runs" / "holdout_ledger.json"
+    ledger_path = ctx.run_dir.parent / "holdout_ledger.json"
     ledger = json.loads(ledger_path.read_text(encoding="utf-8")) if ledger_path.exists() else {}
     previous = [r for r in ledger.get(sig, []) if r != ctx.run_dir.name]
     mode = (ev or {}).get("holdout_status", "auto")

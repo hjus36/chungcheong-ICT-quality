@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import platform
 import re
 import shutil
@@ -42,13 +43,13 @@ warnings.filterwarnings("ignore", category=RuntimeWarning, message="invalid valu
 from src.config import WORKFLOW_DIR, load_config  # noqa: E402
 from src.data import file_sha256  # noqa: E402
 from src.runio import RunContext, StageError  # noqa: E402
-from stages import eda, explain, feature_filter, model, report, split, validate, wrapper  # noqa: E402
+from stages import eda, explain, feature_filter, model, release, report, split, validate, wrapper  # noqa: E402
 
 STAGES = {"validate": validate, "eda": eda, "split": split, "filter": feature_filter,
-          "wrapper": wrapper, "model": model, "explain": explain, "report": report}
+          "wrapper": wrapper, "model": model, "explain": explain, "release": release, "report": report}
 ORDER = list(STAGES)
 PACKAGES = ["pandas", "numpy", "scikit-learn", "scipy", "xgboost", "joblib", "pyyaml", "pyarrow", "matplotlib"]
-RUNS_DIR = WORKFLOW_DIR / "runs"
+RUNS_DIR = Path(os.environ.get("ICT_RUNS_DIR") or WORKFLOW_DIR / "runs")   # 테스트에서 임시 폴더 지정
 CODE_PATHS = ["run.py", "src", "stages"]
 NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
 
@@ -145,7 +146,7 @@ def main(argv=None):
     todo = [s for s in requested if s not in done]
 
     ctx = RunContext(run_dir, cfg)
-    print(f"실행: {name}  ({run_dir.relative_to(WORKFLOW_DIR)})")
+    print(f"실행: {name}  ({run_dir})")
     if not todo:
         print("실행할 단계가 없습니다 (모두 완료).")
         return 0

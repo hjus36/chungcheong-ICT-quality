@@ -10,7 +10,8 @@ import yaml
 
 WORKFLOW_DIR = Path(__file__).resolve().parents[1]
 CONFIG_DIR = WORKFLOW_DIR / "config"
-CONFIG_FILES = ("columns.yaml", "experiment.yaml")
+CONFIG_FILES = ("columns.yaml", "experiment.yaml", "release.yaml")
+CONFIG_ENV = "ICT_CONFIG_DIR"     # 테스트 등에서 다른 설정 폴더를 쓸 때
 DATA_ENV = "ICT_DATA_PATH"
 
 
@@ -18,6 +19,7 @@ DATA_ENV = "ICT_DATA_PATH"
 class Config:
     columns: dict
     experiment: dict
+    release: dict
     config_dir: Path
 
     @property
@@ -55,9 +57,11 @@ class Config:
         return h.hexdigest()
 
 
-def load_config(config_dir: Path = CONFIG_DIR) -> Config:
+def load_config(config_dir: Path | None = None) -> Config:
+    config_dir = Path(config_dir or os.environ.get(CONFIG_ENV) or CONFIG_DIR)
     loaded = {}
     for name in CONFIG_FILES:
         with open(config_dir / name, encoding="utf-8") as f:
             loaded[name] = yaml.safe_load(f) or {}
-    return Config(columns=loaded["columns.yaml"], experiment=loaded["experiment.yaml"], config_dir=config_dir)
+    return Config(columns=loaded["columns.yaml"], experiment=loaded["experiment.yaml"],
+                  release=loaded["release.yaml"], config_dir=config_dir)

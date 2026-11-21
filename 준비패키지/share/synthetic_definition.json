@@ -1,0 +1,62 @@
+{
+  "notice": "합성 자료이며 실측이 아니다. 원본 행을 복사하거나 섞지 않았다. actual_label은 모델 위험도로 뽑은 가상값이다.",
+  "release_version": "probayes-im-v2-im_v2_release",
+  "data_source": "synthetic_im",
+  "config": {
+    "seed": 20261121,
+    "rows": 120,
+    "test_upload_rows": 20,
+    "start_at": "2026-11-02 08:00:00",
+    "cycle_seconds": 45,
+    "gap_seconds": 15,
+    "materials": [
+      "PP",
+      "ABS"
+    ],
+    "widen": 0.35,
+    "ranges": {},
+    "only_for_material": {
+      "CALC_": "PP"
+    },
+    "optional_missing_rate": 0.1,
+    "label": {
+      "enabled": true
+    },
+    "error_rows": [
+      "duplicate_part_id",
+      "out_of_range",
+      "missing_required",
+      "bad_timestamp",
+      "bad_source",
+      "bad_label"
+    ]
+  },
+  "ranges": {
+    "DXP_HoldingPressure1": {
+      "low": 10.840000000000018,
+      "high": 438.56
+    },
+    "CALC_InjectionStroke": {
+      "low": 132.56542865753173,
+      "high": 153.51852138519288
+    }
+  },
+  "files": {
+    "synthetic_demo.csv": {
+      "rows": 120,
+      "sha256": "5f18265fd0284207d8772993dd756ccd8765a1aada8f11686c15ade042d488c5"
+    },
+    "test_upload.csv": {
+      "rows": 26,
+      "error_rows": [
+        "duplicate_part_id",
+        "out_of_range",
+        "missing_required",
+        "bad_timestamp",
+        "bad_source",
+        "bad_label"
+      ],
+      "sha256": "5a1da37825f0c1d600d01345bdcb7773088d396f305c58db7bf2cfd9a3f6813b"
+    }
+  }
+}

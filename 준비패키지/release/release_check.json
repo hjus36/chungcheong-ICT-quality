@@ -1,0 +1,37 @@
+{
+  "version": "probayes-im-v2-im_v2_release",
+  "passed": true,
+  "checks": [
+    {
+      "check": "선택 모델 Gate 1·2 통과",
+      "passed": true,
+      "value": {
+        "gate1_pass": true,
+        "gate2_pass": true
+      }
+    },
+    {
+      "check": "holdout Recall ≥ 0.9",
+      "passed": true,
+      "value": 1.0
+    },
+    {
+      "check": "holdout PR-AUC > 기준선(전부 우선 검토)",
+      "value": [
+        0.8406191761454921,
+        0.2975206611570248
+      ],
+      "passed": true
+    },
+    {
+      "check": "holdout F2 ≥ 기준선(전부 우선 검토)",
+      "value": [
+        0.8823529411764706,
+        0.6792452830188679
+      ],
+      "passed": true
+    }
+  ],
+  "model_sha256": "55539d978d2f74739e3c9f962197abc3c4cf8326363b084aaea050bba09c2dfa",
+  "test_status": "previously_seen_holdout_development_reference"
+}

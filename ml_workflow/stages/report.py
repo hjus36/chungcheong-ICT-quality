@@ -421,8 +421,27 @@ def sec_explain(d):
         bp = d.csv("06_explain", f"normal_ranges_by_{gp}")
         if bp is not None:
             d.add(f"\n**`{gp}`별 정상범위**\n\n", md_table(bp))
-    d.add("\nMVP용 패키지: `06_explain/model.joblib`, `06_explain/model_card.json` "
-          "(예측: `python predict.py <실행 폴더> <입력 파일>`)\n", NOTE)
+    d.add("\n개발용 예측: `python predict.py <실행 폴더> <입력 파일>` (06_explain 모델 사용)\n", NOTE)
+
+
+def sec_release(d):
+    rc = d.json("07_release", "release_check")
+    dd = d.json("07_release", "data_dictionary")
+    if not rc:
+        return
+    checks = pd.DataFrame([{"check": c["check"], "passed": "통과" if c["passed"] else "미통과"} for c in rc["checks"]])
+    d.add("\n---\n\n# 서비스 배포 후보\n",
+          f"버전 `{rc['version']}` · 모델 해시 `{rc['model_sha256'][:12]}…` · "
+          f"승격 조건 **{'통과' if rc['passed'] else '미통과'}**\n\n",
+          md_table(checks, {"check": "승격 조건", "passed": "결과"}))
+    if dd:
+        feats = pd.DataFrame(dd["features"])[["name", "unit", "required", "min", "max", "description"]]
+        feats["required"] = feats["required"].map({True: "필수", False: "선택(대체)"})
+        d.add("\n**업로드 입력 계약 (data_dictionary.json)**\n\n",
+              md_table(feats, {"name": "특징", "unit": "단위", "required": "입력", "min": "허용 하한",
+                               "max": "허용 상한", "description": "설명"}, ["name"]))
+    d.add("\n승격: `python promote.py --run <실행 이름>` → `준비패키지/release/`. "
+          "합성 예제: `python make_synthetic.py` → `준비패키지/share/`\n", NOTE)
 
 
 def publish(run_dir) -> int:
@@ -455,6 +474,7 @@ def run(ctx):
     sec_wrapper(d)
     sec_model(d)
     sec_explain(d)
+    sec_release(d)
     d.add("\n---\n\n# 결과 해석 및 한계\n", design("limitations", "알려진 한계"), "\n_(작성)_\n")
     path = ctx.run_dir / "report.md"
     path.write_text("\n".join(d.parts), encoding="utf-8")
