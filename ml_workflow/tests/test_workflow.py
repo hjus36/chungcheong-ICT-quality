@@ -167,6 +167,50 @@ class WorkflowEndToEnd(unittest.TestCase):
         r = self.py("run.py", "--resume", "t1", "--stages", "model", check=False)
         self.assertNotEqual(r.returncode, 0)
 
+    def test_8_to_service_input_and_missing_columns(self):
+        sys.path.insert(0, str(WF))
+        os.environ["ICT_CONFIG_DIR"] = str(self.config)
+        try:
+            from src.config import load_config
+            from src.contract import check_service_input, service_columns, to_service_input
+            from src.errors import StageError
+            cfg = load_config()
+        finally:
+            os.environ.pop("ICT_CONFIG_DIR", None)
+        dictionary = json.loads((self.runs / "t1" / "07_release" / "data_dictionary.json").read_text(encoding="utf-8"))
+        raw = pd.read_parquet(self.data)
+        out = to_service_input(raw, cfg, dictionary)
+        self.assertEqual(list(out.columns), service_columns(dictionary))
+        self.assertEqual(len(out), len(raw))
+        self.assertTrue((out["data_source"] == dictionary["data_source"]).all())
+        self.assertEqual(out["part_id"].iloc[0], str(raw["MET_MachineCycleID"].iloc[0]))
+        self.assertRegex(out["cycle_start_at"].iloc[0], r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+        self.assertEqual(out["actual_label"].tolist(), raw["LBL_NOK"].tolist())
+        for f in dictionary["features"]:   # 값은 그대로 (변환·대체 없음)
+            pd.testing.assert_series_equal(out[f["name"]], raw[f["name"]].reset_index(drop=True), check_names=False)
+        self.assertEqual(check_service_input(out, dictionary), [])
+        with self.assertRaises(StageError) as e:
+            to_service_input(raw.drop(columns=["MET_MachineCycleID"]), cfg, dictionary)
+        self.assertIn("MET_MachineCycleID", str(e.exception))
+
+    def test_9_make_upload_cli(self):
+        rel = self.runs / "t1" / "07_release"
+        out = TMP / "upload_holdout.csv"
+        r = self.py("make_upload.py", "--input", str(self.data), "--release", str(rel), "--holdout-of", "t1",
+                    "--output", str(out))
+        self.assertNotIn("[주의]", r.stdout)
+        split = pd.read_csv(self.runs / "t1" / "02_split" / "split.csv")
+        df = pd.read_csv(out, dtype={"part_id": str})
+        self.assertEqual(len(df), int((split["split"] == "holdout").sum()))
+        r = self.py("make_upload.py", "--input", str(self.data), "--release", str(rel), "--output", str(TMP / "all.csv"))
+        self.assertIn("[주의]", r.stdout)
+        other = TMP / "other.parquet"
+        pd.read_parquet(self.data).head(10).to_parquet(other)
+        r = self.py("make_upload.py", "--input", str(other), "--release", str(rel), "--holdout-of", "t1",
+                    "--output", str(TMP / "x.csv"), check=False)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("SHA-256", r.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
