@@ -9,8 +9,8 @@ import numpy as np
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import (average_precision_score, balanced_accuracy_score, brier_score_loss,
-                             confusion_matrix, f1_score, precision_recall_curve, precision_score,
-                             recall_score, roc_auc_score)
+                             confusion_matrix, f1_score, fbeta_score, precision_recall_curve,
+                             precision_score, recall_score, roc_auc_score)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -70,7 +70,9 @@ def threshold_metrics(y, scores, threshold) -> dict:
         "Recall": float(recall_score(y, preds, zero_division=0)) if y.sum() > 0 else np.nan,
         "Precision": float(precision_score(y, preds, zero_division=0)),
         "F1": float(f1_score(y, preds, zero_division=0)),
+        "F2": float(fbeta_score(y, preds, beta=2, zero_division=0)),
         "Balanced_Acc": float(balanced_accuracy_score(y, preds)) if len(np.unique(y)) == 2 else np.nan,
+        "Alert_rate": float(preds.mean()),
         "TN": int(tn), "FP": int(fp), "FN": int(fn), "TP": int(tp),
     }
 

@@ -1,6 +1,8 @@
 """04 wrapper — 모델마다 자기 특징 수(k)를 고른다 (B안).
 
-- dev 안에서 그룹 단위 K-fold. 매 fold 학습 부분으로 F-test/FDR 순위를 다시 계산한다.
+- dev 안에서 그룹 단위 K-fold를 cv.n_repeats번 반복한다(반복마다 seed를 바꿔 다시 섞음).
+  fold 배정 하나에 결과가 좌우되지 않도록 모든 반복·fold의 점수를 평균한다.
+  매 fold 학습 부분으로 F-test/FDR 순위를 다시 계산한다.
   (순위는 모델과 무관하므로 fold·indicator 조건마다 한 번만 계산해 모든 모델이 공유)
 - 모델 × indicator 조건마다 k별 PR-AUC 곡선을 그리고 k_rule로 각자의 k를 고른다.
 - 다음 단계로 넘기는 특징 집합은 features.missing_indicators 조건 기준.
@@ -17,7 +19,7 @@ from src.design import rank_fdr_candidates
 from src.evaluate import fit_predict, metrics
 from src.groups import make_groups
 from src.models import DISPLAY, is_available
-from src.pipeline import group_folds, load_split, used_features
+from src.pipeline import fold_table, load_split, repeated_group_folds, used_features
 from src.runio import StageError
 
 STAGE = "04_wrapper"
@@ -130,11 +132,10 @@ def run(ctx):
     y = dev[cfg.target].astype(int)
     groups = make_groups(dev, cfg)
     X = dev[used_features(ctx)]
-    folds = group_folds(y, groups, int(ex["cv"].get("n_splits", 5)), cfg.seed)
-    fold_tab = pd.DataFrame({"row_index": dev.index, "group": groups.values, "fold": 0})
-    for i, (_, va) in enumerate(folds, 1):
-        fold_tab.iloc[va, fold_tab.columns.get_loc("fold")] = i
-    ctx.write_csv(STAGE, "cv_folds", fold_tab)
+    n_splits = int(ex["cv"].get("n_splits", 5))
+    n_repeats = int(ex["cv"].get("n_repeats", 1))
+    folds = repeated_group_folds(y, groups, n_splits, n_repeats, cfg.seed)
+    ctx.write_csv(STAGE, "cv_folds", fold_table(dev.index, groups, folds, n_repeats))
 
     primary_ind = bool((ex.get("features") or {}).get("missing_indicators", True))
     variants = [primary_ind] + ([not primary_ind] if wc.get("compare_missing_indicators") else [])
@@ -143,9 +144,9 @@ def run(ctx):
     rankings, final_rank = {}, {}
     for ind in variants:
         rankings[ind] = [rank_fdr_candidates(X.iloc[tr], y.iloc[tr], alpha, ind)[0]["feature"].tolist()
-                         for tr, _ in folds]
+                         for _, _, tr, _ in folds]
         final_rank[ind] = rank_fdr_candidates(X, y, alpha, ind)[0]
-        fr = pd.DataFrame({f"fold{i}": pd.Series(r) for i, r in enumerate(rankings[ind], 1)})
+        fr = pd.DataFrame({f"r{rr}_fold{f}": pd.Series(r) for (rr, f, _, _), r in zip(folds, rankings[ind])})
         fr.insert(0, "rank", np.arange(1, len(fr) + 1))
         ctx.write_csv(STAGE, f"fold_rankings_{VARIANT[ind]}", fr)
 
@@ -160,10 +161,12 @@ def run(ctx):
                 k_max = min(k_max, int(wc["max_features"]))
             if k_max == 0:
                 raise StageError(f"[{var}] FDR 기준을 통과한 특징이 없는 fold가 있습니다.")
+            ckpt = ctx.stage_dir(STAGE) / f"_ckpt_curve_{m}_{var}.csv"
             recs = []
-            for k in parse_k_grid(wc.get("k_grid"), k_max):
+            grid = [] if ckpt.exists() else parse_k_grid(wc.get("k_grid"), k_max)
+            for k in grid:
                 per = []
-                for (tr, va), ranked in zip(folds, rankings[ind]):
+                for (_, _, tr, va), ranked in zip(folds, rankings[ind]):
                     s, pr, _ = fit_predict(m, p, X.iloc[tr], y.iloc[tr], X.iloc[va], ranked[:k], ind, cfg.seed)
                     per.append(metrics(y.iloc[va], s, pr))
                 f = pd.DataFrame(per)
@@ -172,8 +175,12 @@ def run(ctx):
                              "ROC_AUC_mean": f["ROC_AUC"].mean(),
                              "Recall_mean": f["Recall"].mean(), "Recall_std": f["Recall"].std(ddof=1),
                              "Precision_mean": f["Precision"].mean(), "F1_mean": f["F1"].mean()})
-            curve = pd.DataFrame(recs)
-            k, best, best_at = choose_k(curve, rule, tol, wc.get("min_recall"), len(folds))
+            if ckpt.exists():   # 중단 후 --resume: 이미 계산한 곡선 재사용 (같은 실행 = 같은 설정·코드)
+                curve = pd.read_csv(ckpt, encoding="utf-8-sig")
+            else:
+                curve = pd.DataFrame(recs)
+                curve.to_csv(ckpt, index=False, encoding="utf-8-sig")
+            k, best, best_at = choose_k(curve, rule, tol, wc.get("min_recall"), n_splits)
             curve["selected"] = curve["n_features"] == k
             ctx.write_csv(STAGE, f"curve_{m}_{var}", curve)
             fr = final_rank[ind]
@@ -215,7 +222,7 @@ def run(ctx):
 
     fig = _plot(ctx, curves, chosen_k, models, VARIANT[primary_ind])
     ctx.write_json(STAGE, "wrapper_summary", {
-        "estimators": models, "skipped": skipped, "cv": f"StratifiedGroupKFold({len(folds)})",
+        "estimators": models, "skipped": skipped, "cv": f"StratifiedGroupKFold({n_splits}) × {n_repeats}회 반복", "n_splits": n_splits, "n_repeats": n_repeats,
         "dev_rows": len(dev), "dev_groups": int(groups.nunique()), "fdr_alpha": alpha,
         "k_rule": rule, "tolerance": tol, "min_recall": wc.get("min_recall"), "k_grid": wc.get("k_grid"),
         "param_overrides": overrides,

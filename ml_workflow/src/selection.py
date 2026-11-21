@@ -21,7 +21,14 @@ def select_model(table: pd.DataFrame, sel: dict, n_folds: int):
     t = table.copy().reset_index(drop=True)
     gate = sel.get("gate") or {}
     min_p = gate.get("min_precision")
-    t["gate_pass"] = (t["Precision_at_target"] >= float(min_p)) if min_p is not None else True
+    min_lr = gate.get("lodo_min_recall")
+    t["gate1_pass"] = (t["Precision_at_target"] >= float(min_p)) if min_p is not None else True
+    if min_lr is not None and "lodo_recall_min" in t:
+        col = "lodo_recall_min" if gate.get("lodo_all_parts", True) else "lodo_recall_mean"
+        t["gate2_pass"] = t[col].fillna(-1) >= float(min_lr)
+    else:
+        t["gate2_pass"] = True
+    t["gate_pass"] = t["gate1_pass"] & t["gate2_pass"]
     gate_skipped = False
     if not t["gate_pass"].any():
         if gate.get("if_none_pass", "skip_gate") == "stop":
@@ -70,7 +77,12 @@ def select_model(table: pd.DataFrame, sel: dict, n_folds: int):
         if r["model"] == chosen:
             return "선택"
         if not r["gate_pass"] and not gate_skipped:
-            return f"gate 탈락 (Precision@Recall {r['Precision_at_target']:.2f} < {min_p})"
+            why = []
+            if not r["gate1_pass"]:
+                why.append(f"Gate 1: Precision@Recall {r['Precision_at_target']:.2f} < {min_p}")
+            if not r["gate2_pass"]:
+                why.append(f"Gate 2: 실험일 제외 최소 Recall {r.get('lodo_recall_min', float('nan')):.2f} < {min_lr}")
+            return "탈락 (" + "; ".join(why) + ")"
         if not r["in_tie_set"]:
             return f"{sel.get('primary', 'PR_AUC')} 평균이 동점 기준({floor:.4f}) 미만"
         return f"동점 집합 내, {KEY_LABEL.get(eliminated.get(r['model']), eliminated.get(r['model']))}에서 밀림"

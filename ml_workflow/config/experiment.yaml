@@ -34,6 +34,7 @@ filter:
 
 cv:
   n_splits: 5                  # dev 안에서 그룹 단위 StratifiedGroupKFold
+  n_repeats: 5                 # seed를 바꿔 fold를 다시 나누는 반복 횟수 (fold 배정 운에 좌우되지 않게)
 
 
 wrapper:
@@ -59,8 +60,10 @@ model:
   selection:
     gate:                      # 1단계: 최소 조건
       target_recall: 0.90      # CV 예측에서 이 Recall을 만족하는 판정 기준을 모델마다 찾음
-      min_precision: 0.40      # 그 기준에서 Precision이 이보다 낮으면 탈락
-      if_none_pass: skip_gate  # 통과 모델이 없을 때: skip_gate(경고 후 생략) | stop
+      min_precision: 0.40      # 그 기준에서 Precision이 이보다 낮으면 탈락 (Gate 1: 불량 탐지)
+      lodo_min_recall: 0.50    # Gate 2: 실험일을 하나씩 빼고 검증했을 때 Recall 하한 (CV 판정 기준 그대로 적용)
+      lodo_all_parts: true     # true: 모든 실험일이 하한을 넘어야 함 / false: 평균으로 판정
+      if_none_pass: skip_gate  # 통과 모델이 없을 때: skip_gate(경고 후 생략, 승격은 차단) | stop
     primary: PR_AUC            # 2단계: 주 지표 (그룹 CV fold 평균)
     tie:                       # 3단계: 1위와의 차이가 표준오차 이내면 동점으로 보고 아래 순서로 결정
       rule: one_se
@@ -79,6 +82,18 @@ model:
     xgboost: {n_estimators: 400, max_depth: 3, learning_rate: 0.05, subsample: 0.8,
               colsample_bytree: 0.8, eval_metric: logloss, tree_method: hist, n_jobs: -1}
     svm: {kernel: rbf, class_weight: balanced}
+
+baselines:                     # 모델과 함께 보고하는 기준선
+  all_risk: true               # 전부 우선 검토
+  all_normal: true             # 전부 통상 검토
+  single_feature: true         # Filter 1위 특징 하나의 기준값 규칙
+  setpoint_only_prefix: SET    # 이 접두사 특징만 쓴 Logistic Regression (null이면 생략)
+
+evaluation:
+  # holdout 평가의 성격. auto: 같은 분할을 이전 실행이 평가했으면 '개발 참고 평가'로 자동 표기
+  # development_reference: 항상 '개발 참고 평가'로 표기 (규칙을 조정하며 이미 holdout을 본 경우)
+  holdout_status: development_reference
+  holdout_status_note: "규칙과 설정을 조정하는 과정에서 이 holdout 결과를 이미 확인했으므로 독립 검증이 아니다."
 
 explain:
   permutation_repeats: 30      # holdout permutation importance 반복 수

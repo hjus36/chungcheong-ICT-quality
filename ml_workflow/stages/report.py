@@ -330,8 +330,11 @@ def sec_model(d):
         d.add(f"\n> 제외된 모델: {', '.join(ms['skipped'])}\n")
     d.add("\n## 선택 규칙\n", design("selection"),
           md_table(pd.DataFrame([
-              {"단계": "1. 최소 조건 (gate)",
+              {"단계": "1. Gate 1 — 불량 탐지",
                "내용": f"CV 예측에서 Recall ≥ {tgt}를 만족하는 판정 기준을 모델마다 찾고, 그때 Precision ≥ {gate.get('min_precision')}"},
+              {"단계": "1. Gate 2 — 실험일 일반화",
+               "내용": f"실험일을 하나씩 빼고 학습·검증했을 때 CV 판정 기준에서의 Recall ≥ {gate.get('lodo_min_recall')}"
+                       + (" (모든 실험일)" if gate.get('lodo_all_parts', True) else " (평균)")},
               {"단계": "2. 주 지표", "내용": f"{sc.get('primary', 'PR_AUC')} fold 평균 (높을수록 좋음)"},
               {"단계": "3. 동점 처리",
                "내용": f"1위와의 차이가 표준오차 이내({tie.get('rule')})면 동점 → "
@@ -344,7 +347,8 @@ def sec_model(d):
           md_table(tr, {"final_rank": "순위", "model_name": "모델", "k": "특징 수",
                         "PR_AUC_mean": "PR-AUC 평균", "PR_AUC_std": "표준편차",
                         "threshold_at_target": "판정 기준", "Precision_at_target": f"Precision@R{tgt}",
-                        "gate_pass": "gate", "in_tie_set": "동점 집합", "lodo_PR_AUC": "실험일 제외 PR-AUC",
+                        "gate1_pass": "Gate 1", "lodo_recall_min": "실험일 최소 Recall", "gate2_pass": "Gate 2",
+                        "in_tie_set": "동점 집합", "lodo_PR_AUC": "실험일 제외 PR-AUC",
                         "Brier": "Brier", "interpretability_rank": "해석 순서", "result": "결과"}),
           f"\n**선택 모델: {ms['selected_model_name']}** — {ms['selection_reason']}\n")
     if ms.get("figure"):
@@ -358,12 +362,22 @@ def sec_model(d):
           "**CV(dev) 구간별 실제 불량률**\n\n",
           md_table(ob, {"band": "구간", "n": "행 수", "n_nok": "실제 불량", "nok_rate": "불량 rate"}))
 
-    d.add("\n## Holdout 평가\n",
+    hs = ms.get("holdout_status") or {}
+    dev_ref = hs.get("status") == "previously_seen_holdout_development_reference"
+    d.add("\n## Holdout 평가" + (" — 개발 참고 평가" if dev_ref else "") + "\n",
+          (f"\n> ⚠️ **개발 참고 평가:** {hs.get('note')} 결과를 모델 성능의 독립 검증으로 해석하지 않는다.\n\n"
+           if dev_ref else ""),
           f"Holdout {ms['holdout_rows']}행은 그룹 단위로 분리되어 특징·모델·기준 선택에 쓰지 않았다. "
           "각 모델에 **CV에서 정한 판정 기준을 고정 적용**했다. 모든 모델을 기록하지만 선택은 CV 결과로만 했다.\n\n",
           md_table(ho, {"model_name": "모델", "selected": "선택", "k": "특징 수", "threshold": "판정 기준",
                         "PR_AUC": "PR-AUC", "ROC_AUC": "ROC-AUC", "Brier": "Brier", "Recall": "Recall",
-                        "Precision": "Precision", "F1": "F1", "TP": "TP", "FN": "FN", "FP": "FP", "TN": "TN"}))
+                        "Precision": "Precision", "F2": "F2", "Alert_rate": "우선 검토 rate",
+                        "TP": "TP", "FN": "FN", "FP": "FP", "TN": "TN"}))
+    bl = d.csv("05_model", "baselines_holdout")
+    if bl is not None:
+        d.add("\n**기준선 비교 (Holdout)**\n\n",
+              md_table(bl, {"name": "기준선", "PR_AUC": "PR-AUC", "Recall": "Recall", "Precision": "Precision",
+                            "F2": "F2", "Alert_rate": "우선 검토 rate", "TP": "TP", "FN": "FN", "FP": "FP", "TN": "TN"}))
     h = ms["holdout_selected"]
     hb = d.csv("05_model", "holdout_bands")
     d.add("\n**선택 모델 혼동행렬 (Holdout, 판정 기준 고정)**\n\n",
@@ -419,7 +433,8 @@ def publish(run_dir) -> int:
     n = 0
     for f in sorted(run_dir.rglob("*")):
         rel = f.relative_to(run_dir).as_posix()
-        if not f.is_file() or rel.split("/")[0] in ("public", "code") or rel in PRIVATE_FILES:
+        if (not f.is_file() or rel.split("/")[0] in ("public", "code") or rel in PRIVATE_FILES
+                or f.name.startswith("_ckpt_")):
             continue
         dst = pub / rel
         dst.parent.mkdir(parents=True, exist_ok=True)

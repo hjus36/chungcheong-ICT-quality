@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedGroupKFold
 
-from .runio import StageError
+from .errors import StageError
 
 
 def load_split(ctx):
@@ -30,6 +30,37 @@ def group_folds(y: pd.Series, groups: pd.Series, n_splits: int, seed: int):
     folds = list(sgkf.split(np.zeros(len(y)), y.to_numpy(), groups.to_numpy()))
     for i, (_, va) in enumerate(folds, 1):
         if y.iloc[va].nunique() < 2:
-            raise StageError(f"{i}번째 fold 검증 데이터에 한 클래스만 있습니다. "
+            raise StageError(f"seed {seed}의 {i}번째 fold 검증 데이터에 한 클래스만 있습니다. "
                              "cv.n_splits를 줄이거나 seed를 바꾸세요.")
     return folds
+
+
+def repeated_group_folds(y, groups, n_splits: int, n_repeats: int, seed: int):
+    """반복 그룹 K-fold. [(repeat, fold, train_pos, valid_pos), ...] — repeat마다 seed+repeat로 다시 섞는다."""
+    out = []
+    for r in range(n_repeats):
+        for f, (tr, va) in enumerate(group_folds(y, groups, n_splits, seed + r), 1):
+            out.append((r + 1, f, tr, va))
+    return out
+
+
+def fold_table(index, groups, folds, n_repeats) -> pd.DataFrame:
+    tab = pd.DataFrame({"row_index": index, "group": np.asarray(groups)})
+    for r in range(1, n_repeats + 1):
+        col = np.zeros(len(tab), dtype=int)
+        for rr, f, _, va in folds:
+            if rr == r:
+                col[va] = f
+        tab[f"fold_r{r}"] = col
+    return tab
+
+
+def folds_from_table(tab: pd.DataFrame):
+    """cv_folds.csv(행 순서 = dev 순서) → repeated_group_folds와 같은 형식."""
+    out = []
+    reps = sorted(int(c[6:]) for c in tab.columns if c.startswith("fold_r"))
+    for r in reps:
+        ids = tab[f"fold_r{r}"].to_numpy()
+        for f in sorted(np.unique(ids)):
+            out.append((r, int(f), np.flatnonzero(ids != f), np.flatnonzero(ids == f)))
+    return out
