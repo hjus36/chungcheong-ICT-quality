@@ -213,6 +213,22 @@ class SystemTests(unittest.TestCase):
             response = self.client.get('/sample?kind='+kind); self.assertEqual(response.status_code, 200)
             self.assertEqual(set(pd.read_csv(BytesIO(response.content)).data_source), {'synthetic_im'})
 
+    @unittest.skipUnless(service.sample_path('real').exists(), '실측 예제(준비패키지/local/real_demo.csv)가 없음 — promote.py로 승격하면 생김')
+    def test_13_real_demo_matches_release_holdout(self):
+        info = json.loads((service.RELEASE/'release_info.json').read_text(encoding='utf-8'))
+        raw = self.client.get('/sample?kind=real')
+        self.assertEqual(raw.status_code, 200)
+        import hashlib
+        self.assertEqual(hashlib.sha256(raw.content).hexdigest(), info['real_demo']['sha256'])
+        sug = self.post('/preview', raw=raw.content).json()['suggested_mapping']
+        self.assertTrue(set(service.schema()['required_columns']) <= set(sug.values()))
+        p = self.post('/predict', raw=raw.content, name='real_demo.csv').json()
+        self.assertEqual((p['error_rows'], p['data_scope']), (0, service.dictionary()['data_source']))
+        self.assertEqual(p['predicted_rows'], info['real_demo']['rows'])
+        cmp, test = p['summary']['label_comparison'], service.model_info()['test']
+        self.assertEqual([cmp[k] for k in ('tp', 'fn', 'fp', 'tn')], [test[k] for k in ('tp', 'fn', 'fp', 'tn')])
+        self.assertNotIn('가상', cmp['note'])
+
 if __name__ == '__main__':
     result = unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(SystemTests))
     evidence = Path(os.environ.get('ICT_EVIDENCE_DIR', str(ROOT/'tmp/test-evidence')))

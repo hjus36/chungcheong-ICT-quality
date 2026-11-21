@@ -19,7 +19,8 @@ page.on('console',msg=>{if(msg.type()==='error'&&!msg.text().includes('favicon.i
 const check=(name)=>{checks.push(name);console.log('PASS '+name)};
 try{
   await page.goto(base);
-  await expect(page.getByRole('heading',{name:'사출성형 품질위험 검토',exact:true})).toBeVisible();
+  // 서버가 막 시작했으면 첫 요청에서 모델을 읽느라 몇 초 걸릴 수 있다.
+  await expect(page.getByRole('heading',{name:'사출성형 품질위험 검토',exact:true})).toBeVisible({timeout:20000});
   const deploymentSchema=await (await context.request.get(base+'/schema')).json();
   if(deploymentSchema.public_demo){
     await expect(page.getByLabel('공개 체험 안내')).toContainText('모든 방문자에게 공개');
@@ -109,6 +110,26 @@ try{
   await expect(page.getByText('개발 참고 평가').first()).toBeVisible();
   await page.screenshot({path:path.join(evidence,'model.png'),fullPage:true});
   check('Selection record, gates, LODO diagnosis, confusion matrix and baselines');
+  if(deploymentSchema.sample_availability.real){
+    // 실측 예제(준비패키지/local/real_demo.csv)는 승격 때만 생기므로 있을 때만 확인한다.
+    await page.getByRole('button',{name:'데이터 업로드',exact:true}).click();
+    await page.getByRole('button',{name:'실측 예제 불러오기'}).click();
+    const req=deploymentSchema.required_columns.length;
+    await expect(page.getByText(`${req}/${req} 필수 연결`)).toBeVisible();
+    const validated=page.waitForResponse(r=>r.url().endsWith('/validate'));
+    await page.getByRole('button',{name:'데이터 검증',exact:true}).click();
+    const v=await (await validated).json(); expect(v.error_rows).toBe(0);
+    const realPredicted=page.waitForResponse(r=>r.url().endsWith('/predict')&&r.request().method()==='POST');
+    await page.getByRole('button',{name:`${v.valid_rows}행 분석 및 저장`}).click();
+    const real=await (await realPredicted).json();
+    const model=await (await context.request.get(base+'/model')).json();
+    const c=real.summary.label_comparison;
+    expect([c.tp,c.fn,c.fp,c.tn]).toEqual([model.test.tp,model.test.fn,model.test.fp,model.test.tn]);
+    await expect(page.getByRole('heading',{name:'실제 판정과 비교'})).toBeVisible();
+    await expect(page.getByText('ProBayes 실측').first()).toBeVisible();
+    await page.screenshot({path:path.join(evidence,'real_demo.png'),fullPage:true});
+    check('Real-data demo: auto mapping, 0 error rows, decisions equal the release holdout result');
+  }
   await page.getByRole('button',{name:'데이터 업로드',exact:true}).click();
   // Partial failure must keep valid rows and display the error before prediction.
   const lines=raw.trim().split(/\r?\n/);const columns=lines[0].replace(/^\uFEFF/,'').split(',');
