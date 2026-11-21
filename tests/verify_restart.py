@@ -13,7 +13,7 @@ PORT = 8767
 
 def launch(db):
     env = {**os.environ, 'ICT_DB_PATH': str(db), 'PYTHONIOENCODING': 'utf-8'}
-    process = subprocess.Popen([sys.executable, '-m', 'uvicorn', 'app_kamp:app', '--app-dir', str(ROOT/'준비패키지'),
+    process = subprocess.Popen([sys.executable, '-m', 'uvicorn', 'app:app', '--app-dir', str(ROOT/'준비패키지'),
                                 '--host', '127.0.0.1', '--port', str(PORT)], cwd=ROOT, env=env,
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
@@ -33,7 +33,7 @@ def main():
         with httpx.Client(base_url=f'http://127.0.0.1:{PORT}',timeout=15,trust_env=False) as client:
             try:
                 assert client.get('/').status_code==200
-                response=client.post('/predict',files={'file':('restart.csv',(ROOT/'준비패키지/kamp/share/test_upload.csv').read_bytes())})
+                response=client.post('/predict',files={'file':('restart.csv',(ROOT/'준비패키지/share/test_upload.csv').read_bytes())})
                 response.raise_for_status(); first=response.json()
             finally: process.terminate();process.wait(timeout=10)
             process=launch(db)

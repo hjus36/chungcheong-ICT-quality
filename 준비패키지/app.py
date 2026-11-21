@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 import quality_service as service
 
-app = FastAPI(title='무한루프 · 제조공정 품질 분석', version='1.0.0')
+app = FastAPI(title='무한루프 · 사출성형 품질위험 검토', version='2.0.0')
 
 @app.get('/health')
 def health():
@@ -22,30 +22,31 @@ def model():
     return service.model_info()
 
 @app.get('/sample')
-def sample(kind: str = Query('real', pattern='^(real|synthetic)$')):
+def sample(kind: str = Query('synthetic', pattern='^(real|synthetic|test)$')):
     if service.public_demo() and kind == 'real':
         raise HTTPException(404, '공개 체험용 서버는 합성 예제만 제공합니다.')
     path = service.sample_path(kind)
     if not path.exists():
-        raise HTTPException(404, '실측 예제는 저장소에 배포하지 않습니다. 합성 예제를 사용하거나 이용 권한이 있는 실측자료를 업로드하세요.')
-    return FileResponse(path, filename='kamp_real_demo.csv' if kind == 'real' else 'synthetic_demo.csv', media_type='text/csv')
+        raise HTTPException(404, '실측 예제는 저장소에 배포하지 않습니다. 합성 예제를 사용하거나 원본 자료(CC BY 4.0)를 직접 내려받아 사이클 단위로 업로드하세요.')
+    names = {'real': 'probayes_real_demo.csv', 'synthetic': 'synthetic_demo.csv', 'test': 'test_upload.csv'}
+    return FileResponse(path, filename=names[kind], media_type='text/csv')
 
 @app.post('/preview')
 async def preview(file: UploadFile = File(...)):
     df, meta = await service.read_upload(file)
     return {**meta, 'columns': list(df.columns), 'rows': len(df), 'sample': service.json_safe(df.head(5)),
-            'suggested_mapping': {c: c for c in df.columns if c in service.META + service.FEATURES + service.OPTIONAL}}
+            'suggested_mapping': service.suggested_mapping(df.columns)}
 
 @app.post('/validate')
-async def validate(file: UploadFile = File(...), mapping: str = Form('{}'), units: str = Form('{}')):
+async def validate(file: UploadFile = File(...), mapping: str = Form('{}')):
     df, meta = await service.read_upload(file)
-    summary, *_ = service.prepare(df, mapping, units)
+    summary, *_ = service.prepare(df, mapping)
     return {**meta, **summary}
 
 @app.post('/predict')
-async def predict(file: UploadFile = File(...), mapping: str = Form('{}'), units: str = Form('{}')):
+async def predict(file: UploadFile = File(...), mapping: str = Form('{}')):
     df, meta = await service.read_upload(file)
-    return service.analyze(df, meta, mapping, units)
+    return service.analyze(df, meta, mapping)
 
 @app.get('/runs')
 def runs(limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0),

@@ -1,5 +1,5 @@
 {
-  "version": "probayes-im-v2-im_v2_release",
+  "version": "probayes-im-v2-im_v2_r2",
   "data_source": "ProBayes_IM_v2",
   "synthetic_source": "synthetic_im",
   "meta": [
@@ -63,6 +63,13 @@
       "reference_median": 145.21014404296875,
       "reference_q95": 149.20464935302735
     }
+  ],
+  "excluded_input_prefixes": [
+    "LBL_",
+    "IR_",
+    "CV_",
+    "SCA_",
+    "SIM_"
   ],
   "notes": [
     "단위 변환은 하지 않는다. 표시된 단위로 입력한다.",

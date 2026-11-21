@@ -47,6 +47,18 @@ def _relation(v, y, min_group):
     return out
 
 
+def _excluded_prefixes(cfg):
+    """예측 시점 이후(사후측정)·오프라인·라벨 접두사 — 업로드 매핑에서 특징으로 연결하지 못하게 한다."""
+    c = cfg.columns
+    order = c.get("stage_order") or []
+    cut = order.index(c["prediction_time"]) if c.get("prediction_time") in order else len(order)
+    out = list((c.get("roles") or {}).get("label_prefixes") or [])
+    for p, st in (c.get("prefix_stage") or {}).items():
+        if st == "offline" or (st in order and order.index(st) > cut):
+            out.append(f"{p}_")
+    return out
+
+
 def run(ctx):
     cfg = ctx.cfg
     rel, svc = cfg.release, cfg.columns.get("service") or {}
@@ -123,6 +135,7 @@ def run(ctx):
                       "min": info[f]["min"], "max": info[f]["max"], "required": f in required,
                       "reference_q05": reference["q05"][f], "reference_median": reference["median"][f],
                       "reference_q95": reference["q95"][f]} for f in feats],
+        "excluded_input_prefixes": _excluded_prefixes(cfg),
         "notes": ["단위 변환은 하지 않는다. 표시된 단위로 입력한다.",
                   "min/max는 물리적으로 불가능한 값을 거르는 범위이며 공정 규격이 아니다.",
                   "required=false인 특징은 비어 있어도 학습 중앙값으로 대체해 예측한다."],

@@ -1,6 +1,6 @@
 {
   "notice": "합성 자료이며 실측이 아니다. 원본 행을 복사하거나 섞지 않았다. actual_label은 모델 위험도로 뽑은 가상값이다.",
-  "release_version": "probayes-im-v2-im_v2_release",
+  "release_version": "probayes-im-v2-im_v2_r2",
   "data_source": "synthetic_im",
   "config": {
     "seed": 20261121,
@@ -27,7 +27,6 @@
       "out_of_range",
       "missing_required",
       "bad_timestamp",
-      "bad_source",
       "bad_label"
     ]
   },
@@ -47,16 +46,15 @@
       "sha256": "5f18265fd0284207d8772993dd756ccd8765a1aada8f11686c15ade042d488c5"
     },
     "test_upload.csv": {
-      "rows": 26,
+      "rows": 25,
       "error_rows": [
         "duplicate_part_id",
         "out_of_range",
         "missing_required",
         "bad_timestamp",
-        "bad_source",
         "bad_label"
       ],
-      "sha256": "5a1da37825f0c1d600d01345bdcb7773088d396f305c58db7bf2cfd9a3f6813b"
+      "sha256": "63f27e95d60387255ae1af8b9297391fbaeeede3db54149d78ea472dcd878060"
     }
   }
 }

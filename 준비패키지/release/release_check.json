@@ -1,5 +1,5 @@
 {
-  "version": "probayes-im-v2-im_v2_release",
+  "version": "probayes-im-v2-im_v2_r2",
   "passed": true,
   "checks": [
     {
@@ -32,6 +32,6 @@
       "passed": true
     }
   ],
-  "model_sha256": "55539d978d2f74739e3c9f962197abc3c4cf8326363b084aaea050bba09c2dfa",
+  "model_sha256": "445d8ce366e91c15f6a3f5d4a1f8864132c8e2e5e4676d1b08259768dc7e5185",
   "test_status": "previously_seen_holdout_development_reference"
 }

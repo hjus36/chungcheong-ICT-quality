@@ -40,3 +40,4 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
+/준비패키지/local/

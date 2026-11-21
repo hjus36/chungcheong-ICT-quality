@@ -31,4 +31,5 @@ label:
   enabled: true
 
 # test_upload.csv 끝에 붙이는 검증 오류 행 (각 1행)
-error_rows: [duplicate_part_id, out_of_range, missing_required, bad_timestamp, bad_source, bad_label]
+# bad_source(다른 출처)는 파일 전체를 거부하는 규칙이라 여기 넣지 않는다 (테스트에서 따로 확인).
+error_rows: [duplicate_part_id, out_of_range, missing_required, bad_timestamp, bad_label]

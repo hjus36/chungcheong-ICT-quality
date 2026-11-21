@@ -1,9 +1,9 @@
 {
-  "version": "probayes-im-v2-im_v2_release",
-  "run": "im_v2_release",
-  "promoted_at": "2026-11-21T10:13:21",
+  "version": "probayes-im-v2-im_v2_r2",
+  "run": "im_v2_r2",
+  "promoted_at": "2026-11-21T10:27:22",
   "forced": false,
-  "model_sha256": "55539d978d2f74739e3c9f962197abc3c4cf8326363b084aaea050bba09c2dfa",
+  "model_sha256": "445d8ce366e91c15f6a3f5d4a1f8864132c8e2e5e4676d1b08259768dc7e5185",
   "data_sha256": "009d64ae4d77d2ed2de817c7d921d2c5ca58065f62b2680ededdf6b5576468bd",
   "config_sha256": "d9815a329cf1280de2c259c29cfe6480f89b4ad47b03163cec7c4ab661ea6453",
   "code_sha256": {
@@ -28,7 +28,7 @@
     "stages/explain.py": "9b7c2482984f51268b4852fe04194f6a8af1198264ec12cf8b14e70125a151b3",
     "stages/feature_filter.py": "cf4d724ad5e0021ce416fa759527458d71ac7301bcc272bfb5966e46f0aeac9b",
     "stages/model.py": "0e79036d1c4b30d4ae460d85d1350495a0e6e41e8375aea33cc07f66de0e8cf3",
-    "stages/release.py": "1b715f77d146761bd7a4afa0d38b4053d5eb05fddab29ef44a1ffc09c0de902a",
+    "stages/release.py": "776a8eb5848212faa08e3cf1f2228f6db4d902a0f2e941c80c735ef238169438",
     "stages/report.py": "49f41886cad5f3557f600c7266c5fb1a62b761a465eaeb7d9fb880edc2280d60",
     "stages/split.py": "4dd56839d0642d8ab75783312fdc06fdb7b086182376497d8980be53128c1473",
     "stages/validate.py": "228daa185f2ef26a5aff19a241f4485d0883ac1a098f859e16e08c54f6e435f4",
@@ -48,9 +48,9 @@
     "matplotlib": "3.11.2"
   },
   "files": {
-    "model.joblib": "55539d978d2f74739e3c9f962197abc3c4cf8326363b084aaea050bba09c2dfa",
-    "benchmark_public.json": "0683df8f163a922011d1896808eb1573e4f0a860ebc5bf88c1333b2738fab33c",
-    "data_dictionary.json": "6e0c52e8175f97ca86605dd6fdff4b9d91715dcc42f4d1892cbc5ed1e980f1a2",
-    "release_check.json": "41e1fecbfb66cd5390c1f918685e868a659b8f93df5e80f6caf19c0458fe47cf"
+    "model.joblib": "445d8ce366e91c15f6a3f5d4a1f8864132c8e2e5e4676d1b08259768dc7e5185",
+    "benchmark_public.json": "1e3c6057c49b11f66c4369f65510a4e11e4d72b319ce9f2ddf686150ac9d5d26",
+    "data_dictionary.json": "851766bb151f9be66c4ce3e14e582b59dfed5bb828b022cd08541e6c459ab520",
+    "release_check.json": "5cfbf211c09b5de7027a89350f4aeafb11d9cb3d91165fa2352c0d0e212d5528"
   }
 }
