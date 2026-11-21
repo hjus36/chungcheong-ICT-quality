@@ -1,9 +1,0 @@
-{
-  "status": "passed",
-  "port": 8765,
-  "script": "scripts/start.ps1",
-  "health_ok": true,
-  "frontend_ok": true,
-  "legacy_payloads_preserved": 6,
-  "demo_run_id": "2c4b1922-4f6c-49b3-97a2-c0fa59916460"
-}

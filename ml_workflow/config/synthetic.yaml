@@ -1,0 +1,35 @@
+# ============================================================
+# 합성 예제 자료 정의 — 공개 데모·업로드 테스트용 (실측 아님)
+# make_synthetic.py가 승격된 release의 data_dictionary.json을 읽어 만든다.
+# 원본 행을 복사하거나 섞지 않는다. 값은 아래 규칙으로 새로 뽑는다.
+# ============================================================
+seed: 20261121
+rows: 120                 # synthetic_demo.csv
+test_upload_rows: 20      # test_upload.csv (오류 행 포함)
+start_at: "2026-11-02 08:00:00"
+cycle_seconds: 45         # 사이클 길이 (시작~종료)
+gap_seconds: 15           # 사이클 간 간격
+materials: [PP, ABS]
+
+# 특징값 범위. 지정하지 않은 특징은 dictionary의 정상 참고 구간(q05~q95)을
+# 양쪽으로 widen 비율만큼 넓힌 균등분포에서 뽑는다 (집계 통계만 사용).
+widen: 0.35
+ranges: {}
+#  예) DXP_HoldingPressure1: {low: 50, high: 400}
+
+# 특정 재료에서만 측정되는 특징 (접두사 → 재료). 다른 재료 행은 비운다.
+# 원본 설명서: CALC_*는 PP만 계산됨.
+only_for_material:
+  CALC_: PP
+
+# 선택(required=false) 특징을 비워 둘 비율 — 결측 대체 경로 확인용
+optional_missing_rate: 0.10
+
+# actual_label은 가상의 값이다: 모델 위험도 p로 Bernoulli(p) 추출.
+# 화면의 "실제 판정 비교" 기능 시연용이며 모델 성능의 근거가 아니다.
+label:
+  enabled: true
+
+# test_upload.csv 끝에 붙이는 검증 오류 행 (각 1행)
+# bad_source(다른 출처)는 파일 전체를 거부하는 규칙이라 여기 넣지 않는다 (테스트에서 따로 확인).
+error_rows: [duplicate_part_id, out_of_range, missing_required, bad_timestamp, bad_label]

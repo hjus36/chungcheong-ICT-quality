@@ -12,7 +12,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / '준비패키지'))
 from fastapi.testclient import TestClient
-from app_kamp import app
+from app import app
 import quality_service as service
 
 
@@ -37,7 +37,7 @@ class PublicDemoTests(unittest.TestCase):
         self.assertEqual((schema['max_rows'], schema['history_limit']), (500, 20))
         self.assertEqual(self.client.get('/sample?kind=real').status_code, 404)
         self.assertEqual(self.client.get('/model').json(), json.loads((service.RELEASE / 'benchmark_public.json').read_text(encoding='utf-8')))
-        self.assertEqual(self.client.get('/sample?kind=synthetic').content, (service.ROOT / 'share' / 'synthetic_demo.csv').read_bytes())
+        self.assertEqual(self.client.get('/sample?kind=synthetic').content, (service.SHARE / 'synthetic_demo.csv').read_bytes())
 
     def test_public_example_prediction_and_export(self):
         self.assertEqual(self.client.get('/runs').json()['total'], 0)
@@ -46,7 +46,7 @@ class PublicDemoTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200, response.text)
         result = response.json()
         self.assertEqual(result['predicted_rows'], 120)
-        self.assertEqual(result['data_scope'], 'synthetic_kamp60')
+        self.assertEqual(result['data_scope'], 'synthetic_im')
         self.assertEqual(self.client.get('/runs/' + result['run_id']).json(), result)
         exported = self.client.get('/runs/' + result['run_id'] + '/export')
         self.assertEqual(len(pd.read_csv(BytesIO(exported.content))), 120)
@@ -64,7 +64,7 @@ class PublicDemoTests(unittest.TestCase):
     def test_history_keeps_latest_twenty_only(self):
         for i in range(22):
             service.save_run({'run_id': str(i), 'created_at': f'2026-11-16T00:00:{i:02d}+00:00',
-                              'filename': 'synthetic.csv', 'data_scope': 'synthetic_kamp60', 'model_version': 'test', 'predicted_rows': 1})
+                              'filename': 'synthetic.csv', 'data_scope': 'synthetic_im', 'model_version': 'test', 'predicted_rows': 1})
         history = self.client.get('/runs').json()
         self.assertEqual(history['total'], 20)
         self.assertEqual(history['items'][0]['run_id'], '21')

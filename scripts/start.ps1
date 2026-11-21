@@ -10,6 +10,6 @@ if (-not $NoBrowser) {
 }
 Push-Location $repoRoot
 try {
-    & $runtimePython -m uvicorn app_kamp:app --app-dir (Join-Path $repoRoot '준비패키지') --host 127.0.0.1 --port $Port
+    & $runtimePython -m uvicorn app:app --app-dir (Join-Path $repoRoot '준비패키지') --host 127.0.0.1 --port $Port
     if ($LASTEXITCODE -ne 0) { throw "Server exited with code $LASTEXITCODE." }
 } finally { Pop-Location }

@@ -1,0 +1,104 @@
+# ============================================================
+# 실험 설정 — 분석 기준값. 경로는 ml_workflow 폴더 기준 상대경로.
+# ============================================================
+
+data:
+  # ProBayes "Injection-Molding Production Data with Quality Labels" v2 (CC BY 4.0)
+  # 경로는 ml_workflow 기준. 환경변수 ICT_DATA_PATH가 있으면 그 경로를 우선 사용한다.
+  path: data/dataset_V2.parquet
+  fallback_csv: data/dataset_V2.csv          # parquet를 읽을 수 없을 때 사용 (선택)
+  expected_sha256: 009d64ae4d77d2ed2de817c7d921d2c5ca58065f62b2680ededdf6b5576468bd   # 게시 파일과 다르면 경고
+
+seed: 42
+
+features:
+  drop_all_missing: true
+  drop_constant: true          # 관측값이 한 종류뿐인 특징
+  drop_exact_duplicates: true  # 값이 완전히 같은 특징 쌍 → 앞쪽 컬럼만 유지
+  near_duplicate:
+    threshold: 0.99            # |Spearman rho| 기준
+    min_periods: 30
+    action: report             # report: 표만 출력 | drop: 앞쪽 컬럼만 유지
+  missing_indicators: true     # 결측 여부를 별도 항목으로 평가
+
+split:
+  strategy: group              # group: 그룹 단위 holdout | random: 행 단위 층화
+  holdout_size: 0.2
+
+eda:
+  fdr_alpha: 0.05
+  missing_bins: [0, 10, 30, 50, 70, 100]   # 결측률(%) 구간
+
+filter:
+  fdr_alpha: 0.05
+
+cv:
+  n_splits: 5                  # dev 안에서 그룹 단위 StratifiedGroupKFold
+  n_repeats: 5                 # seed를 바꿔 fold를 다시 나누는 반복 횟수 (fold 배정 운에 좌우되지 않게)
+
+
+wrapper:
+  # B안: 모델마다 자기 특징 수(k)를 고른다. 특징을 넣는 순서(F 점수 순위)는 모든 모델이 공유.
+  estimators: [logistic_regression, random_forest, xgboost, svm]
+  k_rule: one_se               # one_se: 최고 PR-AUC − 표준오차 이상 중 최소 k (곡선이 흔들릴 때 권장)
+                               # tolerance: 최고 PR-AUC의 일정 비율 이내 중 최소 k
+  pr_auc_relative_tolerance: 0.01   # k_rule=tolerance일 때 허용 비율
+  min_recall: null             # 예: 0.90 (null이면 기준 없음)
+  k_grid: "1-20, 25-max:5"     # 탐색할 k. 1~20은 전부, 이후 5 간격 (max = 모든 fold 공통 후보 수)
+  max_features: null
+  compare_missing_indicators: true  # indicator 켬/끔 두 조건을 모두 계산
+                                    # (다음 단계로 넘기는 건 features.missing_indicators 조건)
+  param_overrides:             # 탐색 속도용 (모델 단계는 model.params 그대로 사용)
+    random_forest: {n_estimators: 200}
+    xgboost: {n_estimators: 200}
+
+model:
+  candidates: [logistic_regression, random_forest, xgboost, svm]
+  calibrate: true              # 출력 점수를 확률로 보정 (위험도 %·Brier 계산용, fold 학습 데이터 안에서)
+  calibration: {method: sigmoid, cv: 3}
+
+  selection:
+    gate:                      # 1단계: 최소 조건
+      target_recall: 0.90      # CV 예측에서 이 Recall을 만족하는 판정 기준을 모델마다 찾음
+      min_precision: 0.40      # 그 기준에서 Precision이 이보다 낮으면 탈락 (Gate 1: 불량 탐지)
+      lodo_min_recall: 0.50    # Gate 2: 실험일을 하나씩 빼고 검증했을 때 Recall 하한 (CV 판정 기준 그대로 적용)
+      lodo_all_parts: true     # true: 모든 실험일이 하한을 넘어야 함 / false: 평균으로 판정
+      if_none_pass: skip_gate  # 통과 모델이 없을 때: skip_gate(경고 후 생략, 승격은 차단) | stop
+    primary: PR_AUC            # 2단계: 주 지표 (그룹 CV fold 평균)
+    tie:                       # 3단계: 1위와의 차이가 표준오차 이내면 동점으로 보고 아래 순서로 결정
+      rule: one_se
+      order: [lodo_PR_AUC, Brier, interpretability]
+      tolerance: 0.01          # 각 기준에서 이 차이 이내면 같다고 보고 다음 기준으로
+    interpretability: [logistic_regression, xgboost, random_forest, svm]   # 앞쪽이 해석 쉬움
+
+  risk_bands:                  # 웹 대시보드의 정상 / 품질주의 / 불량 위험 구간 (선택 모델 CV 예측 기준)
+    defect_recall: 0.90        # 이 Recall 지점의 기준 이상 → 불량 위험
+    caution_recall: 0.98       # 이 Recall 지점의 기준 이상 → 품질주의
+
+  leave_one_out_by: MET_TimeCycleStart   # 그룹 키 중 이 부분(실험일)을 하나씩 빼고 진단. null이면 생략
+  params:
+    logistic_regression: {class_weight: balanced, max_iter: 5000}
+    random_forest: {n_estimators: 400, class_weight: balanced_subsample, n_jobs: -1}
+    xgboost: {n_estimators: 400, max_depth: 3, learning_rate: 0.05, subsample: 0.8,
+              colsample_bytree: 0.8, eval_metric: logloss, tree_method: hist, n_jobs: -1}
+    svm: {kernel: rbf, class_weight: balanced}
+
+baselines:                     # 모델과 함께 보고하는 기준선
+  all_risk: true               # 전부 우선 검토
+  all_normal: true             # 전부 통상 검토
+  single_feature: true         # Filter 1위 특징 하나의 기준값 규칙
+  setpoint_only_prefix: SET    # 이 접두사 특징만 쓴 Logistic Regression (null이면 생략)
+
+evaluation:
+  # holdout 평가의 성격. auto: 같은 분할을 이전 실행이 평가했으면 '개발 참고 평가'로 자동 표기
+  # development_reference: 항상 '개발 참고 평가'로 표기 (규칙을 조정하며 이미 holdout을 본 경우)
+  holdout_status: development_reference
+  holdout_status_note: "규칙과 설정을 조정하는 과정에서 이 holdout 결과를 이미 확인했으므로 독립 검증이 아니다."
+
+explain:
+  permutation_repeats: 30      # holdout permutation importance 반복 수
+  normal_range_percentiles: [5, 95]   # 정상 샘플 기준 정상범위
+
+report:
+  top_n_univariate: 30
+  top_n_ranking: 30

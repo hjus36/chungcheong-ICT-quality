@@ -1,0 +1,79 @@
+{
+  "version": "probayes-im-v2-im_v2_r3",
+  "data_source": "ProBayes_IM_v2",
+  "synthetic_source": "synthetic_im",
+  "meta": [
+    {
+      "name": "part_id",
+      "required": true,
+      "source_column": "MET_MachineCycleID",
+      "description": "부품(사출 사이클) 식별자. 파일 안에서 중복될 수 없다."
+    },
+    {
+      "name": "cycle_start_at",
+      "required": true,
+      "source_column": "MET_TimeCycleStart",
+      "description": "사이클 시작 시각 (YYYY-MM-DD HH:MM:SS)"
+    },
+    {
+      "name": "cycle_end_at",
+      "required": true,
+      "source_column": "MET_TimeCycleEnd",
+      "description": "사이클 종료 시각 (YYYY-MM-DD HH:MM:SS)"
+    },
+    {
+      "name": "data_source",
+      "required": true,
+      "source_column": null,
+      "description": "ProBayes_IM_v2(실측) 또는 synthetic_im(합성). 한 파일에 섞을 수 없다."
+    }
+  ],
+  "optional": [
+    {
+      "name": "material",
+      "source_column": "MET_MaterialName",
+      "description": "재료 (예: PP, ABS)"
+    },
+    {
+      "name": "actual_label",
+      "source_column": "LBL_NOK",
+      "description": "실제 판정 0(정상)/1(불량). 예측에 쓰지 않고 사후 비교에만 사용"
+    }
+  ],
+  "features": [
+    {
+      "name": "DXP_HoldingPressure1",
+      "unit": "bar",
+      "description": "사출기 센서 시계열에서 추출한 1단계 보압 (설정 보압 1의 실제값)",
+      "min": 0,
+      "max": 5000,
+      "required": true,
+      "reference_q05": 98.9,
+      "reference_median": 200.5,
+      "reference_q95": 350.5
+    },
+    {
+      "name": "CALC_InjectionStroke",
+      "unit": "mm",
+      "description": "사출 시작부터 보압 종료까지의 스크류 위치 변화량 (PP만 계산)",
+      "min": 0,
+      "max": 1000,
+      "required": false,
+      "reference_q05": 136.87930068969726,
+      "reference_median": 145.21014404296875,
+      "reference_q95": 149.20464935302735
+    }
+  ],
+  "excluded_input_prefixes": [
+    "LBL_",
+    "IR_",
+    "CV_",
+    "SCA_",
+    "SIM_"
+  ],
+  "notes": [
+    "단위 변환은 하지 않는다. 표시된 단위로 입력한다.",
+    "min/max는 물리적으로 불가능한 값을 거르는 범위이며 공정 규격이 아니다.",
+    "required=false인 특징은 비어 있어도 학습 중앙값으로 대체해 예측한다."
+  ]
+}

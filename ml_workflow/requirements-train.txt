@@ -1,0 +1,6 @@
+# 학습 워크플로우 전용 의존성. 서비스 실행에는 필요 없다.
+# 서비스와 같은 고정 버전 위에 추가로 설치한다:
+#   pip install -r 준비패키지/requirements-lock.txt -r ml_workflow/requirements-train.txt
+pyyaml==6.0.4
+pyarrow==26.0.1
+matplotlib==3.11.2

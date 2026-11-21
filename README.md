@@ -2,66 +2,48 @@
 
 **제조공정 데이터 기반 품질위험 예측 및 공정편차 분석 MVP**
 
-**공개 체험:** [chungcheong-ict-quality.onrender.com](https://chungcheong-ict-quality.onrender.com) — 홈 화면에서 **합성 예제 결과 보기**를 누르면 바로 분석할 수 있습니다. 무료 서버의 첫 접속은 시간이 걸릴 수 있습니다. 업로드 결과는 방문자끼리 공유되며, 이력은 최근 20건만 보관합니다.
-
 충청권 특화산업연계 수요기반 ICT 현장적용 프로젝트 · **과제 6**
 
-제조 현장의 흩어진 공정 기록을 작업 단위로 정리하고, 품질·공정 담당자가 검토할 작업과 통계적 편차를 함께 확인하는 로컬 웹 애플리케이션입니다. CSV/Excel 업로드부터 항목 매핑, 모델 추론, 대시보드, SQLite 이력 저장까지 연결했습니다.
+**공개 체험:** [chungcheong-ict-quality.onrender.com](https://chungcheong-ict-quality.onrender.com) — 무료 서버라 첫 접속이 느릴 수 있습니다. 사출성형 버전은 병합 후 재배포합니다([문서 10](docs/10_공개_체험_배포.md)).
 
-현재 단계는 **기능 구현과 기술검증을 마친 연구용 MVP**입니다. **실제 제조 현장에서 신뢰할 수 있는 품질판정 성능은 입증하지 못했습니다.** 작업이 끝난 뒤 전체 구간의 집계값을 사용하므로 실시간 조기예측이 아닙니다. 출하판정과 설비 제어를 수행하지 않습니다.
+플라스틱 사출성형의 **사이클(부품) 단위 공정값**을 올리면, 먼저 검사할 부품과 학습 정상 범위를 벗어난 공정변수를 보여주는 웹 애플리케이션입니다. 모델은 별도의 **학습 워크플로우**(`ml_workflow/`)가 만들고, 승격 조건을 통과한 것만 서비스에 반영됩니다.
+
+현재 단계는 **연구용 MVP**입니다. 공개 실험 자료 안에서 검증했으며, 실제 기업 현장 성능과 효과는 입증하지 않았습니다.
 
 ## 주요 기능
 
 | 기능 | 구현 내용 |
 |---|---|
-| 업로드·항목 매핑 | UTF-8/CP949 CSV, xlsx 첫 시트, 미리보기, 원본 열과 공통항목 연결 |
-| 검증·전처리 | 중복·결측·날짜·수치·품질수량 확인, 명시적 단위 변환, 오류행 제외 |
-| 품질위험 예측 | 저장된 RF 모델의 실제 추론, 작업별 점수·검토 우선순위 |
-| 공정변수·편차 분석 | 입력값·대체값·변환값, 학습 분포와 참고 구간, 변수 관계와 기여도 |
-| 웹 대시보드 | 작업 목록·검색·필터·상세, 점수 차트·모델 비교·혼동행렬 |
-| 이력·내보내기 | SQLite 저장·검색·당시 결과 복원, 결과 및 오류 CSV 다운로드 |
-
-저장소 배포본은 독립 난수로 만든 **합성 예제**를 제공합니다. KAMP 실측 원본이나 작업별 가공자료 없이도 업로드→분석→저장 흐름을 실행할 수 있습니다. 실측자료를 로컬에 갖춘 환경의 기능은 유지합니다.
-
-![팀원 재구성안을 반영한 합성 20작업의 기능 시연 화면](docs/verification/ui_20261116/dashboard.png)
-
-위 수치는 합성 예제의 기능 시험 결과이며 모델 정확도 평가가 아닙니다.
-
-## 기술 스택
-
-| 영역 | 실제 사용 기술 |
-|---|---|
-| Frontend | React 19.2.0, Vite 7.1.12, Recharts 3.3.0, Lucide React 0.468.0 |
-| Backend | Python 3.12, FastAPI 0.162.0, Uvicorn 0.54.0 |
-| Database | Python 표준 sqlite3 / 로컬 SQLite |
-| AI/ML | scikit-learn 1.9.1, XGBoost 3.4.1, joblib 1.6.0 |
-| 데이터 처리 | NumPy 2.5.4, pandas 3.0.1, openpyxl 3.1.5 |
-| 검증 | unittest, FastAPI TestClient, Playwright 1.56.1 |
-| 검증한 환경 | Windows, Python 3.12.14, Node.js 24.22.1, pnpm 11.25.0 |
-
-전체 Python 버전은 [requirements-lock.txt](준비패키지/requirements-lock.txt), 프런트 의존성은 [package.json](frontend/package.json)과 [pnpm-lock.yaml](frontend/pnpm-lock.yaml)에 고정했습니다.
+| 업로드·항목 매핑 | UTF-8/CP949 CSV, xlsx, 미리보기, 원본 열 자동 제안, 라벨·사후측정 열 연결 차단 |
+| 검증 | 중복 ID·날짜·숫자·허용 범위·필수 특징 결측 → 행별 오류, 선택 특징 결측은 학습 중앙값 대체 |
+| 품질위험 예측 | 보정된 위험 점수, 2단계 검토 구분(우선 검토 / 통상 검토), 참고 구간 이탈 변수 |
+| 사후 비교 | `actual_label`(0/1)이 있으면 예측과 비교 (예측 입력에는 쓰지 않음) |
+| 분석 화면 | 공정변수 분포·구간별 불량 비율·영향도, 모델 선택 기록표·기준선·실험일 제외 진단 |
+| 이력·내보내기 | SQLite 저장·검색·당시 결과 복원, 결과·오류 CSV |
+| 실측 예제 | 원본 데이터의 학습 미사용 부품을 업로드 형식으로 자동 변환, 웹 판정이 리포트와 같은지 승격 전에 검사 |
+| 학습 워크플로우 | 사후측정 자동 제외, 그룹 분할, 반복 그룹 CV, 4개 모델 비교, Gate 1·2, 리포트 자동 생성, 승격 |
 
 ## 시스템 구조
 
 ```mermaid
 flowchart LR
-    User[품질·공정 담당자] --> UI[React 대시보드]
-    UI --> API[FastAPI]
-    API --> Prep[열 매핑·단위 변환·행 검증]
-    Prep --> ML[Random Forest / 경고 0.35]
-    ML --> Result[점수·편차·출처·모델 버전]
-    Result --> DB[(SQLite 분석 이력)]
-    Result --> UI
-    DB --> API
+    subgraph 학습 [ml_workflow]
+      D[(ProBayes v2)] --> W[9단계 워크플로우]
+      W -->|promote.py| REL[준비패키지/release<br/>모델·데이터 사전·벤치마크]
+    end
+    User[품질 담당자] --> UI[React 화면]
+    UI --> API[FastAPI app.py]
+    API --> SVC[quality_service<br/>입력 계약 검증·추론]
+    REL --> SVC
+    SVC --> DB[(SQLite 이력)]
+    DB --> UI
 ```
 
-FastAPI가 빌드된 React 화면과 API를 같은 주소에서 제공합니다. 외부 API Key나 클라우드 계정은 필요하지 않습니다. 이력 조회는 저장 당시 JSON을 복원하며 새 모델로 임의 재계산하지 않습니다.
+서비스는 특징·단위·허용 범위·결측 규칙을 코드에 두지 않고 `준비패키지/release/`에서 읽습니다. 새 모델은 학습 → 승격 → 서버 재시작으로 반영되며 서비스 코드를 고치지 않습니다. 설계: [문서 02](docs/02_시스템_설계서.md), [WORKFLOW.md](ml_workflow/WORKFLOW.md).
 
 ## 설치·실행 — Windows
 
-무료 공개 체험 서버의 설정과 데이터 범위는 [공개 체험 배포 안내](docs/10_공개_체험_배포.md)를 참고하세요. 화면과 API를 하나의 주소로 제공하며, 공개 모드에서는 500행 분석·최근 20건 이력으로 운영합니다.
-
-Git과 **Python 3.12**를 준비한 뒤 저장소를 Clone하세요.
+Git과 **Python 3.12**를 준비한 뒤:
 
 ```powershell
 git clone https://github.com/hjus36/chungcheong-ICT-quality.git
@@ -70,131 +52,110 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1
 powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
 ```
 
-브라우저: **http://127.0.0.1:8765** · API 문서: **http://127.0.0.1:8765/docs**
+브라우저: **http://127.0.0.1:8765** · API 문서: **http://127.0.0.1:8765/docs** · 종료: `Ctrl+C` · 포트 변경: `start.ps1 -Port 8770`
 
-종료: 서버 터미널에서 `Ctrl+C`. 포트 변경: `start.ps1 -Port 8770`.
+빌드된 화면·모델·합성 예제가 저장소에 있어 Node.js와 원본 데이터 없이 실행됩니다. 화면 소스를 고칠 때는 Node.js 22.12+와 `setup.ps1 -RebuildFrontend`.
 
-Python 자동 탐색이 안 되면 `setup.ps1 -PythonExe "Python312\python.exe의 실제 경로"`로 지정합니다. 최초 패키지 설치에는 인터넷이 필요합니다. **빌드된 화면·모델·합성 예제가 포함되어 일반 시연에는 Node.js, 원본 다운로드, 모델 재학습이 필요하지 않습니다.** SQLite 파일은 처음 실행할 때 생성되며 기존 개인 이력은 배포하지 않습니다.
-
-화면 소스를 수정할 개발자는 Node.js 22.12 이상(검증 환경은 24.22.1)과 pnpm 11.25.0 또는 npm/npx를 준비합니다.
+### 모델 다시 만들기
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1 -RebuildFrontend
-# 백엔드를 8765에서 실행한 상태에서 프런트 개발 서버 실행
-cd frontend
-pnpm dev
+powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1 -Train
+# 원본: ml_workflow\data\README.md 대로 dataset_V2.parquet 받기
+powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run im_v3
+powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run im_v3 -Resume -Stages report -Promote
 ```
+
+실행 결과와 자동 리포트는 `ml_workflow\runs\im_v3\`(git 제외). 승격하면 실측 예제(`준비패키지\local\real_demo.csv`, git 제외)도 함께 생겨 **실측 예제 불러오기** 버튼이 켜집니다. 새 Clone에는 이 파일이 없으므로 버튼이 꺼져 있습니다. 승격 없이 만들려면 `ml_workflow\make_upload.py`를 씁니다. 절차: [문서 11](docs/11_데이터_재현과_저장소_운영.md).
 
 ### 5분 시연
 
-1. 첫 화면의 **데이터 업로드 → 합성 예제 불러오기**를 선택합니다. **합성 예제 결과 보기**는 예제를 즉시 분석·저장해 작업 검토 화면으로 이동합니다.
-2. 필수 40항목 연결과 단위를 확인하고 **데이터 검증**을 누릅니다.
-3. **120행 분석 및 저장**으로 작업 검토 목록을 확인합니다. 작업을 선택하면 우측 패널에 위험 점수와 편차가 표시되고, **전체 작업 상세 보기**에서 품질수량·결측 대체·전체 변수를 확인할 수 있습니다.
-4. 공정변수·모델 검증 화면에서 통계 관계와 낮은 모델 성능을 함께 확인합니다.
-5. 분석 이력에서 저장 결과를 복원하고 결과 CSV를 내려받습니다.
+1. 홈 → **합성 예제 결과 보기**: 120부품 분석 → 우선 검토 부품과 참고 구간 이탈 변수
+2. **데이터 업로드 → 실측 예제 불러오기**: 원본에서 학습에 쓰지 않은 실제 부품 121개 → **실제 판정과 비교**가 모델 검증 화면의 holdout 결과(36/0/24/61)와 같음
+3. **데이터 업로드 → 오류 포함 예제** → 검증에서 제외된 6행과 이유 확인 → 분석
+4. **모델 검증**: XGBoost가 CV 점수는 높지만 Gate 2(처음 보는 실험일)에서 탈락한 이유
+5. **분석 이력**에서 결과 복원, CSV 다운로드
 
-가상 품질수량은 **가상 불량률**로 표시합니다. 합성 예제의 결과로 모델 정확도를 주장하지 않습니다. 실측 예제 버튼은 해당 로컬 파일을 별도 확보한 경우에만 활성화됩니다. 자세한 조작은 [사용자 설명서](docs/08_사용자_설명서.md)를 참고하세요.
+## 입력 계약 (현재 모델)
 
-화면은 팀원이 전달한 Figma 기반 재구성안을 반영한 상단 메뉴·첫 화면·작업 선택 패널 구성입니다. 첫 화면의 표와 분포 그림은 **화면 예시**이고, 예제 버튼으로 실행한 결과는 기존 분석 API와 SQLite에 연결됩니다. `#dashboard`, `#upload`, `#variables`, `#model`, `#history` 주소로 각 화면을 열 수 있습니다. 상세 추이와 분석 요약은 작업 검토 화면의 펼침 영역에서 확인합니다.
-
-## 입력 계약
-
-- 한 행은 완료된 작업/LOT 한 개. 최대 10MiB, 10,000행, 100열.
-- 필수: 작업 ID·시작/종료 시각·출처와 18센서의 평균/표본 표준편차 **36특성**.
-- 온도는 °C, OP/CP는 %. °F/K/fraction 입력은 사용자가 명시한 경우에만 변환합니다.
-- 선택 품질수량은 사후 비교용이며 예측 입력에서 제외합니다.
-- 특성 결측은 최대 3개까지 학습 중앙값으로 대체합니다. 더 많은 결측·중복 ID·잘못된 값은 행별 오류로 표시합니다.
-- 실측과 합성, 서로 다른 공정의 데이터는 같은 파일에 섞지 않습니다.
-
-정확한 필드명은 [데이터 사전](docs/데이터사전.json)과 [API·DB 명세](docs/05_API_DB_명세서.md)에 있습니다. 학습 5~95% 통계 구간은 기업 규격이 아니며, 모델 위험 점수는 실제 불량률 또는 보정된 불량 확률이 아닙니다.
-
-## 데이터셋과 공유 범위
-
-| 자료 | 구성 | 활용 |
+| 열 | 필수 | 형식 |
 |---|---|---|
-| KAMP 열처리 품질보증 | 자동차 부품 염욕 열처리, 센서 **2,939,722행**, 품질 결과가 연결된 **136작업** | 서비스 모델 학습·평가. 센서행을 독립 정답 수로 세지 않음 |
-| UCI SECOM | 반도체 생산 **1,567개체**, 숫자 신호 590열, 검사 실패 104건 | 별도 공정의 모델 비교. 제공처 설명 591특성과 실제 파일 590열 차이를 기록 |
-| 공유용 합성 예제 | 가상 작업 120행, 테스트용 20행 | 독립 난수로 생성한 기능 시험자료. 학습·성능평가 제외 |
+| `part_id`, `cycle_start_at`, `cycle_end_at`, `data_source` | ✓ | 부품 ID, `YYYY-MM-DD HH:MM:SS`, `ProBayes_IM_v2` 또는 `synthetic_im` |
+| `DXP_HoldingPressure1` | ✓ | 1단계 보압 실제값, bar, 0~5000 |
+| `CALC_InjectionStroke` |  | 사출 스트로크, mm, 0~1000 (비면 대체) |
+| `material`, `actual_label` |  | 재료, 실제 판정 0/1 |
 
-**KAMP와 SECOM은 통합 학습하지 않았습니다.** SECOM은 열처리 모델의 외부 검증 자료가 아닙니다. KAMP의 136작업도 같은 설비에서 수집되어 작업 사이의 완전한 통계적 독립성을 확인하지 못했습니다.
+단위 변환은 하지 않습니다. 기준 파일은 워크플로우가 생성한 `준비패키지/release/data_dictionary.json`이며 모델이 바뀌면 함께 바뀝니다. [문서 05](docs/05_API_DB_명세서.md), [문서 10 데이터 사전](docs/10_자료_출처와_데이터사전.md).
 
-KAMP 출처: 중소벤처기업부, KAMP, 「열처리 품질보증 AI 데이터셋」, 스마트제조혁신추진단(㈜임픽스), 2022.12.23. [공식 다운로드 안내](https://www.kamp-ai.kr/aidataDetail?DATASET_SEQ=60).
+## 데이터
 
-SECOM 출처: McCann, M. & Johnston, A. (2008). [SECOM, DOI 10.24432/C54305](https://doi.org/10.24432/C54305), UCI, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+ProBayes 「Injection-Molding Production Data with Quality Labels」 v2 — SKZ·Fraunhofer IPA, EUDAT B2SHARE, 2022, DOI [10.23728/b2share.4c5692b886db419180f716acf895bf06](https://doi.org/10.23728/b2share.4c5692b886db419180f716acf895bf06), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). 564 사출 사이클, 47개 실험 그룹, 불량(싱크마크 또는 미충전) 27.5%.
 
-KAMP 원본·작업별 가공 CSV·개인화 가이드북, SECOM 원본 ZIP/행렬/라벨, 개인 DB, 공식 평가·신청·면담 문서, 가상환경·캐시는 Git에서 제외합니다. 학습 모델과 집계 평가·통계는 포함하며, 배포본 관계 차트는 최소 5작업으로 묶은 평균을 표시합니다. 상세 조건과 과거 이력에 남은 자료는 [데이터 공유 정책](DATA_USAGE.md)에 명시했습니다.
+원본과 행 단위 파생 자료는 저장소에 넣지 않습니다. 공유 범위와 변경 내용 표기: [DATA_USAGE.md](DATA_USAGE.md).
 
-원본을 별도 확보해 연구를 재현하는 절차는 [데이터 재현 안내](docs/11_데이터_재현과_저장소_운영.md)에 있습니다.
+## 모델과 평가 결과
 
-## 모델과 실제 평가 결과
+**Logistic Regression, 특징 2개**(`DXP_HoldingPressure1`, `CALC_InjectionStroke`), 우선 검토 기준 **0.252**.
 
-현재 서비스 모델은 **Random Forest**, 경고 기준은 **0.35**입니다. 라벨은 학습 불량률 Q3인 약 0.049443% 이상인 상대적 위험이며 기업의 합격·불합격 기준이 아닙니다. 학습 78 / 검증 22 / 보류 36작업을 시간순으로 나눴습니다.
+| 모델 | CV PR-AUC | Gate 1 | 실험일 제외 최소 Recall (Gate 2) | 결과 |
+|---|---:|:-:|---:|---|
+| **Logistic Regression** | 0.818 | ✓ | 0.50 | **선택** |
+| XGBoost | 0.875 | ✓ | 0.00 | 탈락 |
+| Random Forest | 0.800 | ✓ | 0.00 | 탈락 |
+| SVM | 0.762 | ✗ | 0.00 | 탈락 |
 
-| 기존 보류 36작업 | 결과 |
-|---|---:|
-| Recall / Precision | 71.4% / 17.9% |
-| F1 / F2 | 0.2857 / 0.4464 |
-| ROC-AUC / AP | 0.4286 / 0.2055 |
-| TP / FN / FP / TN | 5 / 2 / 23 / 6 |
-| 전부 경고하는 기준선 F2 | **0.5469** |
+| holdout 121부품 (개발 참고 평가) | 선택 모델 | 전부 우선 검토 |
+|---|---:|---:|
+| Recall / Precision | 1.00 / 0.60 | 1.00 / 0.30 |
+| F2 / PR-AUC | 0.882 / 0.841 | 0.679 / 0.298 |
+| TP / FN / FP / TN | 36 / 0 / 24 / 61 | 36 / 0 / 85 / 0 |
 
-기존 보류자료는 이미 확인한 개발 참고 평가입니다. 새로운 독립 검증이 아닙니다. 현재 모델은 전부 경고하는 기준선보다 F2가 낮아 무인 품질판정이나 현장 경고 운영에 충분하다고 볼 수 없습니다.
-
-### 추가 성능 개선 실험
-
-`experiments/quality_20261101/`에서 공정 관계 16개와 원본 시간특성 35개를 설계하고, LR/RF/XGBoost **18후보와 기존 RF 대조군**을 비교했습니다. 최고 시간순 CV 후보는 5월 검증에서 AP **0.3770 → 0.2290**, F2 **0.6061 → 0.3846**으로 악화되어 **기존 모델을 유지**했습니다.
-
-SECOM은 별도 6후보를 비교했습니다. 선정 XGBoost의 마지막 시간 보류 380개체에서 AP 0.0889, Recall 4.3%로 실용 성능을 확보하지 못했습니다. 결과를 본 뒤 보류자료로 후보나 경계를 다시 고르지 않았습니다.
-
-[상세 벤치마크](docs/06_모델_벤치마크_보고서.md) · [실험 코드·재현 설명](experiments/quality_20261101/README.md) · [전체 검증 비교표](experiments/quality_20261101/results/all_validation_comparisons.csv)
+holdout은 규칙을 조정하면서 이미 본 자료이므로 **독립 검증이 아닙니다.** 선택 모델도 한 실험일에서 Recall 0.50으로 Gate 2 경계에 있습니다. [상세 벤치마크](docs/06_모델_벤치마크_보고서.md).
 
 ## 저장소 구조
 
 ```text
-frontend/                 React 소스·설정·lockfile·빌드 dist·브라우저 테스트
+ml_workflow/              학습 워크플로우 — 설정(YAML), 단계별 코드, 승격·합성 예제·원본 변환(make_upload.py), 테스트
+  config/                 columns.yaml(사람 판단) · experiment.yaml(분석 기준) · release.yaml · synthetic.yaml
+  data/README.md          원본 받는 법·해시 (데이터 파일은 git 제외)
+  runs/                   실행 결과 (git 제외)
 준비패키지/
-  app_kamp.py              현재 FastAPI 진입점
-  quality_service.py       검증·단위변환·추론·SQLite 이력
-  prepare_kamp.py          원본 센서 집계·품질표 연결
-  train_release.py         기존 서비스 모델 학습 절차
-  kamp/release/            현재 모델·집계 벤치마크
-  kamp/share/              재배포용 독립 난수 합성 예제
-  data/, models/, results/ 과거 강구 합성 데모 기록
-experiments/quality_20261101/
-                          개선 코드·프로토콜·집계결과·선정후보·출처
-docs/                     기술문서 01~11·데이터 사전·검증 기록
-scripts/                  설치·실행·테스트·공유자료 생성·저장소 감사
-tests/                    API·자료 무결성·재시작 검증
-DATA_USAGE.md             공유 범위·데이터 이용조건·과거 이력 안내
+  app.py                  FastAPI 진입점
+  quality_service.py      입력 계약 검증·추론·SQLite 이력
+  release/                승격된 모델·데이터 사전·공개 벤치마크·승격 기록
+  share/                  합성 예제 (데모 120행, 오류 포함 업로드 예제, 생성 정의)
+  local/                  실측 예제 — 승격 때 생성, git 제외
+frontend/                 React 소스·빌드 dist·브라우저 테스트
+scripts/                  setup · start · train · test (PowerShell), 공개 배포 패키지, 저장소 감사
+tests/                    릴리스 무결성 · API · 공개 모드 · 서버 재시작
+docs/                     기술문서 01~11
+DATA_USAGE.md             데이터 출처·라이선스·공유 범위
 ```
 
-`app.py`, 과거 `data/models/results`, 초기 모델은 보존된 연구 기록입니다. **현재 실행 진입점은 `scripts/start.ps1`과 `app_kamp.py`**입니다. 새 Clone에는 로컬 전용 원본·보존 사본·중복 후보 파일이 포함되지 않습니다.
-
-## 테스트와 검증
-
-| 구분 | 검증 범위 |
-|---|---|
-| 최초 MVP | API 11개, 브라우저 11시나리오, 프로세스 재시작, 원본 해시·작업 연결 |
-| 모델 개선 실험 | 실험 검증 8개, API 11개 재검증, 재집계 재현, 브라우저 주요 흐름 |
-| 이번 저장소 정리 | 원본 없는 배포 구성 및 GitHub 새 Clone 설치, API 12개·실제 서버 재시작·주요 화면 검증 |
-
-최신 실제 결과는 [기술검증 보고서](docs/07_검증_결과보고서.md)와 `docs/verification/repository/`에 기록합니다. 과거 전체 브라우저 테스트와 이번 주요 흐름 확인은 구분합니다. 테스트 통과는 모델의 현장 정확도를 증명하지 않습니다.
+## 테스트
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1
-.\.venv\Scripts\python.exe tests\verify_restart.py
+powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1            # 릴리스 무결성, API 13, 공개 모드 4, 재시작
+powershell -ExecutionPolicy Bypass -File .\scripts\test.ps1 -Workflow  # + 워크플로우 종단 11 (setup.ps1 -Train 필요)
 ```
 
-브라우저 자동 회귀는 프런트 개발 의존성과 Edge가 필요합니다. 별도 DB 서버를 띄운 뒤 `node frontend/tests/e2e.mjs`로 실행합니다. 상세 명령은 [저장소 운영 안내](docs/11_데이터_재현과_저장소_운영.md)에 있습니다. 원본 검증·학습 재현은 별도 데이터 확보가 필요하며 기본 Clone 테스트와 구분합니다.
+브라우저 테스트(16개, 실측 예제 흐름은 파일이 있을 때만)는 서버를 8766에 띄운 뒤 `test.ps1 -Browser`. 결과: [문서 07](docs/07_검증_결과보고서.md).
+
+## 기술 스택
+
+| 영역 | 사용 기술 |
+|---|---|
+| Frontend | React 19.2.0, Vite 7.1.12, Recharts 3.3.0, Lucide React 0.468.0 |
+| Backend | Python 3.12, FastAPI 0.162.0, Uvicorn 0.54.0, SQLite |
+| ML | scikit-learn 1.9.1, XGBoost 3.4.1, joblib 1.6.0, NumPy 2.5.4, pandas 3.0.1 |
+| 학습 전용 | PyYAML 6.0.4, PyArrow 26.0.1, Matplotlib 3.11.2 |
+| 검증 | unittest, FastAPI TestClient, Playwright 1.56.1 |
+
+버전은 [requirements-lock.txt](준비패키지/requirements-lock.txt), [requirements-train.txt](ml_workflow/requirements-train.txt), [pnpm-lock.yaml](frontend/pnpm-lock.yaml)에 고정했습니다.
 
 ## 기술문서
 
-[01 요구사항](docs/01_요구사항_정의서.md) · [02 시스템 설계](docs/02_시스템_설계서.md) · [03 데이터·AI 설계](docs/03_데이터_AI_설계서.md) · [04 개발 현황·계획](docs/04_개발계획서.md) · [05 API·DB](docs/05_API_DB_명세서.md)
-
-[06 모델 벤치마크](docs/06_모델_벤치마크_보고서.md) · [07 기술검증](docs/07_검증_결과보고서.md) · [08 사용자 설명서](docs/08_사용자_설명서.md) · [09 최종 결과](docs/09_최종_결과보고서.md) · [10 출처·데이터 사전](docs/10_자료_출처와_데이터사전.md) · [11 재현·저장소 운영](docs/11_데이터_재현과_저장소_운영.md)
+[01 요구사항](docs/01_요구사항_정의서.md) · [02 시스템 설계](docs/02_시스템_설계서.md) · [03 데이터·AI 설계](docs/03_데이터_AI_설계서.md) · [04 개발 현황·계획](docs/04_개발계획서.md) · [05 API·DB](docs/05_API_DB_명세서.md) · [06 모델 벤치마크](docs/06_모델_벤치마크_보고서.md) · [07 기술검증](docs/07_검증_결과보고서.md) · [08 사용자 설명서](docs/08_사용자_설명서.md) · [09 최종 결과](docs/09_최종_결과보고서.md) · [10 공개 체험 배포](docs/10_공개_체험_배포.md) · [10 자료 출처·데이터 사전](docs/10_자료_출처와_데이터사전.md) · [11 재현·저장소 운영](docs/11_데이터_재현과_저장소_운영.md) · [워크플로우 설계](ml_workflow/WORKFLOW.md)
 
 ## 한계와 다음 단계
 
-독립 품질 정답이 적고 제품·재질·검사시각·기업 규격이 부족합니다. 새 기업의 열처리 품질자료, 실제 예측 시점 이전의 센서구간, 공정별 재학습과 시간·그룹 분할 검증이 필요합니다. 현장 담당자와 미탐 비용·검토 가능한 작업 수를 정한 뒤 모델과 경고 기준을 다시 평가해야 합니다.
-
-실제 기업 설비/MES 연결, 현장 사용자 평가, 불량 감소 효과는 확인하지 못했습니다. 무료 공개 체험 서버를 배포했으며 현장 운영용 서비스와 구분합니다. 2026-11-16에 사용자가 저장소를 Public으로 변경했습니다. 과거 커밋의 문서·데이터 공개 범위는 [데이터 공유 안내](DATA_USAGE.md)에서 확인하세요.
+실험 계획으로 만든 자료라 독립 표본이 사실상 47개 실험 조건이고, 학습 자료의 실험일은 3개뿐입니다. 새 실험일이나 실제 생산 자료로 규칙을 고정한 독립 검증, 기업 공정 담당자와의 측정 시점·단위·규격 확인, MES 연계는 후속 과제입니다. 이전 버전(KAMP 열처리·SECOM)은 git 이력에 남아 있습니다.

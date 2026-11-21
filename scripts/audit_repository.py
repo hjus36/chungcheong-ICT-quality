@@ -19,26 +19,25 @@ def main():
         names=tracked+extra
     names=sorted(set(filter(None,names)));included=set(names);errors=[];files=[];total=0
     patterns={
-        'personal_absolute_path':re.compile(r'[A-Za-z]:[\\/]+Users[\\/]+(?!Public(?:[\\/]))[^\s"<>]+'),
+        'personal_absolute_path':re.compile(r'(?:[A-Za-z]:[\\/]+Users[\\/]+(?!Public(?:[\\/]))|/' + r'Users/(?!Shared/)[^/\s"<>]+/)[^\s"<>]*'),  # 패턴이 자기 자신에 걸리지 않게 분리
         'github_token':re.compile(r'(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,})'),
         'private_key':re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
         'openai_key':re.compile(r'sk-(?:proj-)?[A-Za-z0-9_-]{40,}'),
         'korean_mobile':re.compile(r'01[016789]-\d{3,4}-\d{4}'),
         'personal_download_id':re.compile(r'(?:MSS_' + r'hjus36|GB20261026-PU\d+)')}
-    private_csv={'demo_upload.csv','holdout_predictions.csv','joined_batches.csv','process_batches.csv','quality_batches.csv','split_manifest.csv'}
+    row_level={'split.csv','cv_folds.csv','oof_predictions.csv','holdout_predictions.csv','benchmark.json','real_demo.csv'}
     for name in names:
         path=PurePosixPath(name)
         if any(p in {'.venv','venv','node_modules','__pycache__','baseline_snapshot','참고자료','.git'} for p in path.parts) or path.parts[0] in {'tmp','outputs','output'}:
             errors.append(dict(file=name,rule='excluded_directory'));continue
         if path.suffix.lower() in {'.sqlite3','.db','.zip','.docx','.pdf','.pyc'} or '.sqlite3-' in name:
             errors.append(dict(file=name,rule='local_or_binary_document'));continue
-        if name.startswith('준비패키지/kamp/') and ((len(path.parts)==3 and path.name in private_csv) or name in {
-            '준비패키지/kamp/release/benchmark.json','준비패키지/kamp/release/holdout_predictions.csv','준비패키지/kamp/release/synthetic_demo.csv'}):
-            errors.append(dict(file=name,rule='kamp_row_level_data'));continue
-        if name.startswith('experiments/quality_20261101/runs/kamp_v1/') and path.suffix=='.csv':
-            errors.append(dict(file=name,rule='kamp_row_level_experiment'));continue
-        if path.name in {'secom.data','secom_labels.data','compact_features.csv','temporal_features.csv'}:
-            errors.append(dict(file=name,rule='local_source_or_features'));continue
+        if path.parts[0]=='ml_workflow' and len(path.parts)>1 and path.parts[1] in {'runs','data'} and name!='ml_workflow/data/README.md':
+            errors.append(dict(file=name,rule='workflow_data_or_runs'));continue
+        if path.suffix.lower() in {'.parquet','.joblib'} and name!='준비패키지/release/model.joblib':
+            errors.append(dict(file=name,rule='dataset_or_unpromoted_model'));continue
+        if path.name in row_level or name.startswith(('준비패키지/local/','준비패키지/release/previous/')) or path.name.startswith('dataset_V'):
+            errors.append(dict(file=name,rule='row_level_data'));continue
         content=git('show',':'+name) if args.staged else (ROOT/name).read_bytes()
         total+=len(content)
         if len(content)>5*1024*1024: errors.append(dict(file=name,rule='over_5MiB_review_limit'))

@@ -1,0 +1,35 @@
+# ============================================================
+# 서비스 배포(승격) 설정 — 07_release와 promote.py가 사용한다.
+# ============================================================
+version_prefix: probayes-im-v2         # 번들 버전 = <prefix>-<실행 이름>
+source:
+  title: Injection-Molding Production Data with Quality Labels (v2)
+  creators: Lambers, Jonathan; Schüder, Jakob; Krauß, Jonas
+  organizations: German Plastics Center (SKZ), Fraunhofer IPA — ProBayes
+  publisher: EUDAT B2SHARE
+  year: 2022
+  doi: 10.23728/b2share.4c5692b886db419180f716acf895bf06
+  url: https://b2share.eudat.eu/records/k0v7s-jf859
+  license: CC BY 4.0
+
+gate:                                  # 모두 만족해야 서비스로 승격한다
+  require_selection_gates: true        # 선택 모델이 Gate 1·2를 통과해야 함
+  holdout_min_recall: 0.90             # holdout(고정 기준) Recall 하한
+  holdout_beats_baseline: all_risk     # holdout PR-AUC·F2가 이 기준선보다 높아야 함 (F2는 같아도 됨)
+
+real_demo:                             # 원본 → 웹 업로드 형식 실측 예제 (promote가 준비패키지/local/로 복사, git 제외)
+  enabled: true
+  rows: holdout                        # holdout: 학습에 쓰지 않은 행만(판정 일치 검사) | all: 전체(학습 행 포함, 성능 비교 불가)
+
+analysis:                              # 화면용 공정변수 분석
+  extra_top_features: 10               # 모델 특징 외에 함께 보여줄 Filter 상위 특징 수
+  relation_min_group: 5                # 변수-불량률 관계는 최소 이 부품 수로 묶은 평균만 공개
+  histogram_bins: 12
+
+limitations:
+  - 실험계획(DoE) 47개 조건 × 12부품이며 라벨이 조건마다 고정되어 있어, 독립 표본은 사실상 47개 조건이다.
+  - 실험일 3개(PP 2일, ABS 1일)뿐이라 새 재료·설비 상태로의 일반화 근거가 약하다.
+  - 사이클 종료 직후(탈형 전) 측정값만 사용한다. 탈형 후 측정(IR·CV)과 냉각 후 무게(SCA)는 쓰지 않는다.
+  - 위험 점수는 학습 자료에서 보정한 불량 확률이며, 다른 설비·제품에서는 보정이 맞지 않을 수 있다.
+  - 정상범위는 학습 자료의 정상 부품 5~95% 구간이며 공정 규격이 아니다.
+  - holdout은 규칙을 조정하며 이미 확인한 개발 참고 평가이며 독립 검증이 아니다.

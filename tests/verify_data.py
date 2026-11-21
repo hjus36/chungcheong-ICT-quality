@@ -1,34 +1,62 @@
+"""Release integrity: promoted files, input contract and public assets agree with each other."""
 from pathlib import Path
 import hashlib
 import json
-import numpy as np
+import os
+import joblib
 import pandas as pd
 
-ROOT=Path(__file__).resolve().parents[1]
-DATA=ROOT/'준비패키지/kamp'
+ROOT = Path(__file__).resolve().parents[1]
+REL = ROOT / '준비패키지' / 'release'
+SHARE = ROOT / '준비패키지' / 'share'
+
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
 
 def main():
-    audit=json.loads((DATA/'audit.json').read_text(encoding='utf-8'))
-    p=pd.read_csv(DATA/'process_batches.csv'); q=pd.read_csv(DATA/'quality_batches.csv'); j=pd.read_csv(DATA/'joined_batches.csv')
-    assert p.batch_id.is_unique and q.batch_id.is_unique and j.batch_id.is_unique
-    assert set(p.batch_id)==set(q.batch_id)==set(j.batch_id) and len(j)==136
-    assert (q['양품수량']+q['불량수량']==q['총수량']).all()
-    assert np.allclose(q.defect_rate_percent,100*q['불량수량']/q['총수량'])
-    merged=p.merge(q,on=['batch_id','data_source'],validate='one_to_one').sort_values('batch_id')
-    j=j.sort_values('batch_id')
-    assert np.allclose(merged[audit['features']].to_numpy(),j[audit['features']].to_numpy(),equal_nan=True)
-    assert np.allclose(merged.defect_rate_percent,j.defect_rate_percent)
-    hashes={}
-    for name,expected in audit['files'].items():
-        raw=ROOT/'참고자료/KAMP_열처리_품질보증/원본/data'/name
-        if raw.exists():
-            with raw.open('rb') as f: digest=hashlib.file_digest(f,'sha256').hexdigest()
-            assert digest==expected['sha256'],name
-            hashes[name]={'verified':True,'bytes':raw.stat().st_size,'sha256':digest}
-        else: hashes[name]={'verified':False,'reason':'Original source not distributed; processed-data checks still ran.'}
-    result={'status':'passed','joined_batches':136,'features':36,'one_to_one':True,'quantity_identity':True,
-            'joined_feature_values_match':True,'raw_files':hashes}
-    (ROOT/'docs/verification/data_results.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
-    print(json.dumps(result,ensure_ascii=False))
+    info = json.loads((REL / 'release_info.json').read_text(encoding='utf-8'))
+    for name, digest in info['files'].items():
+        assert sha(REL / name) == digest, f'{name}: release_info 해시 불일치 (promote.py 없이 수정됨)'
+    bench = json.loads((REL / 'benchmark_public.json').read_text(encoding='utf-8'))
+    check = json.loads((REL / 'release_check.json').read_text(encoding='utf-8'))
+    dictionary = json.loads((REL / 'data_dictionary.json').read_text(encoding='utf-8'))
+    bundle = joblib.load(REL / 'model.joblib')
+    assert bench['model_sha256'] == check['model_sha256'] == info['model_sha256'] == sha(REL / 'model.joblib')
+    assert bench['version'] == check['version'] == info['version'] == bundle['version'] == dictionary['version']
+    assert check['passed'] or info.get('forced'), '승격 조건 미통과 모델'
+    assert bundle['schema_version'] == 2
+    assert [f['name'] for f in dictionary['features']] == bundle['features']
+    assert sorted(bundle['missing_policy']['required'] + bundle['missing_policy']['optional']) == sorted(bundle['features'])
+    assert bundle['caution_threshold'] <= bundle['alert_threshold'] == bench['alert_threshold']
+    for f in bundle['features']:
+        assert not f.startswith(tuple(dictionary['excluded_input_prefixes'])), f
+    for fa in bench['feature_analysis']:
+        assert all(g['count'] >= 5 for g in fa['quality_relation']), fa['feature']
+    definition = json.loads((SHARE / 'synthetic_definition.json').read_text(encoding='utf-8'))
+    assert definition['release_version'] == bundle['version'], '합성 예제를 make_synthetic.py로 다시 만드세요'
+    for name, meta in definition['files'].items():
+        assert sha(SHARE / name) == meta['sha256'], name
+        df = pd.read_csv(SHARE / name)
+        assert set(df.data_source) == {dictionary['synthetic_source']}, name
+    # 실측 예제는 git에 없다: 파일이 있을 때만 승격 기록과 대조한다
+    real = info.get('real_demo') or {}
+    local = ROOT / '준비패키지' / 'local' / 'real_demo.csv'
+    real_status = 'not_present'
+    if real and local.exists():
+        assert sha(local) == real['sha256'], '준비패키지/local/real_demo.csv가 승격된 버전과 다릅니다 (promote.py로 다시 승격)'
+        assert len(pd.read_csv(local)) == real['rows']
+        real_status = 'verified'
+    result = {'status': 'passed', 'version': bundle['version'], 'model': bundle['selected_model'],
+              'real_demo': real_status,
+              'features': bundle['features'], 'release_check_passed': check['passed'],
+              'synthetic_rows': {k: v['rows'] for k, v in definition['files'].items()}}
+    evidence = Path(os.environ.get('ICT_EVIDENCE_DIR', str(ROOT / 'tmp' / 'test-evidence')))
+    evidence.mkdir(parents=True, exist_ok=True)
+    (evidence / 'data_results.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(json.dumps(result, ensure_ascii=False))
 
-if __name__=='__main__': main()
+
+if __name__ == '__main__':
+    main()

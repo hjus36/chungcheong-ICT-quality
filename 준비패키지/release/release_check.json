@@ -1,0 +1,67 @@
+{
+  "version": "probayes-im-v2-im_v2_r3",
+  "passed": true,
+  "checks": [
+    {
+      "check": "실측 예제 형식 (서비스 검증 규칙)",
+      "passed": true,
+      "value": "문제 없음"
+    },
+    {
+      "check": "실측 예제 판정 = holdout 결과 (TP/FN/FP/TN)",
+      "passed": true,
+      "value": {
+        "real_demo": {
+          "TP": 36,
+          "FN": 0,
+          "FP": 24,
+          "TN": 61
+        },
+        "holdout": {
+          "TP": 36,
+          "FN": 0,
+          "FP": 24,
+          "TN": 61
+        }
+      }
+    },
+    {
+      "check": "선택 모델 Gate 1·2 통과",
+      "passed": true,
+      "value": {
+        "gate1_pass": true,
+        "gate2_pass": true
+      }
+    },
+    {
+      "check": "holdout Recall ≥ 0.9",
+      "passed": true,
+      "value": 1.0
+    },
+    {
+      "check": "holdout PR-AUC > 기준선(전부 우선 검토)",
+      "value": [
+        0.8406191761454921,
+        0.2975206611570248
+      ],
+      "passed": true
+    },
+    {
+      "check": "holdout F2 ≥ 기준선(전부 우선 검토)",
+      "value": [
+        0.8823529411764706,
+        0.6792452830188679
+      ],
+      "passed": true
+    }
+  ],
+  "warnings": [],
+  "real_demo": {
+    "scope": "holdout",
+    "rows": 121,
+    "positives": 36,
+    "sha256": "65857d90959a0d5a09f8a53965b416aa7290b1363209f78d3a0250a27fc655ca"
+  },
+  "model_sha256": "2a566cf8193af8b8bfdbf11c3caa467f81e805a6583dd33f15e3519bd36a7cdb",
+  "test_status": "previously_seen_holdout_development_reference"
+}
