@@ -1,0 +1,54 @@
+# ============================================================
+# 컬럼 역할 정의 — "사람이 판단하는 내용"만 이 파일에 둔다.
+# 데이터셋이 바뀌면 이 파일만 검토·수정한다.
+# 근거 문서: dataset/data_description.pdf
+# ============================================================
+
+target: LBL_NOK
+
+# 모델 입력에서 항상 제외하는 역할 컬럼
+roles:
+  id: [MET_JobCycleID, MET_MachineCycleID]
+  time: [MET_TimeCycleStart, MET_TimeCycleEnd]
+  label_prefixes: [LBL_]                          # 육안 검사 결과(사후 라벨)
+  meta: [MET_ExperimentNumber, MET_MaterialName]  # 그룹·해석용, 입력 아님
+
+# 그룹 키: 같은 실험 조건에서 생산된 행 묶음
+# 실험 번호(A01~A16, Z01)는 실험일마다 재사용되므로 날짜와 함께 쓴다.
+group:
+  columns: [MET_TimeCycleStart, MET_ExperimentNumber]
+  transforms:
+    MET_TimeCycleStart: date
+
+# 예측 시점: stage_order에서 이 단계까지 측정되는 특징만 입력 후보가 된다.
+prediction_time: in_cycle
+stage_order: [pre_production, in_cycle, post_ejection, post_cooling]
+
+# offline 단계(시뮬레이션 등)를 입력 후보로 허용할지
+allow_offline: false
+
+# 접두사 → 측정 단계
+prefix_stage:
+  SET: pre_production   # 실험 계획의 목표 설정값
+  MET: pre_production   # 재료 수분 (ID·시간·메타는 roles에서 먼저 제외)
+  ENV: pre_production   # 생산 공간 온습도
+  DRY: pre_production   # 건조 시스템
+  QUA: in_cycle         # 사출기 품질 테이블(사이클별 단일값)
+  DXP: in_cycle         # 사출기 센서 시계열 / 추출값
+  TCE: in_cycle         # 취출측 온도조절기
+  TCN: in_cycle         # 노즐측 온도조절기
+  CALC: in_cycle        # DXP 스크류 위치에서 계산 (PP만)
+  DOS: in_cycle         # 도징 시스템
+  E77: in_cycle         # EUROMAP77
+  IR: post_ejection     # 탈형 후 로봇이 IR 카메라 앞에 위치시켜 촬영
+  CV: post_ejection     # IR 촬영 후 일반 카메라로 치수 측정
+  SCA: post_cooling     # 냉각 후 스프루 제거, 저울 측정
+  SIM: offline          # Moldex3D 시뮬레이션 (실험 설정의 함수)
+
+# 컬럼 단위 예외 — 접두사 규칙보다 우선한다.
+column_overrides: {}
+#  예) SOME_COLUMN: {stage: in_cycle, reason: "실제로는 사이클 중 측정"}
+
+# 컬럼 단위 수동 제외 — 사유가 그대로 결과 표에 기록된다.
+manual_drop: []
+#  예) - {column: SOME_COLUMN, reason: "센서 교체로 단위 불일치"}
