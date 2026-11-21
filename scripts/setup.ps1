@@ -1,4 +1,4 @@
-﻿param([string]$PythonExe = '', [switch]$RebuildFrontend)
+﻿param([string]$PythonExe = '', [switch]$RebuildFrontend, [switch]$Train)
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $env:PYTHONIOENCODING = 'utf-8'
@@ -24,6 +24,11 @@ if (-not (Test-Path $requirements)) { $requirements = Join-Path $repoRoot '준�
 Assert-Exit 'Install Python dependencies'
 & $venvPython -c 'import fastapi,numpy,pandas,sklearn,xgboost,openpyxl;print(fastapi.__version__)'
 Assert-Exit 'Dependency check'
+if ($Train) {
+    # 학습 워크플로우(ml_workflow) 전용 의존성: yaml 설정, parquet 읽기, 그래프
+    & $venvPython -m pip install --disable-pip-version-check -r (Join-Path $repoRoot 'ml_workflow\requirements-train.txt')
+    Assert-Exit 'Install training dependencies'
+}
 if ($RebuildFrontend -or -not (Test-Path (Join-Path $repoRoot 'frontend\dist\index.html'))) {
     $bundleRoot = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies'
     $nodeCommand = Get-Command node -ErrorAction SilentlyContinue
@@ -44,3 +49,4 @@ if ($RebuildFrontend -or -not (Test-Path (Join-Path $repoRoot 'frontend\dist\ind
     } finally { Pop-Location }
 }
 Write-Host 'Setup complete. Run: powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1'
+if ($Train) { Write-Host 'Training: powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run <name>' }

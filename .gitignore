@@ -41,3 +41,4 @@ __pycache__/
 Thumbs.db
 desktop.ini
 /준비패키지/local/
+.pnpm-store/

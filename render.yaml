@@ -8,7 +8,7 @@ services:
     numInstances: 1
     autoDeployTrigger: off
     buildCommand: pip install -r 준비패키지/requirements-lock.txt && python scripts/build_public_demo.py
-    startCommand: uvicorn app_kamp:app --app-dir tmp/public-demo/준비패키지 --host 0.0.0.0 --port $PORT --workers 1
+    startCommand: uvicorn app:app --app-dir tmp/public-demo/준비패키지 --host 0.0.0.0 --port $PORT --workers 1
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
