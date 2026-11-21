@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Run, [switch]$Resume, [switch]$Promote, [string]$Stages = '')
+﻿param([Parameter(Mandatory=$true)][string]$Run, [switch]$Resume, [switch]$Promote, [string]$Stages = '')
 # 학습 워크플로우 실행 → (선택) 서비스로 승격 → 합성 예제 재생성
 #   powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run im_v3
 #   powershell -ExecutionPolicy Bypass -File .\scripts\train.ps1 -Run im_v3 -Resume       (중단된 단계부터)
