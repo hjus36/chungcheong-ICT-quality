@@ -138,7 +138,7 @@ class WorkflowEndToEnd(unittest.TestCase):
         pub = self.runs / "t1" / "public"
         self.assertTrue(pub.exists())
         for f in ["02_split/split.csv", "05_model/oof_predictions.csv", "06_explain/model.joblib",
-                  "07_release/model.joblib"]:
+                  "07_release/model.joblib", "07_release/real_demo.csv"]:
             self.assertFalse((pub / f).exists(), f)
         self.assertFalse(list(pub.rglob("_ckpt_*")))
 
@@ -210,6 +210,52 @@ class WorkflowEndToEnd(unittest.TestCase):
                     "--output", str(TMP / "x.csv"), check=False)
         self.assertEqual(r.returncode, 2)
         self.assertIn("SHA-256", r.stdout)
+
+    def test_10_real_demo_generated_and_checked(self):
+        rel = self.runs / "t1" / "07_release"
+        split = pd.read_csv(self.runs / "t1" / "02_split" / "split.csv")
+        demo = pd.read_csv(rel / "real_demo.csv", dtype={"part_id": str})
+        dictionary = json.loads((rel / "data_dictionary.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(demo), int((split["split"] == "holdout").sum()))
+        self.assertEqual(list(demo.columns), [m["name"] for m in dictionary["meta"]]
+                         + [f["name"] for f in dictionary["features"]] + [m["name"] for m in dictionary["optional"]])
+        chk = json.loads((rel / "release_check.json").read_text(encoding="utf-8"))
+        names = {c["check"]: c for c in chk["checks"]}
+        self.assertTrue(names["실측 예제 형식 (서비스 검증 규칙)"]["passed"])
+        self.assertTrue(names["실측 예제 판정 = holdout 결과 (TP/FN/FP/TN)"]["passed"])
+        self.assertEqual(chk["real_demo"]["rows"], len(demo))
+        self.assertTrue((self.runs / "t1" / "public" / "07_release" / "real_demo_definition.json").exists())
+
+    def test_11_real_demo_mismatch_blocks_and_missing_column_warns(self):
+        sys.path.insert(0, str(WF))
+        os.environ["ICT_CONFIG_DIR"] = str(self.config); os.environ["ICT_DATA_PATH"] = str(self.data)
+        try:
+            from src.config import load_config
+            from src.pipeline import load_split
+            from src.runio import RunContext
+            from stages import release
+            cfg = load_config()
+            ctx = RunContext(self.runs / "t1", cfg)
+            _, hold = load_split(ctx)
+        finally:
+            os.environ.pop("ICT_CONFIG_DIR", None); os.environ.pop("ICT_DATA_PATH", None)
+        rel = self.runs / "t1" / "07_release"
+        dictionary = json.loads((rel / "data_dictionary.json").read_text(encoding="utf-8"))
+        b = joblib.load(rel / "model.joblib")
+        hold_m = pd.read_csv(self.runs / "t1" / "05_model" / "holdout_metrics.csv")
+        hsel = hold_m[hold_m["selected"].astype(bool)].iloc[0].to_dict()
+        hsel["TP"] += 1                                   # 서비스 판정과 어긋나게 만든다
+        out = TMP / "rd_check"; out.mkdir(exist_ok=True)
+        checks, warnings = [], []
+        release._real_demo(ctx, cfg, cfg.release, dictionary, b["pipeline"], b["features"], b["alert_threshold"],
+                           hold, hsel, {}, out, checks, warnings)
+        self.assertFalse(next(c for c in checks if "판정" in c["check"])["passed"])
+        broken = json.loads(json.dumps(dictionary)); broken["meta"][0]["source_column"] = "NO_SUCH_COLUMN"
+        checks, warnings = [], []
+        r = release._real_demo(ctx, cfg, cfg.release, broken, b["pipeline"], b["features"], b["alert_threshold"],
+                               hold, hsel, {}, out, checks, warnings)
+        self.assertIsNone(r); self.assertEqual(checks, [])
+        self.assertTrue(any("NO_SUCH_COLUMN" in w for w in warnings))
 
 
 if __name__ == "__main__":

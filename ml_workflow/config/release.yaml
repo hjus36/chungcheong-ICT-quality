@@ -17,6 +17,10 @@ gate:                                  # 모두 만족해야 서비스로 승격
   holdout_min_recall: 0.90             # holdout(고정 기준) Recall 하한
   holdout_beats_baseline: all_risk     # holdout PR-AUC·F2가 이 기준선보다 높아야 함 (F2는 같아도 됨)
 
+real_demo:                             # 원본 → 웹 업로드 형식 실측 예제 (promote가 준비패키지/local/로 복사, git 제외)
+  enabled: true
+  rows: holdout                        # holdout: 학습에 쓰지 않은 행만(판정 일치 검사) | all: 전체(학습 행 포함, 성능 비교 불가)
+
 analysis:                              # 화면용 공정변수 분석
   extra_top_features: 10               # 모델 특징 외에 함께 보여줄 Filter 상위 특징 수
   relation_min_group: 5                # 변수-불량률 관계는 최소 이 부품 수로 묶은 평균만 공개

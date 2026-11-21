@@ -5,6 +5,8 @@
 - benchmark_public.json  화면·API용 집계 지표 (행 단위 정보 없음)
 - data_dictionary.json   업로드 입력 계약 (메타·특징·단위·범위·필수 여부)
 - release_check.json     승격 조건 판정 결과 (promote.py가 확인)
+- real_demo.csv          원본 holdout 행을 업로드 형식으로 바꾼 실측 예제 (행 단위 → 비공개, promote가 local/로 복사)
+- real_demo_definition.json  실측 예제의 행 수·불량 수·해시 (집계 정보)
 """
 from __future__ import annotations
 
@@ -17,7 +19,7 @@ import pandas as pd
 import sklearn
 from scipy.stats import spearmanr
 
-from src.contract import feature_info, lower_metrics
+from src.contract import check_service_input, feature_info, lower_metrics, to_service_input
 from src.models import DISPLAY
 from src.pipeline import load_split
 from src.runio import StageError
@@ -45,6 +47,57 @@ def _relation(v, y, min_group):
         out.append({"value": float(chunk["v"].mean()), "defect_rate_percent": float(chunk["y"].mean() * 100),
                     "count": int(len(chunk))})
     return out
+
+
+def _confusion(y, pred):
+    y, pred = np.asarray(y).astype(int), np.asarray(pred).astype(bool)
+    return {"TP": int(((y == 1) & pred).sum()), "FN": int(((y == 1) & ~pred).sum()),
+            "FP": int(((y == 0) & pred).sum()), "TN": int(((y == 0) & ~pred).sum())}
+
+
+def _real_demo(ctx, cfg, rel, dictionary, pipeline, feats, threshold, hold_df, hsel, manifest, out_dir, checks, warnings):
+    """holdout(또는 전체) 원본 행을 업로드 형식으로 바꿔 저장하고, 서비스와 같은 판정이 나오는지 검사한다.
+
+    - 만들지 못하면(원본 열 누락 등) 경고만 남긴다 → 모델 승격은 막지 않는다.
+    - 만든 파일이 서비스 형식 검사를 통과하지 못하거나, holdout 판정이 05_model 결과와 다르면 승격을 막는다.
+    """
+    rd = rel.get("real_demo") or {}
+    if not rd.get("enabled", False):
+        return None
+    scope = rd.get("rows", "holdout")
+    if scope not in ("holdout", "all"):
+        warnings.append(f"real_demo.rows는 holdout 또는 all이어야 합니다 (현재: {scope}) — 실측 예제를 만들지 않음")
+        return None
+    try:
+        out = to_service_input(hold_df if scope == "holdout" else ctx.df, cfg, dictionary)
+    except StageError as e:
+        warnings.append(f"실측 예제를 만들지 못함: {e}")
+        return None
+    path = out_dir / "real_demo.csv"
+    out.to_csv(path, index=False, encoding="utf-8-sig")
+    # 서비스처럼 파일을 다시 읽어 검사한다 (CSV 저장·읽기 과정까지 포함)
+    back = pd.read_csv(path, dtype={"part_id": str}, encoding="utf-8-sig")
+    problems = check_service_input(back, dictionary)
+    checks.append({"check": "실측 예제 형식 (서비스 검증 규칙)", "passed": not problems, "value": problems or "문제 없음"})
+    X = back[feats].apply(pd.to_numeric, errors="coerce")
+    pred = pipeline.predict_proba(X)[:, 1] >= threshold
+    label_col = (cfg.columns.get("service") or {}).get("label_column") or "actual_label"
+    got = _confusion(back[label_col], pred)
+    if scope == "holdout":
+        want = {k: int(hsel[k]) for k in ("TP", "FN", "FP", "TN")}
+        checks.append({"check": "실측 예제 판정 = holdout 결과 (TP/FN/FP/TN)", "passed": got == want,
+                       "value": {"real_demo": got, "holdout": want}})
+    else:
+        warnings.append("실측 예제에 학습(dev) 행이 포함됨 — 이 파일의 판정 결과로 성능을 비교하지 않는다")
+    definition = {
+        "notice": "원본 실측 자료를 업로드 형식으로 바꾼 파일이다. 행 단위 자료이므로 저장소·공개 사본·공개 서버에 넣지 않는다.",
+        "version": dictionary["version"], "scope": scope, "rows": int(len(back)),
+        "positives": int(back[label_col].sum()), "columns": list(back.columns),
+        "source_data_sha256": manifest.get("data_sha256"),
+        "sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "confusion_at_alert_threshold": got,
+    }
+    ctx.write_json(STAGE, "real_demo_definition", definition)
+    return {k: definition[k] for k in ("scope", "rows", "positives", "sha256")}
 
 
 def _excluded_prefixes(cfg):
@@ -77,7 +130,7 @@ def run(ctx):
     feats = th["features"]
     version = f"{rel.get('version_prefix', 'model')}-{ctx.run_dir.name}"
 
-    dev, _ = load_split(ctx)
+    dev, hold_df = load_split(ctx)
     y = dev[cfg.target].astype(int)
     ok = dev[y == 0]
     lo, hi = (cfg.experiment.get("explain") or {}).get("normal_range_percentiles", [5, 95])
@@ -212,9 +265,13 @@ def run(ctx):
     }
     ctx.write_json(STAGE, "benchmark_public", benchmark)
 
+    # 실측 예제 (원본 → 업로드 형식) + 판정 일치 검사
+    checks, warnings = [], []
+    real_demo = _real_demo(ctx, cfg, rel, dictionary, pipeline, feats, bundle["alert_threshold"],
+                           hold_df, hsel, manifest, out_dir, checks, warnings)
+
     # 승격 조건
     g = rel.get("gate") or {}
-    checks = []
     if g.get("require_selection_gates", True):
         checks.append({"check": "선택 모델 Gate 1·2 통과", "passed": bool(th["gates"]["gate1_pass"] and th["gates"]["gate2_pass"]),
                        "value": th["gates"]})
@@ -233,9 +290,12 @@ def run(ctx):
                            "passed": bool(hsel["F2"] >= b["F2"])})
     passed = all(c["passed"] for c in checks)
     ctx.write_json(STAGE, "release_check", {"version": version, "passed": passed, "checks": checks,
+                                            "warnings": warnings, "real_demo": real_demo,
                                             "model_sha256": model_sha, "test_status": hs["status"]})
     print(f"  번들 {version}: {DISPLAY[th['model']]}, 특징 {len(feats)}개 (필수 {len(required)}, 선택 {len(optional)}), "
           f"우선 검토 기준 {bundle['alert_threshold']:.3f}")
     for c in checks:
         print(f"   {'✓' if c['passed'] else '✗'} {c['check']}: {c['value']}")
+    for w in warnings:
+        print(f"   [경고] {w}")
     print(f"  승격 조건: {'통과' if passed else '미통과'} → promote.py --run {ctx.run_dir.name}")

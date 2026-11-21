@@ -19,6 +19,7 @@ PRIVATE_FILES = {
     "05_model/holdout_predictions.csv",
     "06_explain/model.joblib",
     "07_release/model.joblib",   # 모델은 promote.py로만 배포
+    "07_release/real_demo.csv",  # 원본 행 단위 실측 예제
 }
 
 

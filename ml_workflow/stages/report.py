@@ -434,6 +434,12 @@ def sec_release(d):
           f"버전 `{rc['version']}` · 모델 해시 `{rc['model_sha256'][:12]}…` · "
           f"승격 조건 **{'통과' if rc['passed'] else '미통과'}**\n\n",
           md_table(checks, {"check": "승격 조건", "passed": "결과"}))
+    for w in rc.get("warnings") or []:
+        d.add(f"\n> ⚠️ {w}\n")
+    rd = rc.get("real_demo")
+    if rd:
+        d.add(f"\n**실측 예제** (`07_release/real_demo.csv`, 비공개): {rd['scope']} {rd['rows']}행 · 불량 {rd['positives']}개. "
+              "`promote.py`가 `준비패키지/local/`로 복사하며 웹의 '실측 예제 불러오기'로 쓴다.\n")
     if dd:
         feats = pd.DataFrame(dd["features"])[["name", "unit", "required", "min", "max", "description"]]
         feats["required"] = feats["required"].map({True: "필수", False: "선택(대체)"})
