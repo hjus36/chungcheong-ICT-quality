@@ -144,15 +144,23 @@ class WorkflowEndToEnd(unittest.TestCase):
 
     def test_6_promote_and_synthetic(self):
         chk = json.loads((self.runs / "t1" / "07_release" / "release_check.json").read_text(encoding="utf-8"))
-        r = self.py("promote.py", "--run", "t1", "--target", str(self.release), check=False)
+        r = self.py("promote.py", "--run", "t1", "--target", str(self.release), "--local-target", str(TMP / "local"),
+                    check=False)
         if chk["passed"]:
             self.assertEqual(r.returncode, 0, r.stdout)
         else:
             self.assertEqual(r.returncode, 1, r.stdout)
-            self.py("promote.py", "--run", "t1", "--target", str(self.release), "--force")
+            self.py("promote.py", "--run", "t1", "--target", str(self.release), "--local-target", str(TMP / "local"),
+                    "--force")
         info = json.loads((self.release / "release_info.json").read_text(encoding="utf-8"))
         self.assertEqual(info["files"]["model.joblib"], info["model_sha256"])
-        self.py("promote.py", "--run", "t1", "--target", str(self.release), "--force")
+        local = TMP / "local"
+        self.assertTrue((local / "real_demo.csv").exists() and (local / "real_demo_definition.json").exists())
+        import hashlib
+        self.assertEqual(info["real_demo"]["sha256"], hashlib.sha256((local / "real_demo.csv").read_bytes()).hexdigest())
+        self.assertEqual(info["real_demo"]["rows"], len(pd.read_csv(local / "real_demo.csv")))
+        self.py("promote.py", "--run", "t1", "--target", str(self.release), "--local-target", str(TMP / "local"),
+                    "--force")
         self.assertTrue((self.release / "previous").exists())
 
         self.py("make_synthetic.py", "--release", str(self.release), "--out", str(self.share))

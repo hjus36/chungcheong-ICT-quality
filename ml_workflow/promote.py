@@ -7,6 +7,8 @@
 - release_check.json이 통과가 아니면 중단한다 (--force로만 무시).
 - 기존 release/ 내용은 release/previous/<기존 버전>/으로 옮겨 보관한다 (git 제외).
 - 승격 기록은 release/release_info.json에 남긴다.
+- 07_release의 실측 예제(real_demo.csv, 행 단위)는 git 제외 폴더 준비패키지/local/로 복사한다.
+  없으면 경고만 하고 승격은 계속한다.
 """
 from __future__ import annotations
 
@@ -22,6 +24,8 @@ from pathlib import Path
 WORKFLOW_DIR = Path(__file__).resolve().parent
 REPO = WORKFLOW_DIR.parent
 DEFAULT_TARGET = REPO / "준비패키지" / "release"
+DEFAULT_LOCAL = REPO / "준비패키지" / "local"
+LOCAL_FILES = ("real_demo.csv", "real_demo_definition.json")
 RUNS_DIR = Path(os.environ.get("ICT_RUNS_DIR") or WORKFLOW_DIR / "runs")
 FILES = ("model.joblib", "benchmark_public.json", "data_dictionary.json", "release_check.json")
 
@@ -36,6 +40,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run", required=True)
     ap.add_argument("--target", type=Path, default=DEFAULT_TARGET)
+    ap.add_argument("--local-target", type=Path, default=DEFAULT_LOCAL, help="실측 예제를 둘 git 제외 폴더")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true", help="승격 조건 미통과여도 복사 (권장하지 않음)")
     a = ap.parse_args(argv)
@@ -60,6 +65,8 @@ def main(argv=None) -> int:
     print(f"승격 후보: {check['version']} ({bench['selected_model']}, 특징 {bench['feature_count']}개)")
     for c in check["checks"]:
         print(f"  {'✓' if c['passed'] else '✗'} {c['check']}")
+    for w in check.get("warnings") or []:
+        print(f"  [경고] {w}")
     print(f"  holdout 상태: {check.get('test_status')}")
     if not check["passed"] and not a.force:
         print("✗ 승격 조건 미통과 — 중단합니다."); return 1
@@ -86,6 +93,16 @@ def main(argv=None) -> int:
             "data_sha256": manifest.get("data_sha256"), "config_sha256": manifest.get("config_sha256"),
             "code_sha256": manifest.get("code_sha256"), "versions": manifest.get("versions"),
             "files": {f: sha256(target / f) for f in FILES}}
+    if all((src / f).exists() for f in LOCAL_FILES):
+        a.local_target.mkdir(parents=True, exist_ok=True)
+        for f in LOCAL_FILES:
+            shutil.copy2(src / f, a.local_target / f)
+        info["real_demo"] = {**(check.get("real_demo") or {}), "sha256": sha256(a.local_target / "real_demo.csv"),
+                             "location": "준비패키지/local/real_demo.csv (git 제외)"}
+        print(f"  실측 예제 → {a.local_target / 'real_demo.csv'} ({info['real_demo'].get('rows')}행)")
+    else:
+        info["real_demo"] = None
+        print("  [경고] 실측 예제(real_demo.csv)가 없어 복사하지 않았습니다. 웹의 '실측 예제 불러오기'는 꺼진 상태로 남습니다.")
     info_path.write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"✓ 승격 완료 → {target}")
     return 0

@@ -40,7 +40,16 @@ def main():
         assert sha(SHARE / name) == meta['sha256'], name
         df = pd.read_csv(SHARE / name)
         assert set(df.data_source) == {dictionary['synthetic_source']}, name
+    # 실측 예제는 git에 없다: 파일이 있을 때만 승격 기록과 대조한다
+    real = info.get('real_demo') or {}
+    local = ROOT / '준비패키지' / 'local' / 'real_demo.csv'
+    real_status = 'not_present'
+    if real and local.exists():
+        assert sha(local) == real['sha256'], '준비패키지/local/real_demo.csv가 승격된 버전과 다릅니다 (promote.py로 다시 승격)'
+        assert len(pd.read_csv(local)) == real['rows']
+        real_status = 'verified'
     result = {'status': 'passed', 'version': bundle['version'], 'model': bundle['selected_model'],
+              'real_demo': real_status,
               'features': bundle['features'], 'release_check_passed': check['passed'],
               'synthetic_rows': {k: v['rows'] for k, v in definition['files'].items()}}
     evidence = Path(os.environ.get('ICT_EVIDENCE_DIR', str(ROOT / 'tmp' / 'test-evidence')))

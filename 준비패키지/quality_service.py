@@ -271,7 +271,7 @@ def prepare(df, mapping_text='{}'):
     return summary, numeric, valid, missing, row_meta
 
 
-def compare_labels(results):
+def compare_labels(results, synthetic=False):
     rows = [r for r in results if r[LABEL] is not None]
     if not rows: return None
     tp = sum(r[LABEL] == 1 and r['review_priority'] == PRIORITY[0] for r in rows)
@@ -280,7 +280,7 @@ def compare_labels(results):
     tn = len(rows) - tp - fn - fp
     return {'count': len(rows), 'positive_count': tp + fn, 'tp': tp, 'fn': fn, 'fp': fp, 'tn': tn,
             'recall': tp / (tp + fn) if tp + fn else None, 'precision': tp / (tp + fp) if tp + fp else None,
-            'note': '업로드한 actual_label과 비교한 결과입니다. 합성 자료의 라벨은 가상값입니다.'}
+            'note': '업로드한 actual_label과 비교한 결과입니다.' + (' 합성 자료의 라벨은 가상값입니다.' if synthetic else '')}
 
 
 def analyze(df, file_meta, mapping='{}'):
@@ -315,7 +315,7 @@ def analyze(df, file_meta, mapping='{}'):
                           'mean_risk_score': float(np.mean(probabilities)),
                           'deviation_part_count': sum(bool(r['outside_training_reference']) for r in results),
                           'label_available_rows': sum(r[LABEL] is not None for r in results),
-                          'label_comparison': compare_labels(results)}
+                          'label_comparison': compare_labels(results, summary['data_scope'] == dictionary()['synthetic_source'])}
     save_run(payload)
     return payload
 
