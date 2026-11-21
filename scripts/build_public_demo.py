@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEST = ROOT / 'tmp' / 'public-demo'
 FILES = (
     '준비패키지/app.py',
+    '준비패키지/app_kamp.py',
     '준비패키지/quality_service.py',
     '준비패키지/release/model.joblib',
     '준비패키지/release/benchmark_public.json',

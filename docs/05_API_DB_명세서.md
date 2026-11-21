@@ -42,7 +42,7 @@ React 개발 서버만 `/api` 접두사를 프록시에서 제거한다. 정적 
 
 | 필드 | 내용 |
 |---|---|
-| results[] | part_id, cycle_start_at, cycle_end_at, material, actual_label, risk_score(0~1 보정 확률), review_priority(우선 검토/통상 검토), imputed_columns, outside_training_reference[{feature, value, train_q05, train_q95, direction, unit}], features(대체 후 값), original_numeric_features(입력값, 결측은 null) |
+| results[] | part_id, cycle_start_at, cycle_end_at, material, actual_label, risk_score(0~1 보정 확률), review_priority(우선 검토/통상 검토), imputed_columns, outside_training_reference[{feature, value, train_q05, train_q95, direction, unit}], features(기존 클라이언트용 표시값. 결측 위치에는 학습 정상 부품의 참고 중앙값), original_numeric_features(입력값, 결측은 null) |
 | summary | priority_count, mean_risk_score, deviation_part_count, label_available_rows, label_comparison{count, positive_count, tp, fn, fp, tn, recall, precision} 또는 null |
 | 추적 | run_id, created_at, filename, file_sha256, model_version, model_name, model_sha256, alert_threshold, risk_score_kind |
 

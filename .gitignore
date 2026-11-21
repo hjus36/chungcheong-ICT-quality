@@ -3,6 +3,14 @@
 !/ml_workflow/data/README.md
 *.parquet
 
+# Local files from the previous heat-treatment workflow
+/참고자료/
+/준비패키지/reference/
+/준비패키지/kamp/
+/준비패키지/data/workbook_data.json
+/experiments/quality_20261101/
+/docs/verification/*.png
+
 # Workflow runs contain row-level splits and predictions; publish only reviewed aggregates
 /ml_workflow/runs/
 /ml_workflow/tests/_tmp/
@@ -40,5 +48,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
+.idea/
 /준비패키지/local/
 .pnpm-store/
