@@ -1,17 +1,17 @@
 {
-  "version": "probayes-im-v2-im_v2_r2",
-  "run": "im_v2_r2",
-  "promoted_at": "2026-11-21T10:27:22",
+  "version": "probayes-im-v2-im_v2_r3",
+  "run": "im_v2_r3",
+  "promoted_at": "2026-11-21T11:32:19",
   "forced": false,
-  "model_sha256": "445d8ce366e91c15f6a3f5d4a1f8864132c8e2e5e4676d1b08259768dc7e5185",
+  "model_sha256": "2a566cf8193af8b8bfdbf11c3caa467f81e805a6583dd33f15e3519bd36a7cdb",
   "data_sha256": "009d64ae4d77d2ed2de817c7d921d2c5ca58065f62b2680ededdf6b5576468bd",
-  "config_sha256": "d9815a329cf1280de2c259c29cfe6480f89b4ad47b03163cec7c4ab661ea6453",
+  "config_sha256": "b428011679e1a42f224209a240685cdeeaf601a5161e1f2410397c8dc6dfd776",
   "code_sha256": {
     "run.py": "1a3144246ff64f06a62df851a5bde24ad7e90b9b081347ec4ec571871cd97de7",
     "src/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "src/columns.py": "1f301ad2850422e4bfa05376625c9ed397eda026db08c3d5812573f93f05e249",
     "src/config.py": "908b6074a10ba4c772c26582719921032190fa56a926676a1b08bd466ed042a1",
-    "src/contract.py": "f2eb41409711c77362e6b5db84402f275f3e426f7921e89731026bb253426585",
+    "src/contract.py": "142aa641c59cbecbd4c252424c56ff9c7095f6ea4499c6319c21c5a7705907c5",
     "src/data.py": "bc90638ddce37f4678cf4646815154b22f79d99c531eb304bffa0b5e7454ac06",
     "src/design.py": "005ae031b2090ddb45493cabe18078c6b5643e5c836c7bd373e6829b2f801bab",
     "src/errors.py": "871d2dab61770083cfc3b78532294146108a5dcb2e6453c5c91bb8017fdee99d",
@@ -20,7 +20,7 @@
     "src/models.py": "a8594c401cc08826966bd6da78b0a70e4eeace81ca4e32ecd4b68841bf7a3c33",
     "src/pipeline.py": "7afee1bb82c2200a4edf54d84d9d9493b1c178de07e3c6d4259d06d5a244bb15",
     "src/quality.py": "633e42cc0d56a0ca371b72304fb6885527578bdb7418af21bc5157a337a8088d",
-    "src/runio.py": "7c8cceddba7a31d0188cac928f767c8e8f3c9ac86011e60773040cdb1cfbada5",
+    "src/runio.py": "1cb513aca1b1414b119c7040254c477990aef81c207d705d70ac2c0430e39dbd",
     "src/selection.py": "78f426319d82133152965852f325e724994ab0d4a053dbd8bc7744fa33693db0",
     "src/stats.py": "d64d64fd38d87c19bbf3aa71a214c977490739b798bff8de8c94c300a16eb780",
     "stages/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -28,8 +28,8 @@
     "stages/explain.py": "9b7c2482984f51268b4852fe04194f6a8af1198264ec12cf8b14e70125a151b3",
     "stages/feature_filter.py": "cf4d724ad5e0021ce416fa759527458d71ac7301bcc272bfb5966e46f0aeac9b",
     "stages/model.py": "0e79036d1c4b30d4ae460d85d1350495a0e6e41e8375aea33cc07f66de0e8cf3",
-    "stages/release.py": "776a8eb5848212faa08e3cf1f2228f6db4d902a0f2e941c80c735ef238169438",
-    "stages/report.py": "49f41886cad5f3557f600c7266c5fb1a62b761a465eaeb7d9fb880edc2280d60",
+    "stages/release.py": "a43a5b13a8ec8be28b80ecd2e74baf60b60a8255d3f096aaba7b5945c9aa321e",
+    "stages/report.py": "df2ddd7772dbbbc637aff0d4ce0e4bc97d7d6d56d50850dc4b04e6e4956e3970",
     "stages/split.py": "4dd56839d0642d8ab75783312fdc06fdb7b086182376497d8980be53128c1473",
     "stages/validate.py": "228daa185f2ef26a5aff19a241f4485d0883ac1a098f859e16e08c54f6e435f4",
     "stages/wrapper.py": "fd5c92eb57b2b9899a421105a09993763e1713224745ba91c42629340a5066c7"
@@ -48,9 +48,16 @@
     "matplotlib": "3.11.2"
   },
   "files": {
-    "model.joblib": "445d8ce366e91c15f6a3f5d4a1f8864132c8e2e5e4676d1b08259768dc7e5185",
-    "benchmark_public.json": "1e3c6057c49b11f66c4369f65510a4e11e4d72b319ce9f2ddf686150ac9d5d26",
-    "data_dictionary.json": "851766bb151f9be66c4ce3e14e582b59dfed5bb828b022cd08541e6c459ab520",
-    "release_check.json": "5cfbf211c09b5de7027a89350f4aeafb11d9cb3d91165fa2352c0d0e212d5528"
+    "model.joblib": "2a566cf8193af8b8bfdbf11c3caa467f81e805a6583dd33f15e3519bd36a7cdb",
+    "benchmark_public.json": "aef23a3a20a039d895dcf5e4c0c3adf2efb0f917779f1f972e34d3053f843e56",
+    "data_dictionary.json": "2ef0eb7284f975686d37ad073ead47fb72f9c899b9b2b6b44cadedaed9e3f30a",
+    "release_check.json": "20095f15aec1761ded44232acc14c6f72877f919169b10275a2ecfd1af088ea2"
+  },
+  "real_demo": {
+    "scope": "holdout",
+    "rows": 121,
+    "positives": 36,
+    "sha256": "65857d90959a0d5a09f8a53965b416aa7290b1363209f78d3a0250a27fc655ca",
+    "location": "준비패키지/local/real_demo.csv (git 제외)"
   }
 }

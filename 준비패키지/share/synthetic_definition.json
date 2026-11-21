@@ -1,6 +1,6 @@
 {
   "notice": "합성 자료이며 실측이 아니다. 원본 행을 복사하거나 섞지 않았다. actual_label은 모델 위험도로 뽑은 가상값이다.",
-  "release_version": "probayes-im-v2-im_v2_r2",
+  "release_version": "probayes-im-v2-im_v2_r3",
   "data_source": "synthetic_im",
   "config": {
     "seed": 20261121,

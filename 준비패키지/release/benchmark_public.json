@@ -1,11 +1,11 @@
 {
-  "version": "probayes-im-v2-im_v2_r2",
+  "version": "probayes-im-v2-im_v2_r3",
   "selected_model": "Logistic Regression",
   "model_key": "logistic_regression",
   "alert_threshold": 0.2517888255411623,
   "caution_threshold": 0.04175978237777086,
   "risk_score_kind": "calibrated_probability",
-  "model_sha256": "445d8ce366e91c15f6a3f5d4a1f8864132c8e2e5e4676d1b08259768dc7e5185",
+  "model_sha256": "2a566cf8193af8b8bfdbf11c3caa467f81e805a6583dd33f15e3519bd36a7cdb",
   "data_sha256": "009d64ae4d77d2ed2de817c7d921d2c5ca58065f62b2680ededdf6b5576468bd",
   "seed": 42,
   "environment": {
